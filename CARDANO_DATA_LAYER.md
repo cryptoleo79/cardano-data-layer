@@ -98,7 +98,7 @@ Per the separate-trust-boundary principle, the Data Layer would **reference** th
 
 ## Open questions before any build commitment
 
-1. **Who maintains the editorial curation?** The moat is also the maintenance burden. A category/project API is only as good as its ongoing curation. Is there an operator/community model, or does it decay like every prior directory?
+1. **Who maintains the editorial curation?** The moat is also the maintenance burden. A category/project API is only as good as its ongoing curation. Is there an operator/community model, or does it decay like every prior directory? — *A governance model now answers the add/update/challenge/dispute/taxonomy/history questions: see `observatory/docs/PROJECT_MEMORY_GOVERNANCE_MODEL.md`. The funding/maintainer-recruitment piece of this question remains open (tracked there).*
 2. **Licensing & neutrality.** Open license (the differentiator vs TapTools/builtoncardano) — but cardanocube's content is "All rights reserved"; the seed must be re-curated/attributed, not republished wholesale.
 3. **Sustainability vs the thing it replaces.** TapTools shut down *despite* being "fast, cost-effective." A neutral infra layer needs a funding/governance model (Catalyst? foundation grant? public good?) that doesn't repeat the failure.
 4. **Scope discipline.** The temptation is to creep into a full TapTools clone. The discipline is: thin proxies for the commodity layer, real investment only in the unique/perishable layer.
