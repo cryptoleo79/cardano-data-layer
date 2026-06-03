@@ -1,0 +1,16 @@
+{
+  "name": "cardano-data-layer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Neutral Cardano data-infrastructure layer — token/NFT market proxies over open sources, plus a curated project + category API. MVP per ../MVP_REPLACEMENT_BLUEPRINT.md.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "poller": "node --disable-warning=ExperimentalWarning src/jobs/ohlcv-poller.js",
+    "seed": "node --disable-warning=ExperimentalWarning src/jobs/seed-project-store.js",
+    "test": "node --disable-warning=ExperimentalWarning --test-concurrency=1 --test"
+  }
+}

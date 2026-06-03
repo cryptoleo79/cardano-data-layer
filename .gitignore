@@ -1,0 +1,10 @@
+# runtime sqlite (created on first start; seeded from seed/*.json)
+service/data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# node
+node_modules/
+npm-debug.log*
+.DS_Store

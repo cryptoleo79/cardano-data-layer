@@ -1,0 +1,599 @@
+{
+  "as_of": "2026-06-03",
+  "source": "cardanocube",
+  "count": 74,
+  "categories": [
+    {
+      "slug": "ai",
+      "name": "AI",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/ai",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "animals",
+      "name": "Animals",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/animals",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "art-nfts",
+      "name": "ART Nfts",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/art-nfts",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "asset-tokenization",
+      "name": "Asset Tokenization",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/asset-tokenization",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "audit",
+      "name": "Audit",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/audit",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "blockchain-explorers",
+      "name": "Blockchain Explorers",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/blockchain-explorers",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "blog",
+      "name": "Blog",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/blog",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "calendar",
+      "name": "Calendar",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/calendar",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "charity-causes",
+      "name": "Charity Causes",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/charity-causes",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "club",
+      "name": "Club",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/club",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "community",
+      "name": "Community",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/community",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "community-building-management",
+      "name": "Community Building Management",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/community-building-management",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "computing-ai",
+      "name": "Computing AI",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/computing-ai",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "consultancy",
+      "name": "Consultancy",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/consultancy",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "cross-chain-assets",
+      "name": "Cross Chain Assets",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/cross-chain-assets",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "cross-chain-bridge",
+      "name": "Cross Chain Bridge",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/cross-chain-bridge",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "dao-tools",
+      "name": "DAO Tools",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/dao-tools",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "data",
+      "name": "Data",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/data",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "defense-system",
+      "name": "Defense System",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/defense-system",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "defi",
+      "name": "Defi",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/defi",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "developer-tools",
+      "name": "Developer Tools",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/developer-tools",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "education",
+      "name": "Education",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/education",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "exchanges-dex",
+      "name": "Exchanges DEX",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/exchanges-dex",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "full-node-wallet",
+      "name": "Full Node Wallet",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/full-node-wallet",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "funding",
+      "name": "Funding",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/funding",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "gambling",
+      "name": "Gambling",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/gambling",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "gaming",
+      "name": "Gaming",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/gaming",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/governance",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "hardware-wallets",
+      "name": "Hardware Wallets",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/hardware-wallets",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "health-care",
+      "name": "Health Care",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/health-care",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "housing-property",
+      "name": "Housing Property",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/housing-property",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "identity",
+      "name": "Identity",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/identity",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "immutable-data",
+      "name": "Immutable Data",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/immutable-data",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "industry-solutions",
+      "name": "Industry Solutions",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/industry-solutions",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "infrastructure",
+      "name": "Infrastructure",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/infrastructure",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "insurance",
+      "name": "Insurance",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/insurance",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "internet-of-things",
+      "name": "Internet OF Things",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/internet-of-things",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "investment",
+      "name": "Investment",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/investment",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "investment-management",
+      "name": "Investment Management",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/investment-management",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "ispo",
+      "name": "Ispo",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/ispo",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "job-platform",
+      "name": "JOB Platform",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/job-platform",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "launchpad",
+      "name": "Launchpad",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/launchpad",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "layer-2-solution",
+      "name": "Layer 2 Solution",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/layer-2-solution",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "lending-borrowing",
+      "name": "Lending Borrowing",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/lending-borrowing",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "light-wallets",
+      "name": "Light Wallets",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/light-wallets",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "marketplaces",
+      "name": "Marketplaces",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/marketplaces",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "media",
+      "name": "Media",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/media",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "meetups-events",
+      "name": "Meetups Events",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/meetups-events",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "meme-coins",
+      "name": "Meme Coins",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/meme-coins",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "metaverse",
+      "name": "Metaverse",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/metaverse",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "music",
+      "name": "Music",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/music",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "nft",
+      "name": "NFT",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/nft",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "nft-marketplaces",
+      "name": "NFT Marketplaces",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/nft-marketplaces",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "nfttools",
+      "name": "Nfttools",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/nfttools",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "partner-chain",
+      "name": "Partner Chain",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/partner-chain",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "payment",
+      "name": "Payment",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/payment",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "peer-to-peer",
+      "name": "Peer TO Peer",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/peer-to-peer",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "pfp-avatar-nfts",
+      "name": "PFP Avatar Nfts",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/pfp-avatar-nfts",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "popular",
+      "name": "Popular",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/popular",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "prediction-market",
+      "name": "Prediction Market",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/prediction-market",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "private-transactions",
+      "name": "Private Transactions",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/private-transactions",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "retail",
+      "name": "Retail",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/retail",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "shitcoin",
+      "name": "Shitcoin",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/shitcoin",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "social",
+      "name": "Social",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/social",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "stablecoin",
+      "name": "Stablecoin",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/stablecoin",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "staking-tools",
+      "name": "Staking Tools",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/staking-tools",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "store-of-value",
+      "name": "Store OF Value",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/store-of-value",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "telecom",
+      "name": "Telecom",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/telecom",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "token-distribution-tooling",
+      "name": "Token Distribution Tooling",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/token-distribution-tooling",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "tools",
+      "name": "Tools",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/tools",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "utility",
+      "name": "Utility",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/utility",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "utility-nfts",
+      "name": "Utility Nfts",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/utility-nfts",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "wallets",
+      "name": "Wallets",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/wallets",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    },
+    {
+      "slug": "youtube",
+      "name": "Youtube",
+      "source": "cardanocube",
+      "source_url": "https://cardanocube.com/categories/youtube",
+      "as_of": "2026-06-03",
+      "taxonomy_note": "Taxonomy observed as-found at cardanocube; preserved per-source, not consolidated."
+    }
+  ]
+}
