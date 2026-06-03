@@ -39,6 +39,7 @@ const SEED_UNITS = [
 ];
 
 const VALID_INTERVALS = new Set(['1m', '5m', '15m', '1h', '4h', '1d']);
+const INTERVAL_SECONDS = { '1m': 60, '5m': 300, '15m': 900, '1h': 3600, '4h': 14400, '1d': 86400 };
 
 // ---------------------------------------------------------------------------
 // init: create the OHLCV table the poller fills and the price routes read.
@@ -205,38 +206,67 @@ async function ohlcvHandler({ query, ctx }) {
     throw new UpstreamError(`invalid interval; expected one of ${[...VALID_INTERVALS].join(',')} or raw`, { status: 400, source: 'token' });
   }
 
-  // Candles are read from the `ohlcv` table the poller fills. If the requested
-  // interval has nothing yet, fall back to checking whether 'raw' points exist
-  // so the note can tell the operator how to get data.
-  const rows = all(
-    'SELECT ts, o, h, l, c, v, source FROM ohlcv WHERE unit = ? AND interval = ? ORDER BY ts DESC LIMIT ?',
-    unit, interval, limit,
+  // 'raw' returns the poller's price ticks verbatim. Named intervals are
+  // aggregated on read by bucketing the persisted raw ticks into o/h/l/c
+  // candles — so collected history becomes real candles with no separate
+  // aggregation job. Volume stays null (we don't yet read per-interval on-chain
+  // volume); o=first tick, h=max, l=min, c=last tick in each bucket.
+  if (interval === 'raw') {
+    const rows = all(
+      'SELECT ts, o, h, l, c, v, source FROM ohlcv WHERE unit = ? AND interval = ? ORDER BY ts DESC LIMIT ?',
+      unit, 'raw', limit,
+    );
+    const candles = rows.reverse().map((r) => ({
+      ts: r.ts, time: new Date(r.ts * 1000).toISOString(),
+      o: r.o, h: r.h, l: r.l, c: r.c, v: r.v, source: r.source,
+    }));
+    const note = candles.length === 0
+      ? 'no raw points yet: run the ohlcv poller (npm run poller, or the --once cron) to start collecting history'
+      : undefined;
+    return { status: 200, body: { unit, interval, candles, count: candles.length,
+      source: candles.length ? [...new Set(candles.map((c) => c.source))].join('+') : 'ohlcv-table',
+      as_of: nowIso(), ...(note ? { note } : {}) } };
+  }
+
+  const sec = INTERVAL_SECONDS[interval];
+  // Pull raw ticks ascending and bucket them. (Bounded by limit*bucket window.)
+  const raw = all(
+    'SELECT ts, c, v, source FROM ohlcv WHERE unit = ? AND interval = ? ORDER BY ts ASC',
+    unit, 'raw',
   );
-  const candles = rows.reverse().map((r) => ({
-    ts: r.ts,
-    time: new Date(r.ts * 1000).toISOString(),
-    o: r.o, h: r.h, l: r.l, c: r.c, v: r.v,
-    source: r.source,
+  const buckets = new Map(); // bucketTs -> {o,h,l,c,v,sources:Set,first,last}
+  for (const r of raw) {
+    const b = Math.floor(r.ts / sec) * sec;
+    let k = buckets.get(b);
+    if (!k) { k = { o: r.c, h: r.c, l: r.c, c: r.c, v: null, src: new Set(), firstTs: r.ts, lastTs: r.ts }; buckets.set(b, k); }
+    if (r.ts <= k.firstTs) { k.o = r.c; k.firstTs = r.ts; }
+    if (r.ts >= k.lastTs) { k.c = r.c; k.lastTs = r.ts; }
+    if (r.c > k.h) k.h = r.c;
+    if (r.c < k.l) k.l = r.c;
+    if (r.v != null) k.v = (k.v ?? 0) + r.v;
+    if (r.source) k.src.add(r.source);
+  }
+  const ordered = [...buckets.entries()].sort((a, b) => a[0] - b[0]).slice(-limit);
+  const candles = ordered.map(([b, k]) => ({
+    ts: b, time: new Date(b * 1000).toISOString(),
+    o: k.o, h: k.h, l: k.l, c: k.c, v: k.v, source: [...k.src].join('+') || null,
   }));
 
-  let note;
+  let note = 'candles aggregated on read from raw price ticks; volume is null (per-interval on-chain volume not yet captured)';
   if (candles.length === 0) {
     const rawCount = get('SELECT COUNT(*) AS n FROM ohlcv WHERE unit = ?', unit)?.n || 0;
     note = rawCount === 0
-      ? 'no candles yet: run the ohlcv poller (npm run poller) with this unit in CDL_POLL_UNITS'
-      : `no candles for interval=${interval}; ${rawCount} raw point(s) exist (try interval=raw). True OHLCV aggregation is a follow-up.`;
+      ? 'no candles yet: run the ohlcv poller (npm run poller, or the --once cron) with this unit tracked'
+      : `${rawCount} raw point(s) exist but none fell into the requested window`;
   }
 
   return {
     status: 200,
     body: {
-      unit,
-      interval,
-      candles,
-      count: candles.length,
-      source: candles.length ? [...new Set(candles.map((c) => c.source))].join('+') : 'ohlcv-table',
+      unit, interval, candles, count: candles.length,
+      source: candles.length ? [...new Set(candles.flatMap((c) => (c.source || '').split('+')).filter(Boolean))].join('+') : 'ohlcv-table',
       as_of: nowIso(),
-      ...(note ? { note } : {}),
+      note,
     },
   };
 }

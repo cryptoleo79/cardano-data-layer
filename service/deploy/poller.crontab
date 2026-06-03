@@ -1,0 +1,13 @@
+# cardano-data-layer — OHLCV history collector.
+# Runs the poller in single-shot mode every 5 minutes. This is the "history
+# clock": it persists a price tick per tracked token so OHLCV candles can be
+# aggregated on read. The collected history is unrecoverable if not started now,
+# so this should run continuously from as early as possible.
+#
+# Install (preserves any existing crontab):
+#   ( crontab -l 2>/dev/null; cat deploy/poller.crontab ) | crontab -
+# Inspect: crontab -l   |   Logs: service/data/poller.log
+#
+# Tracked tokens default to the built-in seed set (MIN, SNEK, HOSKY); set
+# CDL_POLL_UNITS in the environment to track more.
+*/5 * * * * cd /home/midnight/cardano-data-layer/service && /usr/bin/node --disable-warning=ExperimentalWarning src/jobs/ohlcv-poller.js --once >> /home/midnight/cardano-data-layer/service/data/poller.log 2>&1

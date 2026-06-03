@@ -75,6 +75,15 @@ async function main() {
   // Ensure the ohlcv table exists even if the poller runs before the server.
   await tokenModule.init(ctx);
 
+  // `--once` runs a single tick and exits — the cron-friendly mode for durable
+  // history collection (a `*/5 * * * *` entry is more resilient than a
+  // long-running daemon). Without it, the poller daemonizes on the interval.
+  if (process.argv.includes('--once')) {
+    log('single-shot (--once)');
+    await pollOnce();
+    process.exit(0);
+  }
+
   log(`starting; interval=${config.poller.intervalMs}ms; units=${resolveUnits().length}` +
       (config.poller.units.length ? '' : ' (using token seed set; set CDL_POLL_UNITS to override)'));
 

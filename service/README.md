@@ -19,11 +19,17 @@ category** store (the moat) seeded from the Cardano Memory Layer preservation ar
 
 ```sh
 cd service
-npm start            # http://127.0.0.1:8787  (creates+seeds the sqlite db on first run)
-npm test             # 36 tests, offline
-npm run seed         # (re)load the project/category seed via versioned upsert
-npm run poller       # background price poller that fills the ohlcv table
+npm start                       # http://127.0.0.1:8787 (creates+seeds the sqlite db on first run)
+npm test                        # 36 tests, offline
+npm run seed                    # (re)load the project/category seed via versioned upsert
+npm run poller                  # price poller daemon that fills the ohlcv table
+node src/jobs/ohlcv-poller.js --once   # single tick (cron-friendly; see deploy/poller.crontab)
 ```
+
+Copy `.env.example` to `.env` to add optional source keys. **History collection:**
+install `deploy/poller.crontab` (`( crontab -l 2>/dev/null; grep -v '^#' deploy/poller.crontab ) | crontab -`)
+to persist a price tick per tracked token every 5 minutes — the history clock the
+OHLCV endpoint aggregates from.
 
 No keys are required to start. Some routes need free credentials to return live data
 (set as env vars): `BLOCKFROST_PROJECT_ID` (holders fallback), `OPENCNFT_API_KEY` (NFT,
@@ -67,11 +73,14 @@ until verified assignments exist.
 
 ## Status & known limitations
 
-- MVP. Live-verified for price (DexHunter), supply (Koios), metadata (CIP-26), and the full
-  moat. NFT (OpenCNFT) and Blockfrost-backed holders were not live-reachable from the build
-  host; coded to documented shapes and degrade gracefully — confirm endpoint paths against the
-  live APIs before production.
-- OHLCV stores raw price points (o=h=l=c, v=null); aggregating true candles is a follow-up.
+- Market slice finished + live-verified: OHLCV collection (DexHunter), token metadata (CIP-26
+  + Koios fallback), and the project + category moat. The four sources are wired; DexHunter,
+  Koios, and CIP-26 are confirmed live (keyless). **Blockfrost** needs a free `project_id`
+  (returns 403 without one); **OpenCNFT** was DNS-unreachable from the build host — both are
+  coded to documented shapes and degrade to a clean `503` until keys/network are provided.
+- OHLCV: the poller persists raw price ticks; `/token/ohlcv?interval=1h|1d|…` **aggregates them
+  into real o/h/l/c candles on read** (volume null — per-interval on-chain volume not yet
+  captured). `interval=raw` returns the ticks verbatim.
 - `/tokens/top` ranks only the tracked/seed set (flagged `coverage: 'partial'`) — it does not
   fabricate a full-ecosystem ranking.
 - Single-process in-memory cache + one sqlite connection; fine for an MVP, swap for
