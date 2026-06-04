@@ -1,8 +1,9 @@
-// project.test.js — tests for THE MOAT (project + category store).
+// project.test.js — Project Memory (event-sourced curated layer).
 //
-// Fully local: no network. We point CDL_DB_PATH at a fresh temp file BEFORE
-// importing db.js (config reads the env at import time), then import the module
-// and drive it through a fake ctx — the same ctx shape the server passes.
+// Fully local, no network. Points CDL_DB_PATH at a throwaway file BEFORE
+// importing db.js, then drives the module through a fake ctx and asserts the
+// event-sourced guarantees: seed-from-archive, append-only history, provenance,
+// projection-is-derived, and the read-only API shapes.
 //
 // Run: node --test test/project.test.js
 
@@ -12,135 +13,102 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-// --- Point the DB at a throwaway file BEFORE any module imports db/config. ---
-const tmpDir = mkdtempSync(join(tmpdir(), 'cdl-project-test-'));
+const tmpDir = mkdtempSync(join(tmpdir(), 'cdl-pm-test-'));
 process.env.CDL_DB_PATH = join(tmpDir, 'test.sqlite');
 
-// Now import. Dynamic imports guarantee they happen after the env is set.
 const { db } = await import('../src/db.js');
 const { config } = await import('../src/config.js');
 const projectModule = await import('../src/modules/project.js');
 const mod = projectModule.default;
+const { append, eventCount, verifyChain } = await import('../src/projectmemory/eventstore.js');
+const { rebuildProjections } = await import('../src/projectmemory/reducer.js');
 
-const log = () => {};
-const ctx = { db, config, log };
+const ctx = { db, config, log: () => {} };
 
-before(async () => {
-  // init() creates tables and seeds (store starts empty in the temp DB).
-  await mod.init(ctx);
+before(async () => { await mod.init(ctx); });
+after(() => { try { rmSync(tmpDir, { recursive: true, force: true }); } catch {} });
+
+const route = (path, p, q = {}) => mod.routes.find((r) => r.path === path).handler({ params: p, query: q, ctx });
+
+test('seeded from archive into the event log', () => {
+  assert.ok(eventCount() > 0, 'events were emitted by the seed');
 });
 
-after(() => {
-  rmSync(tmpDir, { recursive: true, force: true });
-});
-
-// Small helper to call a route handler the way the server would.
-const call = (handler, { params = {}, query = {} } = {}) =>
-  handler({ req: {}, params, query, ctx });
-
-test('seed loads 74 categories', async () => {
-  const res = await call(findRoute('/categories').handler);
+test('GET /categories returns the cardanocube taxonomy (74)', async () => {
+  const res = await route('/categories', {});
   assert.equal(res.status, 200);
   assert.equal(res.body.count, 74);
-  assert.equal(res.body.categories.length, 74);
-  // Envelope conventions.
-  assert.ok(res.body.source, 'has source');
-  assert.ok(res.body.as_of, 'has as_of');
+  assert.equal(res.body.source, 'project-memory');
 });
 
-test('seed loads 20 defunct projects', async () => {
-  const res = await call(findRoute('/projects').handler, { query: { status: 'defunct' } });
+test('GET /projects lists defunct graveyard projects', async () => {
+  const res = await route('/projects', {}, { status: 'defunct' });
   assert.equal(res.status, 200);
-  assert.equal(res.body.total, 20, 'total defunct count');
-  assert.ok(res.body.projects.every((p) => p.status === 'defunct'));
+  assert.equal(res.body.total, 20);
 });
 
-test('/project/adax returns the archived_wayback_url (provenance preserved)', async () => {
-  const res = await call(findRoute('/project/:id').handler, { params: { id: 'adax' } });
+test('GET /project/:id carries per-field provenance + chain-of-custody evidence', async () => {
+  const res = await route('/project/:id', { id: 'adax' });
   assert.equal(res.status, 200);
-  assert.equal(res.body.project.id, 'adax');
-  assert.ok(
-    res.body.project.archived_wayback_url &&
-      res.body.project.archived_wayback_url.includes('web.archive.org'),
-    'archived_wayback_url present',
-  );
-  // Seeded graveyard projects have no verified category assignments.
-  assert.deepEqual(res.body.project.categories, []);
-  assert.equal(res.body.project.unclassified, true);
+  assert.equal(res.body.status, 'defunct');
+  const nameClaim = res.body.fields.name?.[0];
+  assert.ok(nameClaim, 'has a name claim');
+  assert.equal(nameClaim.provenance.source.source_id, 'cardanocube'); // WHERE
+  assert.ok(nameClaim.provenance.as_of, 'WHEN present');
+  assert.ok(nameClaim.provenance.asserted_by, 'WHO present');
+  const ev = nameClaim.provenance.evidence[0];
+  assert.ok(ev && ev.ref.includes('web.archive.org'), 'evidence links to the Wayback archive');
+  assert.ok(ev.sha256, 'evidence carries the archived sha256 (chain-of-custody)');
 });
 
-test('seeded project records initial history rows', async () => {
-  const res = await call(findRoute('/project/:id').handler, { params: { id: 'adax' } });
-  assert.ok(Array.isArray(res.body.history));
-  assert.ok(res.body.history.length > 0, 'initial seed wrote history');
-  // The wayback url should appear as an initial-history new_value.
-  assert.ok(
-    res.body.history.some((h) => h.field === 'archived_wayback_url' && h.new_value),
-    'history captured archived_wayback_url',
-  );
+test('preserved TapTools rankings imported as token projects (Class C)', async () => {
+  const res = await route('/projects', {}, { q: 'tt:', limit: 1000 });
+  assert.ok(res.body.total >= 1, 'at least one TapTools token imported');
+  const sample = res.body.projects[0];
+  const detail = await route('/project/:id', { id: sample.id });
+  const rankClaim = detail.body.fields.rank?.[0] || detail.body.fields.ticker?.[0];
+  assert.equal(rankClaim.provenance.source.source_id, 'taptools-wayback');
+  assert.equal(rankClaim.provenance.authority_class, 'C');
+  assert.ok(rankClaim.provenance.evidence[0].ref.includes('web.archive.org'));
 });
 
-test('a simulated field change writes a project_history row (versioned upsert)', async () => {
-  const beforeRows = db
-    .prepare('SELECT COUNT(*) AS n FROM project_history WHERE project_id = ?')
-    .get('adax').n;
-
-  // Change a real field through the documented versioned upsert.
-  const result = projectModule.upsertProject(
-    db,
-    { id: 'adax', note: 'Re-confirmed defunct on a later review (test change).' },
-    { changeSource: 'test' },
-  );
-  assert.equal(result.action, 'updated');
-  assert.ok(result.changes.includes('note'));
-
-  const afterRows = db
-    .prepare('SELECT COUNT(*) AS n FROM project_history WHERE project_id = ?')
-    .get('adax').n;
-  assert.equal(afterRows, beforeRows + 1, 'exactly one new history row for the changed field');
-
-  // The newest history row should reflect the change with old + new values.
-  const last = db
-    .prepare('SELECT * FROM project_history WHERE project_id = ? ORDER BY id DESC LIMIT 1')
-    .get('adax');
-  assert.equal(last.field, 'note');
-  assert.equal(last.change_source, 'test');
-  assert.ok(last.new_value.includes('Re-confirmed defunct'));
-  assert.notEqual(last.old_value, last.new_value);
-});
-
-test('re-applying the same value is a no-op (idempotent, no spurious history)', async () => {
-  const beforeRows = db.prepare('SELECT COUNT(*) AS n FROM project_history').get().n;
-  // Upsert adax with its current note again — nothing should change.
-  const current = db.prepare('SELECT note FROM project WHERE id = ?').get('adax').note;
-  const result = projectModule.upsertProject(db, { id: 'adax', note: current }, { changeSource: 'test' });
-  assert.equal(result.action, 'unchanged');
-  const afterRows = db.prepare('SELECT COUNT(*) AS n FROM project_history').get().n;
-  assert.equal(afterRows, beforeRows, 'no history rows written for an unchanged upsert');
-});
-
-test('/category/:slug returns detail (defi exists) with the standard envelope', async () => {
-  const res = await call(findRoute('/category/:slug').handler, { params: { slug: 'defi' } });
+test('GET /history/:project is the append-only event log for the project', async () => {
+  const res = await route('/history/:project', { project: 'adax' });
   assert.equal(res.status, 200);
-  assert.equal(res.body.category.slug, 'defi');
-  assert.ok(res.body.source && res.body.as_of);
-  assert.ok(Array.isArray(res.body.projects));
+  assert.ok(res.body.count >= 3, 'imported + name + status events at least');
+  assert.ok(res.body.events.every((e) => e.hash && e.prev_hash), 'events are hash-chained');
+  assert.equal(res.body.events[0].type, 'project.imported');
 });
 
-test('unknown category and project yield 404', async () => {
-  await assert.rejects(
-    () => call(findRoute('/category/:slug').handler, { params: { slug: 'no-such-cat' } }),
-    (e) => e.status === 404,
-  );
-  await assert.rejects(
-    () => call(findRoute('/project/:id').handler, { params: { id: 'no-such-project' } }),
-    (e) => e.status === 404,
-  );
+test('append-only: UPDATE and DELETE on pm_event are rejected', () => {
+  assert.throws(() => db.prepare('UPDATE pm_event SET actor = ? WHERE seq = 1').run('tamper'), /append-only/);
+  assert.throws(() => db.prepare('DELETE FROM pm_event WHERE seq = 1').run(), /append-only/);
 });
 
-// --- helper: locate a route handler by its registered path ---
-function findRoute(path) {
-  const r = mod.routes.find((x) => x.path === path);
-  if (!r) throw new Error(`route not found in module: ${path}`);
-  return r;
-}
+test('hash chain verifies', () => {
+  assert.equal(verifyChain().ok, true);
+});
+
+test('projections are a pure function of the log (rebuild is stable)', async () => {
+  const before = (await route('/projects', {}, { limit: 1000 })).body.total;
+  rebuildProjections();
+  const afterCount = (await route('/projects', {}, { limit: 1000 })).body.total;
+  assert.equal(afterCount, before, 'rebuilding projections from the log yields the same state');
+});
+
+test('superseding a claim preserves the old one (nothing overwritten)', async () => {
+  // assert a new name for adax; the old claim must remain as superseded.
+  append('claim.asserted', { actor: 'test', subject: 'adax', payload: {
+    project_id: 'adax', field: 'name', value: 'Adax (renamed)', source_id: 'researcher', authority_class: 'E', as_of: '2026-06-04', asserted_by: 'test' } });
+  rebuildProjections();
+  const detail = await route('/project/:id', { id: 'adax' });
+  assert.equal(detail.body.fields.name[0].value, 'Adax (renamed)', 'current value updated');
+  assert.ok(detail.body.superseded_claim_count >= 1, 'the prior name claim is preserved as superseded');
+  const hist = await route('/history/:project', { project: 'adax' });
+  assert.ok(hist.body.count >= 4, 'history grew; nothing was deleted');
+});
+
+test('unknown project → 404', async () => {
+  const res = await route('/project/:id', { id: 'does-not-exist' });
+  assert.equal(res.status, 404);
+});
