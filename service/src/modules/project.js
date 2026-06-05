@@ -13,17 +13,32 @@
 //
 // Routes:
 //   GET /projects             list curated projects
-//   GET /project/:id          one project, with per-field provenance + evidence
+//   GET /project/search?q=    substring search over project id/name
+//   GET /category/:slug       one category + its active project assignments
 //   GET /categories           the (per-source, as-found) taxonomy
 //   GET /history/:project     the append-only event history for one project
+//   GET /project/:id          one project, with per-field provenance + evidence
 
 import { initEventStore, eventCount, verifyChain } from '../projectmemory/eventstore.js';
 import { initProjections } from '../projectmemory/schema.js';
 import { rebuildProjections } from '../projectmemory/reducer.js';
 import { seedIfEmpty } from '../projectmemory/seed.js';
 import { listProjects, getProject, listCategories, historyForProject } from '../projectmemory/read.js';
+import { dq } from '../lib/envelope.js';
 
 const nowIso = () => new Date().toISOString();
+
+// Module-level provenance for the data-quality envelope. Project Memory is
+// event-sourced and seeded from the preservation archive; the underlying claims
+// are mostly community/curated (Class D, cardanocube) with some at-risk-platform
+// rankings (Class C, taptools-wayback) — hence 'mixed'. Honest and simple.
+const DQ = {
+  source: 'project-memory',
+  authority_class: 'D',
+  refresh: 'static',
+  provenance: 'Project Memory — event-sourced, seeded from cardano-project-memory-archive',
+};
+const wrap = (body, extra) => dq({ ...body, as_of: nowIso() }, { ...DQ, ...extra });
 
 export async function init(ctx) {
   initEventStore();        // append-only log + tamper-evident triggers
@@ -36,33 +51,87 @@ export async function init(ctx) {
 }
 
 async function projectsHandler({ query }) {
-  return { status: 200, body: { ...listProjects(query), source: 'project-memory', as_of: nowIso() } };
+  return { status: 200, body: wrap({ ...listProjects(query), source: 'project-memory' }) };
+}
+
+// Literal route — MUST be registered before /project/:id so 'search' is not an id.
+async function projectSearchHandler({ query }) {
+  const q = (query.q || '').trim();
+  if (!q) {
+    return { status: 200, body: wrap({ q: '', total: 0, count: 0, projects: [], source: 'project-memory' }) };
+  }
+  const res = listProjects({ q, limit: query.limit ?? 100, offset: query.offset ?? 0 });
+  return { status: 200, body: wrap({ q, ...res, source: 'project-memory' }) };
 }
 
 async function projectHandler({ params }) {
   const p = getProject(params.id);
-  if (!p) return { status: 404, body: { error: 'not_found', id: params.id } };
-  return { status: 200, body: { ...p, source: 'project-memory', as_of: nowIso() } };
+  if (!p) return { status: 404, body: wrap({ error: 'not_found', id: params.id }, { confidence: 'low' }) };
+  return { status: 200, body: wrap({ ...p, source: 'project-memory' }) };
 }
 
 async function categoriesHandler() {
-  return { status: 200, body: { ...listCategories(), source: 'project-memory', as_of: nowIso() } };
+  return { status: 200, body: wrap({ ...listCategories(), source: 'project-memory' }) };
+}
+
+// One category + its active project assignments, read inline from the projection
+// tables via ctx.db (read.js is owned by another concern; we don't extend it).
+async function categoryHandler({ params, ctx }) {
+  const slug = params.slug;
+  const cat = ctx.db.prepare('SELECT * FROM pm_category WHERE slug = ?').get(slug);
+  if (!cat) return { status: 404, body: wrap({ error: 'not_found', slug }, { confidence: 'low' }) };
+
+  const members = ctx.db.prepare(
+    `SELECT p.id, p.kind, p.name, p.status, p.unclassified,
+            pc.authority_class, pc.as_of, pc.source_id
+       FROM pm_project_category pc
+       JOIN pm_project p ON p.id = pc.project_id
+      WHERE pc.category_slug = ? AND pc.state = 'active'
+      ORDER BY p.id`,
+  ).all(slug);
+
+  const body = {
+    category: {
+      slug: cat.slug,
+      name: cat.name,
+      deprecated: !!cat.deprecated,
+      alias_of: cat.alias_of,
+      source_id: cat.source_id,
+      as_of: cat.as_of,
+      taxonomy_note: cat.taxonomy_note,
+    },
+    project_count: members.length,
+    projects: members.map((r) => ({
+      id: r.id,
+      kind: r.kind,
+      name: r.name,
+      status: r.status,
+      unclassified: !!r.unclassified,
+      assignment: { authority_class: r.authority_class, as_of: r.as_of, source_id: r.source_id },
+    })),
+    source: 'project-memory',
+  };
+  return { status: 200, body: wrap(body) };
 }
 
 async function historyHandler({ params }) {
   const h = historyForProject(params.project);
-  if (!h.exists && h.count === 0) return { status: 404, body: { error: 'not_found', id: params.project } };
-  return { status: 200, body: { project: params.project, count: h.count, events: h.events, source: 'project-memory (event log)', as_of: nowIso() } };
+  if (!h.exists && h.count === 0) return { status: 404, body: wrap({ error: 'not_found', id: params.project }, { confidence: 'low' }) };
+  return { status: 200, body: wrap({ project: params.project, count: h.count, events: h.events, source: 'project-memory (event log)' }) };
 }
 
 export default {
   name: 'project-memory',
   init,
+  // Ordering is load-bearing: literal routes before the parameterized catch-all.
+  // /project/search before /project/:id; /category/:slug + /categories before /project/:id.
   routes: [
     { method: 'GET', path: '/projects', handler: projectsHandler, meta: { desc: 'list curated projects (read-only)' } },
-    { method: 'GET', path: '/project/:id', handler: projectHandler, meta: { desc: 'project with per-field provenance + evidence' } },
+    { method: 'GET', path: '/project/search', handler: projectSearchHandler, meta: { desc: 'substring search over project id/name' } },
+    { method: 'GET', path: '/category/:slug', handler: categoryHandler, meta: { desc: 'one category + its active project assignments' } },
     { method: 'GET', path: '/categories', handler: categoriesHandler, meta: { desc: 'per-source taxonomy' } },
     { method: 'GET', path: '/history/:project', handler: historyHandler, meta: { desc: 'append-only event history for a project' } },
+    { method: 'GET', path: '/project/:id', handler: projectHandler, meta: { desc: 'project with per-field provenance + evidence' } },
   ],
   internals: { verifyChain },
 };

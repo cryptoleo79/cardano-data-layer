@@ -41,7 +41,29 @@ test('module exports the expected shape', () => {
   assert.equal(typeof tokenModule.init, 'function');
   assert.ok(Array.isArray(tokenModule.routes));
   const paths = tokenModule.routes.map((r) => r.path).sort();
-  assert.deepEqual(paths, ['/token/mcap', '/token/ohlcv', '/token/price', '/tokens/top']);
+  assert.deepEqual(paths, [
+    '/token/:id', '/token/list', '/token/mcap', '/token/ohlcv',
+    '/token/price', '/token/search', '/tokens/top',
+  ]);
+});
+
+test('route ordering: literals are registered before /token/:id', () => {
+  const order = tokenModule.routes.map((r) => r.path);
+  const idIdx = order.indexOf('/token/:id');
+  assert.equal(idIdx, order.length - 1, '/token/:id must be LAST');
+  for (const lit of ['/token/price', '/token/ohlcv', '/token/mcap', '/token/search', '/token/list']) {
+    assert.ok(order.indexOf(lit) < idIdx, `${lit} must precede /token/:id`);
+  }
+});
+
+test('every handler body carries the _quality envelope', async () => {
+  // lovelace price is fully offline-resolvable and exercises dq().
+  const handler = handlerFor('/token/price');
+  const res = await handler({ query: { unit: 'lovelace' }, ctx: fakeCtx() });
+  assert.ok(res.body._quality, 'body has _quality');
+  assert.ok('authority_class' in res.body._quality);
+  assert.ok('provenance' in res.body._quality);
+  assert.ok('refresh' in res.body._quality);
 });
 
 // --- input validation: these are pure (no network) and must be deterministic ---
@@ -145,6 +167,67 @@ test('mcap answers with a structured body (live or graceful)', async () => {
   assert.ok('as_of' in res.body);
   assert.ok('mcap' in res.body);
   assert.ok(res.body.mcap.ada === null || typeof res.body.mcap.ada === 'number');
+});
+
+test('search: missing q -> 400', async () => {
+  const handler = handlerFor('/token/search');
+  try {
+    await handler({ query: {}, ctx: fakeCtx() });
+    assert.fail('should have thrown for missing q');
+  } catch (err) {
+    assert.equal(err.status, 400);
+  }
+});
+
+test('search finds seed tokens offline (local set always works)', async () => {
+  const handler = handlerFor('/token/search');
+  const res = await handler({ query: { q: 'SNEK' }, ctx: fakeCtx() });
+  assert.equal(res.status, 200);
+  assert.ok(Array.isArray(res.body.results));
+  // SNEK is in the seed set, so a local match is guaranteed regardless of network.
+  assert.ok(res.body.results.some((r) => r.ticker === 'SNEK'), 'SNEK seed match present');
+  assert.ok(res.body._quality, 'search body carries _quality');
+});
+
+test('list returns the known set offline', async () => {
+  await tokenModule.init(fakeCtx());
+  const handler = handlerFor('/token/list');
+  const res = await handler({ query: {}, ctx: fakeCtx() });
+  assert.equal(res.status, 200);
+  assert.ok(Array.isArray(res.body.tokens));
+  assert.ok(res.body.tokens.length >= 3, 'at least the seed tokens are listed');
+  assert.ok(res.body._quality);
+});
+
+test('detail: invalid id -> 400', async () => {
+  const handler = handlerFor('/token/:id');
+  try {
+    await handler({ params: { id: 'bogus!' }, ctx: fakeCtx() });
+    assert.fail('should have thrown for invalid id');
+  } catch (err) {
+    assert.equal(err.status, 400);
+  }
+});
+
+test('detail answers with a merged body (live or graceful)', async () => {
+  const handler = handlerFor('/token/:id');
+  let res;
+  try {
+    res = await handler({ params: { id: MIN }, ctx: fakeCtx() });
+  } catch (err) {
+    assert.equal(typeof err.status, 'number');
+    return;
+  }
+  assert.equal(res.status, 200);
+  assert.equal(res.body.unit, MIN);
+  assert.ok('metadata' in res.body);
+  assert.ok('supply' in res.body);
+  assert.ok('price' in res.body);
+  assert.ok('holders' in res.body);
+  assert.ok(res.body._quality, 'detail body carries _quality');
+  // Sub-parts degrade to null offline — must never throw.
+  assert.ok(res.body.supply === null || typeof res.body.supply === 'number');
+  assert.ok(res.body.holders.count === null || typeof res.body.holders.count === 'number');
 });
 
 test('top answers with a partial-coverage ranking body (live or graceful)', async () => {

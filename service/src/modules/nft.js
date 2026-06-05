@@ -17,6 +17,13 @@
 
 import { openCnftSource } from '../sources/opencnft.js';
 import { config } from '../config.js';
+import { dq } from '../lib/envelope.js';
+
+// Wrap a handler so every response carries the data-quality envelope (Stream H).
+const withDq = (handler, meta) => async (a) => {
+  const r = await handler(a);
+  return { ...r, body: dq(r.body, { ...meta, confidence: r.status >= 400 ? 'low' : (meta.confidence || 'high') }) };
+};
 
 // The source is injected via the module's closure so tests can swap it for a
 // fake. We keep a mutable reference but default to the real OpenCNFT adapter.
@@ -118,7 +125,7 @@ async function salesHandler({ query, ctx }) {
 export default {
   name: 'nft',
   routes: [
-    { method: 'GET', path: '/nft/collection/stats', handler: statsHandler, meta: { desc: 'NFT collection stats (floor, volume, listings, owners, supply)' } },
-    { method: 'GET', path: '/nft/collection/sales', handler: salesHandler, meta: { desc: 'recent NFT collection sales' } },
+    { method: 'GET', path: '/nft/collection/stats', handler: withDq(statsHandler, { source: 'opencnft', authority_class: 'D', refresh: '~5m', provenance: 'OpenCNFT aggregated marketplace data (attribution: opencnft.io)' }), meta: { desc: 'NFT collection stats (floor, volume, listings, owners, supply)' } },
+    { method: 'GET', path: '/nft/collection/sales', handler: withDq(salesHandler, { source: 'opencnft', authority_class: 'D', refresh: '~5m', provenance: 'OpenCNFT aggregated marketplace sales (attribution: opencnft.io)' }), meta: { desc: 'recent NFT collection sales' } },
   ],
 };

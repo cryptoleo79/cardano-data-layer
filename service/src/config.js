@@ -19,6 +19,17 @@ export const config = {
   dbPath: env.CDL_DB_PATH || new URL('../data/cdl.sqlite', import.meta.url).pathname,
   seedDir: env.CDL_SEED_DIR || new URL('../seed/', import.meta.url).pathname,
 
+  // Memory-layer sources the Data Layer reads (Stream I — memory integration).
+  // These are read-only inputs from the sibling preservation/observatory projects.
+  memory: {
+    // Governance + Treasury Memory: the observatory's CC0 snapshot exports.
+    observatoryDir: env.CDL_OBSERVATORY_DIR || `${env.HOME || '/home/midnight'}/observatory/data/snapshots`,
+    // Catalyst Memory: the catalyst preservation archive.
+    catalystArchive: env.CDL_CATALYST_ARCHIVE || `${env.HOME || '/home/midnight'}/cardano-catalyst-archive`,
+    // Project Memory archive (already consumed by the project seed).
+    projectMemoryArchive: env.CDL_PROJECT_MEMORY_ARCHIVE || `${env.HOME || '/home/midnight'}/cardano-project-memory-archive`,
+  },
+
   // cache TTLs (ms)
   cache: {
     price: int(env.CDL_TTL_PRICE, 60_000),

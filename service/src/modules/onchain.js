@@ -23,6 +23,14 @@ import * as blockfrost from '../sources/blockfrost.js';
 import * as cip26 from '../sources/cip26.js';
 import { config } from '../config.js';
 import { UpstreamError } from '../http.js';
+import { dq } from '../lib/envelope.js';
+
+// Wrap a handler so every response carries the data-quality envelope (Stream H)
+// without rewriting each return site. confidence drops to 'low' on errors.
+const withDq = (handler, meta) => async (a) => {
+  const r = await handler(a);
+  return { ...r, body: dq(r.body, { ...meta, confidence: r.status >= 400 ? 'low' : (meta.confidence || 'high') }) };
+};
 
 // ---- tunables ----
 const TOP_N = 20;            // how many holders to return in the response
@@ -371,9 +379,9 @@ function metadataFromBlockfrost(a) {
 export default {
   name: 'onchain',
   routes: [
-    { method: 'GET', path: '/token/holders', handler: holdersHandler, meta: { desc: 'holder count + top holders (Koios→Blockfrost)' } },
-    { method: 'GET', path: '/token/supply', handler: supplyHandler, meta: { desc: 'total/circulating supply (Koios→Blockfrost)' } },
-    { method: 'GET', path: '/token/metadata', handler: metadataHandler, meta: { desc: 'ticker/name/decimals/logo/url (CIP-26→on-chain)' } },
+    { method: 'GET', path: '/token/holders', handler: withDq(holdersHandler, { source: 'koios+blockfrost', authority_class: 'A', refresh: '~10m', provenance: 'on-chain holder set (Koios asset_addresses → Blockfrost)' }), meta: { desc: 'holder count + top holders (Koios→Blockfrost)' } },
+    { method: 'GET', path: '/token/supply', handler: withDq(supplyHandler, { source: 'koios+blockfrost', authority_class: 'A', refresh: '~10m', provenance: 'on-chain supply (Koios asset_info → Blockfrost)' }), meta: { desc: 'total/circulating supply (Koios→Blockfrost)' } },
+    { method: 'GET', path: '/token/metadata', handler: withDq(metadataHandler, { source: 'cip26+onchain', authority_class: 'B', refresh: 'hourly', provenance: 'CIP-26 registry → on-chain mint metadata' }), meta: { desc: 'ticker/name/decimals/logo/url (CIP-26→on-chain)' } },
   ],
   // exported for tests
   _internal: { parseUnit, shapeHolders, shapeMetadata, metadataFromKoios },

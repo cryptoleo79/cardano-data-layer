@@ -1,0 +1,994 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cardano Data Layer API",
+    "version": "0.1.0",
+    "summary": "Neutral, read-only Cardano data infrastructure.",
+    "description": "A read-only HTTP API over Cardano token markets, on-chain facts, NFT collections, and the four curated memory layers (Project, Governance, Treasury, Catalyst). No authentication is required for the Data Layer itself.\n\nEvery successful response carries a `_quality` data-quality block describing where the data came from (`source`), its authority class (A on-chain / B official / C at-risk platform / D community / E researcher), refresh cadence (`refresh`), `confidence`, `provenance`, and an ISO `as_of` timestamp.\n\nNOTE ON ENVELOPE COVERAGE: The token, market, project, governance, and catalyst modules wrap responses with the `_quality` block via `lib/envelope.js#dq()`. The older `nft` and `onchain` modules currently emit a flatter envelope (top-level `source` + `as_of`) and do NOT yet include a nested `_quality` object; their schemas below reflect that. This is documented honestly rather than aspirationally.\n\nUNVERIFIED ROUTES: At the time this spec was written, `market.js`, `governance.js`, and `catalyst.js` were not yet present on disk. Their routes, parameters, and response shapes are documented from API_BUILD_SPEC.md and may differ slightly from the final implementation; they are marked with `x-status: planned-from-spec`.",
+    "license": { "name": "Read-only public data layer" }
+  },
+  "servers": [
+    { "url": "http://127.0.0.1:8787", "description": "Local development" }
+  ],
+  "tags": [
+    { "name": "System", "description": "Built-in service routes." },
+    { "name": "Token", "description": "Token market data: price, OHLCV, market cap, ranking, search, merged detail." },
+    { "name": "Market", "description": "Cross-cutting market views: spot price, candles, overview, tick history. (planned from spec)" },
+    { "name": "NFT", "description": "NFT collection-level stats and recent sales by policy id." },
+    { "name": "Project", "description": "Project Memory: curated, event-sourced, provenance-bearing project records." },
+    { "name": "Category", "description": "Project taxonomy and per-category assignments." },
+    { "name": "Governance", "description": "Governance + Treasury Memory: DReps, actions, votes, treasury (observatory CC0 export). (planned from spec)" },
+    { "name": "Catalyst", "description": "Catalyst Memory: preservation archive index, funds, proposals (sparse, chain-of-custody). (planned from spec)" }
+  ],
+  "components": {
+    "schemas": {
+      "Quality": {
+        "type": "object",
+        "description": "Data-quality envelope attached to every response body (lib/envelope.js).",
+        "properties": {
+          "source": { "type": ["string", "null"], "example": "dexhunter+minswap" },
+          "authority_class": {
+            "type": ["string", "null"],
+            "enum": ["A", "B", "C", "D", "E", null],
+            "description": "A on-chain · B official · C at-risk platform · D community · E researcher."
+          },
+          "refresh": {
+            "type": ["string", "null"],
+            "enum": ["realtime", "~1m", "~5m", "hourly", "daily", "static", "on-demand", null]
+          },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"], "default": "high" },
+          "provenance": { "type": ["string", "null"] },
+          "as_of": { "type": "string", "format": "date-time" }
+        },
+        "required": ["source", "authority_class", "refresh", "confidence", "provenance", "as_of"]
+      },
+      "FlatEnvelope": {
+        "type": "object",
+        "description": "Legacy envelope used by nft/onchain modules (no nested _quality block).",
+        "properties": {
+          "source": { "type": "string" },
+          "as_of": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Money": {
+        "type": "object",
+        "properties": {
+          "ada": { "type": ["number", "null"] },
+          "usd": { "type": ["number", "null"] }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "note": { "type": "string" },
+          "_quality": { "$ref": "#/components/schemas/Quality" }
+        }
+      }
+    },
+    "parameters": {
+      "Unit": {
+        "name": "unit",
+        "in": "query",
+        "required": true,
+        "description": "Asset unit: \"lovelace\" or policyId(56 hex) + hexAssetName.",
+        "schema": { "type": "string" }
+      },
+      "Policy": {
+        "name": "policy",
+        "in": "query",
+        "required": true,
+        "description": "56-char hex Cardano policy id.",
+        "schema": { "type": "string", "pattern": "^[0-9a-fA-F]{56}$" }
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Liveness probe and service identity.",
+        "responses": {
+          "200": {
+            "description": "Service is up.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "service": { "type": "string" },
+                    "version": { "type": "string" }
+                  }
+                },
+                "example": { "ok": true, "service": "cardano-data-layer", "version": "0.1.0" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes": {
+      "get": {
+        "tags": ["System"],
+        "summary": "List every registered route (method, path, owning module, description).",
+        "responses": {
+          "200": {
+            "description": "Route table.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "routes": { "type": "array", "items": { "type": "object" } } }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/price": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Spot price in ADA and USD with confidence and source.",
+        "parameters": [{ "$ref": "#/components/parameters/Unit" }],
+        "responses": {
+          "200": {
+            "description": "Spot price.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "price": { "$ref": "#/components/schemas/Money" },
+                    "confidence": { "type": "string" },
+                    "source": { "type": "string" },
+                    "note": { "type": "string" },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                },
+                "example": {
+                  "unit": "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b",
+                  "price": { "ada": 0.00234, "usd": 0.00103 },
+                  "confidence": "high",
+                  "source": "dexhunter+minswap",
+                  "as_of": "2026-06-05T00:00:00.000Z",
+                  "_quality": {
+                    "source": "dexhunter+minswap",
+                    "authority_class": "C",
+                    "refresh": "on-demand",
+                    "confidence": "high",
+                    "provenance": "DexHunter aggregate average price (Minswap cross-check); USD derived on-chain via ADA/USDM",
+                    "as_of": "2026-06-05T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing or invalid unit." }
+        }
+      }
+    },
+    "/token/ohlcv": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "OHLCV candles bucketed on read from collected price ticks.",
+        "parameters": [
+          { "$ref": "#/components/parameters/Unit" },
+          { "name": "interval", "in": "query", "schema": { "type": "string", "enum": ["1m", "5m", "15m", "1h", "4h", "1d", "raw"], "default": "1h" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 100, "minimum": 1, "maximum": 1000 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Candles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "interval": { "type": "string" },
+                    "count": { "type": "integer" },
+                    "candles": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid interval or unit." }
+        }
+      }
+    },
+    "/token/mcap": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Market cap = spot price x on-chain supply (Koios).",
+        "parameters": [{ "$ref": "#/components/parameters/Unit" }],
+        "responses": {
+          "200": {
+            "description": "Market cap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "price": { "$ref": "#/components/schemas/Money" },
+                    "supply": { "type": ["number", "null"] },
+                    "decimals": { "type": ["integer", "null"] },
+                    "mcap": { "$ref": "#/components/schemas/Money" },
+                    "confidence": { "type": "string" },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid unit." }
+        }
+      }
+    },
+    "/tokens/top": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Partial ranking over a tracked/seed set (NOT a full ecosystem ranking).",
+        "parameters": [
+          { "name": "by", "in": "query", "schema": { "type": "string", "enum": ["mcap", "volume", "liquidity"], "default": "mcap" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 10, "minimum": 1, "maximum": 100 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranking. NOTE: topHandler currently returns a flat envelope (source + as_of) without a nested _quality block.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "by": { "type": "string" },
+                    "ranking": { "type": "array", "items": { "type": "object" } },
+                    "coverage": { "type": "string", "example": "partial" },
+                    "tracked_units": { "type": "integer" },
+                    "computable": { "type": "integer" },
+                    "source": { "type": "string" },
+                    "note": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid by parameter." }
+        }
+      }
+    },
+    "/token/search": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Search tracked/seed tokens and DexHunter by ticker/name.",
+        "parameters": [{ "name": "q", "in": "query", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Matching tokens.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "q": { "type": "string" },
+                    "count": { "type": "integer" },
+                    "results": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/list": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "List known tokens (seed set plus any tracked units).",
+        "responses": {
+          "200": {
+            "description": "Known tokens.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": { "type": "integer" },
+                    "tokens": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/{id}": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Merged token detail: metadata + supply + spot price + holder count.",
+        "description": "Aggregates CIP-26 (metadata), Koios (supply, holders), and DexHunter (price) for one unit. Registered LAST so it does not shadow /token/search, /token/list, /token/holders, /token/supply, /token/metadata.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "description": "Asset unit (policyId + hexAssetName).", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Merged detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "metadata": { "type": "object" },
+                    "supply": { "type": ["number", "null"] },
+                    "price": { "$ref": "#/components/schemas/Money" },
+                    "holder_count": { "type": ["integer", "null"] },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Unit not found." }
+        }
+      }
+    },
+    "/price/{id}": {
+      "get": {
+        "tags": ["Market"],
+        "summary": "Spot price ADA + USD (DexHunter, Minswap cross-check).",
+        "x-status": "planned-from-spec",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Spot price.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "price": { "$ref": "#/components/schemas/Money" },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ohlcv/{id}": {
+      "get": {
+        "tags": ["Market"],
+        "summary": "Candles aggregated from the ohlcv table.",
+        "x-status": "planned-from-spec",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "interval", "in": "query", "schema": { "type": "string", "enum": ["1m", "5m", "15m", "1h", "4h", "1d"], "default": "1h" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 100 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Candles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "interval": { "type": "string" },
+                    "candles": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/markets": {
+      "get": {
+        "tags": ["Market"],
+        "summary": "Market overview: tracked unit counts and latest tick per unit.",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "Overview.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tracked_units": { "type": "integer" },
+                    "markets": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/price/history/{id}": {
+      "get": {
+        "tags": ["Market"],
+        "summary": "Raw tick history for a unit from the ohlcv table.",
+        "x-status": "planned-from-spec",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 100 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tick history.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "ticks": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/holders": {
+      "get": {
+        "tags": ["NFT", "Token"],
+        "summary": "Holder count and top-N holders for a unit (Koios -> Blockfrost).",
+        "description": "Owned by onchain.js. Emits the legacy flat envelope (top-level source + as_of); no nested _quality block.",
+        "parameters": [{ "$ref": "#/components/parameters/Unit" }],
+        "responses": {
+          "200": {
+            "description": "Holders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "source": { "type": "string" },
+                    "holder_count": { "type": "integer" },
+                    "holder_count_is_lower_bound": { "type": "boolean" },
+                    "top_n": { "type": "integer" },
+                    "top_holders": { "type": "array", "items": { "type": "object" } },
+                    "as_of": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid unit." },
+          "503": { "description": "All sources unavailable." }
+        }
+      }
+    },
+    "/token/supply": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Total / circulating supply (Koios asset_info -> Blockfrost).",
+        "description": "Owned by onchain.js. Legacy flat envelope; circulating_supply equals on-chain total (minted minus burned).",
+        "parameters": [{ "$ref": "#/components/parameters/Unit" }],
+        "responses": {
+          "200": {
+            "description": "Supply.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "source": { "type": "string" },
+                    "total_supply": { "type": "string" },
+                    "circulating_supply": { "type": "string" },
+                    "decimals": { "type": ["integer", "null"] },
+                    "as_of": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid unit." },
+          "503": { "description": "All sources unavailable." }
+        }
+      }
+    },
+    "/token/metadata": {
+      "get": {
+        "tags": ["Token"],
+        "summary": "Ticker / name / decimals / logo / url / description (CIP-26 -> on-chain).",
+        "description": "Owned by onchain.js. Legacy flat envelope. Returns 200 with null fields when an asset simply has no metadata.",
+        "parameters": [{ "$ref": "#/components/parameters/Unit" }],
+        "responses": {
+          "200": {
+            "description": "Metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unit": { "type": "string" },
+                    "source": { "type": "string" },
+                    "ticker": { "type": ["string", "null"] },
+                    "name": { "type": ["string", "null"] },
+                    "decimals": { "type": ["integer", "null"] },
+                    "logo": { "type": ["string", "null"] },
+                    "url": { "type": ["string", "null"] },
+                    "description": { "type": ["string", "null"] },
+                    "as_of": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid unit." },
+          "503": { "description": "All sources unavailable." }
+        }
+      }
+    },
+    "/nft/collection/stats": {
+      "get": {
+        "tags": ["NFT"],
+        "summary": "Collection floor / volume / listings / owners / supply (OpenCNFT).",
+        "description": "Legacy flat envelope. Money is in ADA; usd is always null (no price oracle wired).",
+        "parameters": [{ "$ref": "#/components/parameters/Policy" }],
+        "responses": {
+          "200": {
+            "description": "Collection stats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "policy": { "type": "string" },
+                    "floor": { "$ref": "#/components/schemas/Money" },
+                    "volume": { "$ref": "#/components/schemas/Money" },
+                    "listings": { "type": ["integer", "null"] },
+                    "owners": { "type": ["integer", "null"] },
+                    "supply": { "type": ["integer", "null"] },
+                    "note": { "type": "string" },
+                    "source": { "type": "string" },
+                    "as_of": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid policy." },
+          "404": { "description": "Collection not found." },
+          "503": { "description": "Source unavailable." }
+        }
+      }
+    },
+    "/nft/collection/sales": {
+      "get": {
+        "tags": ["NFT"],
+        "summary": "Recent collection sales/trades, paged (OpenCNFT).",
+        "description": "Legacy flat envelope. Prices in ADA; usd null.",
+        "parameters": [
+          { "$ref": "#/components/parameters/Policy" },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1, "minimum": 1 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recent sales.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "policy": { "type": "string" },
+                    "page": { "type": "integer" },
+                    "count": { "type": "integer" },
+                    "sales": { "type": "array", "items": { "type": "object" } },
+                    "source": { "type": "string" },
+                    "as_of": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid policy." },
+          "404": { "description": "Collection not found." },
+          "503": { "description": "Source unavailable." }
+        }
+      }
+    },
+    "/projects": {
+      "get": {
+        "tags": ["Project"],
+        "summary": "List curated projects (Project Memory, read-only).",
+        "parameters": [
+          { "name": "q", "in": "query", "schema": { "type": "string" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer" } },
+          { "name": "offset", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projects.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer" },
+                    "count": { "type": "integer" },
+                    "projects": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/project/search": {
+      "get": {
+        "tags": ["Project"],
+        "summary": "Substring search over project id/name (registered before /project/:id).",
+        "parameters": [
+          { "name": "q", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 100 } },
+          { "name": "offset", "in": "query", "schema": { "type": "integer", "default": 0 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching projects.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "q": { "type": "string" },
+                    "total": { "type": "integer" },
+                    "count": { "type": "integer" },
+                    "projects": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/project/{id}": {
+      "get": {
+        "tags": ["Project"],
+        "summary": "One project with per-field provenance and evidence.",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Project record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Project not found." }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Category"],
+        "summary": "The per-source, as-found taxonomy.",
+        "responses": {
+          "200": {
+            "description": "Categories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category/{slug}": {
+      "get": {
+        "tags": ["Category"],
+        "summary": "One category plus its active project assignments.",
+        "parameters": [{ "name": "slug", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Category with members.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "category": { "type": "object" },
+                    "project_count": { "type": "integer" },
+                    "projects": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Category not found." }
+        }
+      }
+    },
+    "/history/{project}": {
+      "get": {
+        "tags": ["Project"],
+        "summary": "Append-only event history for one project (event log).",
+        "parameters": [{ "name": "project", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Event history.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "project": { "type": "string" },
+                    "count": { "type": "integer" },
+                    "events": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Project not found / no events." }
+        }
+      }
+    },
+    "/dreps": {
+      "get": {
+        "tags": ["Governance"],
+        "summary": "Top DReps from the observatory top30 export.",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "DReps.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entries": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Export file missing." }
+        }
+      }
+    },
+    "/dreps/{id}": {
+      "get": {
+        "tags": ["Governance"],
+        "summary": "One DRep matched by drep_id.",
+        "x-status": "planned-from-spec",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "DRep.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "_quality": { "$ref": "#/components/schemas/Quality" } } } } }
+          },
+          "404": { "description": "Not found." },
+          "503": { "description": "Export file missing." }
+        }
+      }
+    },
+    "/actions": {
+      "get": {
+        "tags": ["Governance"],
+        "summary": "Governance actions, filterable by type and outcome.",
+        "x-status": "planned-from-spec",
+        "parameters": [
+          { "name": "type", "in": "query", "schema": { "type": "string" } },
+          { "name": "outcome", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "actions": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Export file missing." }
+        }
+      }
+    },
+    "/actions/{id}": {
+      "get": {
+        "tags": ["Governance"],
+        "summary": "One governance action by action_id.",
+        "x-status": "planned-from-spec",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Action.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "_quality": { "$ref": "#/components/schemas/Quality" } } } } }
+          },
+          "404": { "description": "Not found." },
+          "503": { "description": "Export file missing." }
+        }
+      }
+    },
+    "/votes": {
+      "get": {
+        "tags": ["Governance"],
+        "summary": "Recent votes from the live recent_votes export.",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "Recent votes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "votes": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Export file missing." }
+        }
+      }
+    },
+    "/treasury": {
+      "get": {
+        "tags": ["Governance"],
+        "summary": "Treasury snapshot: latest epoch plus series and withdrawals.",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "Treasury snapshot.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "epochs": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Export file missing." }
+        }
+      }
+    },
+    "/archive": {
+      "get": {
+        "tags": ["Catalyst"],
+        "summary": "Catalyst preservation archive index (subfolders, authority classes, counts).",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "Archive index.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subfolders": { "type": "array", "items": { "type": "object" } },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Archive missing." }
+        }
+      }
+    },
+    "/funds": {
+      "get": {
+        "tags": ["Catalyst"],
+        "summary": "Funds derivable from captured artifacts (coverage is sparse, honest).",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "Funds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "funds": { "type": "array", "items": { "type": "object" } },
+                    "note": { "type": "string" },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Archive missing." }
+        }
+      }
+    },
+    "/fund/{id}": {
+      "get": {
+        "tags": ["Catalyst"],
+        "summary": "Captures relating to one fund id.",
+        "x-status": "planned-from-spec",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Fund captures.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "_quality": { "$ref": "#/components/schemas/Quality" } } } } }
+          },
+          "404": { "description": "No captures for fund." },
+          "503": { "description": "Archive missing." }
+        }
+      }
+    },
+    "/proposals": {
+      "get": {
+        "tags": ["Catalyst"],
+        "summary": "Proposals derivable from captures (sparse; never fabricated).",
+        "x-status": "planned-from-spec",
+        "responses": {
+          "200": {
+            "description": "Proposals.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "proposals": { "type": "array", "items": { "type": "object" } },
+                    "note": { "type": "string" },
+                    "_quality": { "$ref": "#/components/schemas/Quality" }
+                  }
+                }
+              }
+            }
+          },
+          "503": { "description": "Archive missing." }
+        }
+      }
+    }
+  }
+}
