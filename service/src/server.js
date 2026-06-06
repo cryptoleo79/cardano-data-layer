@@ -62,30 +62,33 @@ try {
 log('loaded modules:', loaded.join(', ') || '(none yet)');
 
 // --- request dispatch ---
-function send(res, status, body, headers = {}) {
+function send(res, status, body, headers = {}, isHead = false) {
   const payload = typeof body === 'string' ? body : JSON.stringify(body, null, 2);
   res.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'access-control-allow-origin': '*', ...headers });
-  res.end(payload);
+  res.end(isHead ? undefined : payload); // HEAD: headers only, no body
 }
 
 const server = http.createServer(async (req, res) => {
   const started = Date.now();
+  // HEAD is treated as GET (so `curl -I` works); the body is suppressed in send().
+  const isHead = req.method === 'HEAD';
+  const method = isHead ? 'GET' : req.method;
   let url;
   try { url = new URL(req.url, `http://${req.headers.host || 'localhost'}`); }
-  catch { return send(res, 400, { error: 'bad_request' }); }
+  catch { return send(res, 400, { error: 'bad_request' }, {}, isHead); }
 
-  const found = router.match(req.method, url.pathname);
-  if (!found) return send(res, 404, { error: 'not_found', path: url.pathname });
+  const found = router.match(method, url.pathname);
+  if (!found) return send(res, 404, { error: 'not_found', path: url.pathname }, {}, isHead);
 
   const query = Object.fromEntries(url.searchParams.entries());
   try {
     const result = await found.route.handler({ req, query, params: found.params, ctx });
     const { status = 200, body = {}, headers = {} } = result || {};
-    send(res, status, body, headers);
+    send(res, status, body, headers, isHead);
     log(req.method, url.pathname, status, `${Date.now() - started}ms`);
   } catch (err) {
     const status = err && Number.isInteger(err.status) ? err.status : 500;
-    send(res, status, { error: status >= 500 ? 'internal_error' : 'upstream_error', message: err?.message, source: err?.source });
+    send(res, status, { error: status >= 500 ? 'internal_error' : 'upstream_error', message: err?.message, source: err?.source }, {}, isHead);
     log(req.method, url.pathname, status, `${Date.now() - started}ms`, 'ERR', err?.message);
   }
 });

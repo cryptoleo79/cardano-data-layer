@@ -582,32 +582,41 @@ async function detailHandler({ params, ctx }) {
     });
 
   // --- holder count (Koios asset_addresses, capped) ---
+  // Bounded by an overall time budget so a slow/unreachable Koios can never
+  // stall the merged detail call (holders degrade to null + a note instead).
+  const HOLDER_BUDGET_MS = 5_000;
   const holdersPromise = (async () => {
     if (unit === 'lovelace') return { count: null, capped: false, note: 'holder enumeration not applicable to ADA' };
-    try {
-      return await ctx.cache.getOrSet(`token:holders:${unit}`, config.cache.holders, async () => {
-        let count = 0;
-        let capped = false;
-        for (let page = 0; page < HOLDER_MAX_PAGES; page++) {
-          const rows = await koios.assetAddresses(policyId, assetName, {
-            limit: HOLDER_PAGE_LIMIT,
-            offset: page * HOLDER_PAGE_LIMIT,
-            timeoutMs: 12_000,
-          });
-          count += rows.length;
-          if (rows.length < HOLDER_PAGE_LIMIT) break;
-          if (page === HOLDER_MAX_PAGES - 1) capped = true;
-        }
-        return {
-          count,
-          capped,
-          note: capped ? `holder count capped at ${HOLDER_MAX_PAGES * HOLDER_PAGE_LIMIT} (large asset)` : undefined,
-        };
-      });
-    } catch (err) {
-      notes.push(`holders (koios) failed: ${err.message}`);
-      return { count: null, capped: false };
-    }
+    const budget = new Promise((resolve) => setTimeout(
+      () => resolve({ count: null, capped: false, note: 'holders lookup exceeded time budget' }), HOLDER_BUDGET_MS));
+    const work = (async () => {
+      try {
+        return await ctx.cache.getOrSet(`token:holders:${unit}`, config.cache.holders, async () => {
+          let count = 0;
+          let capped = false;
+          for (let page = 0; page < HOLDER_MAX_PAGES; page++) {
+            const rows = await koios.assetAddresses(policyId, assetName, {
+              limit: HOLDER_PAGE_LIMIT,
+              offset: page * HOLDER_PAGE_LIMIT,
+              timeoutMs: 4_000,
+              retries: 0,
+            });
+            count += rows.length;
+            if (rows.length < HOLDER_PAGE_LIMIT) break;
+            if (page === HOLDER_MAX_PAGES - 1) capped = true;
+          }
+          return {
+            count,
+            capped,
+            note: capped ? `holder count capped at ${HOLDER_MAX_PAGES * HOLDER_PAGE_LIMIT} (large asset)` : undefined,
+          };
+        });
+      } catch (err) {
+        notes.push(`holders (koios) failed: ${err.message}`);
+        return { count: null, capped: false };
+      }
+    })();
+    return Promise.race([work, budget]);
   })();
 
   const [meta, sup, price, holders] = await Promise.all([metaPromise, supplyPromise, pricePromise, holdersPromise]);
