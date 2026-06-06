@@ -39,8 +39,14 @@ router.add('GET', '/docs', async () => {
     return { status: 200, body: s, headers: { 'content-type': 'text/html; charset=utf-8' } };
   } catch { return { status: 404, body: { error: 'docs_not_found' } }; }
 });
-// '/' redirects to the docs.
-router.add('GET', '/', async () => ({ status: 302, body: '', headers: { location: '/docs' } }));
+// '/' serves the developer landing page.
+const indexPath = new URL('../public/index.html', import.meta.url);
+router.add('GET', '/', async () => {
+  try {
+    const s = await readFile(indexPath, 'utf8');
+    return { status: 200, body: s, headers: { 'content-type': 'text/html; charset=utf-8' } };
+  } catch { return { status: 302, body: '', headers: { location: '/docs' } }; }
+});
 
 // --- auto-load modules ---
 const modulesDir = new URL('./modules/', import.meta.url);

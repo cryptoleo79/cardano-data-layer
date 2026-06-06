@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardano Data Layer — api.asy.life</title>
+<meta name="description" content="A neutral, read-only Cardano data API: token, market, NFT, project, category, governance, and Catalyst data, consolidated over open sources — every response carries provenance.">
+<meta name="theme-color" content="#fafaf7">
+<style>
+  :root{--bg:#fafaf7;--card:#fff;--text:#1a1a1a;--muted:#666;--faint:#999;--accent:#2c5670;--accent-soft:rgba(44,86,112,.08);--border:rgba(0,0,0,.1);--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  code,.mono{font-family:var(--mono);font-size:.88em}
+  .eco{background:#fff;border-bottom:1px solid var(--border);font-size:.85rem}
+  .eco-in{max-width:980px;margin:0 auto;padding:8px 20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .eco .lbl{color:var(--faint);margin-right:4px}
+  .eco a{color:var(--muted)}.eco a.on{color:var(--accent);font-weight:600}
+  .eco .sep{color:var(--faint)}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+  header.hero{padding:46px 0 28px;border-bottom:1px solid var(--border);margin-bottom:30px}
+  h1{font-size:2rem;margin:0 0 8px}
+  .tag{color:var(--muted);font-size:1.08rem;margin:0 0 18px;max-width:680px}
+  .cta a{display:inline-block;margin:4px 10px 4px 0;padding:8px 16px;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:.92rem}
+  .cta a.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  h2{font-size:1.2rem;margin:34px 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .cat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+  .cat h3{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+  .cat p{margin:0 0 8px;color:var(--muted);font-size:.88rem}
+  .cat code{display:block;color:var(--text);font-size:.8rem;background:var(--accent-soft);padding:2px 6px;border-radius:3px;margin:2px 0;word-break:break-all}
+  pre{background:#1f2937;color:#e5e7eb;padding:14px 16px;border-radius:8px;overflow:auto;font-size:.83rem;line-height:1.7}
+  pre .c{color:#93c5a6}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;margin:8px 0}
+  th,td{border:1px solid var(--border);padding:6px 9px;text-align:left}th{background:var(--accent-soft)}
+  .note{color:var(--muted);font-size:.9rem}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<div class="eco"><div class="eco-in">
+  <span class="lbl">asy.life</span>
+  <a href="https://ctf.asy.life">CTF</a><span class="sep">·</span>
+  <a href="https://observatory.asy.life">Observatory</a><span class="sep">·</span>
+  <a href="https://voting.asy.life">Voting</a><span class="sep">·</span>
+  <a href="https://governance.asy.life">Governance</a><span class="sep">·</span>
+  <a href="https://api.asy.life" class="on">API</a><span class="sep">·</span>
+  <a href="https://github.com/cryptoleo79" target="_blank" rel="noopener">GitHub</a>
+</div></div>
+
+<div class="wrap">
+<header class="hero">
+  <h1>Cardano Data Layer</h1>
+  <p class="tag">A neutral, <strong>read-only</strong> Cardano data API — token, market, NFT, project, category, governance, and Catalyst data, consolidated over open sources. Every response carries its provenance. No key, no signup.</p>
+  <div class="cta">
+    <a class="primary" href="/docs">API documentation →</a>
+    <a href="/openapi.json">OpenAPI spec</a>
+    <a href="/health">Health</a>
+    <a href="https://github.com/cryptoleo79/cardano-data-layer" target="_blank" rel="noopener">Source</a>
+  </div>
+</header>
+
+<h2>What it is</h2>
+<p>The Cardano Data Layer is a thin, neutral consolidation API over open Cardano data sources (Koios, the CIP-26 token registry, DexHunter/Minswap, OpenCNFT) and this project's preservation and observatory memory layers. It does not host a wallet, take writes, rank, or give advice — it answers GET requests with data, each tagged with where it came from and how much to trust it.</p>
+<p>Built as ecosystem infrastructure, partly in response to the wind-down of closed analytics platforms: open, reproducible, and provenance-first.</p>
+
+<h2>API categories</h2>
+<div class="grid">
+  <div class="cat"><h3>Token</h3><p>Metadata, supply, price, holders, rankings.</p><code>/token/{unit}</code><code>/tokens/top</code></div>
+  <div class="cat"><h3>Market</h3><p>Spot price, OHLCV candles, market overview.</p><code>/price/{unit}</code><code>/ohlcv/{unit}?interval=1h</code></div>
+  <div class="cat"><h3>NFT</h3><p>Collection floor, volume, sales (by policy).</p><code>/nft/collection/stats?policy=…</code></div>
+  <div class="cat"><h3>Project</h3><p>Curated project memory with provenance + history.</p><code>/projects</code><code>/project/{id}</code></div>
+  <div class="cat"><h3>Category</h3><p>The ecosystem taxonomy, preserved as-found.</p><code>/categories</code><code>/category/{slug}</code></div>
+  <div class="cat"><h3>Governance</h3><p>DReps, governance actions, votes, treasury.</p><code>/dreps</code><code>/actions</code><code>/treasury</code></div>
+  <div class="cat"><h3>Catalyst</h3><p>Preserved Catalyst archive: funds, proposals.</p><code>/archive</code><code>/funds</code></div>
+</div>
+
+<h2>Quick examples</h2>
+<pre><span class="c"># health</span>
+curl https://api.asy.life/health
+
+<span class="c"># a token, merged detail (metadata + supply + price + holders)</span>
+curl https://api.asy.life/token/279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b
+
+<span class="c"># spot price</span>
+curl https://api.asy.life/price/279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b
+
+<span class="c"># defunct projects (preserved project memory)</span>
+curl "https://api.asy.life/projects?status=defunct"
+
+<span class="c"># top DReps and the treasury</span>
+curl https://api.asy.life/dreps
+curl https://api.asy.life/treasury
+
+<span class="c"># the machine-readable spec</span>
+curl https://api.asy.life/openapi.json</pre>
+
+<h2>Every response carries provenance</h2>
+<p class="note">A <code>_quality</code> block on every response tells you the source, how authoritative it is, and how fresh:</p>
+<table>
+<tr><th>field</th><th>meaning</th></tr>
+<tr><td><code>source</code></td><td>upstream(s) the data came from</td></tr>
+<tr><td><code>authority_class</code></td><td>A on-chain · B official · C at-risk platform · D community · E researcher</td></tr>
+<tr><td><code>refresh</code></td><td>realtime · ~5m · hourly · daily · static · on-demand</td></tr>
+<tr><td><code>confidence</code></td><td>high · medium · low</td></tr>
+<tr><td><code>provenance</code></td><td>how the value was derived</td></tr>
+</table>
+
+<footer>
+  Read-only · no API key · CORS enabled. Code Apache-2.0; data licenses vary by upstream (see each <code>_quality.source</code>). Part of the <a href="https://observatory.asy.life">asy.life</a> ecosystem. Not affiliated with the upstream data providers.
+</footer>
+</div>
+</body>
+</html>
