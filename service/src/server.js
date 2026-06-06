@@ -3,7 +3,7 @@
 // and registers its routes. Adding a feature = dropping a file in modules/.
 
 import http from 'node:http';
-import { readdir } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { TtlCache } from './cache.js';
 import { Router } from './router.js';
 import { config } from './config.js';
@@ -11,12 +11,36 @@ import { db } from './db.js';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 const ctx = { db, cache: new TtlCache(), config, log };
+const STARTED = Date.now();
 
 const router = new Router();
 
-// --- built-in routes ---
-router.add('GET', '/health', async () => ({ status: 200, body: { ok: true, service: 'cardano-data-layer', version: '0.1.0' } }));
+// --- built-in routes (first-class deployment endpoints) ---
+router.add('GET', '/health', async () => ({
+  status: 200,
+  body: { ok: true, service: 'cardano-data-layer', version: '0.1.0', uptime_s: Math.floor((Date.now() - STARTED) / 1000), routes: router.list().length, time: new Date().toISOString() },
+}));
 router.add('GET', '/routes', async () => ({ status: 200, body: { routes: router.list() } }));
+
+// /openapi.json — the OpenAPI 3.1 spec, served verbatim.
+const openapiPath = new URL('../openapi.json', import.meta.url);
+router.add('GET', '/openapi.json', async () => {
+  try {
+    const s = await readFile(openapiPath, 'utf8');
+    return { status: 200, body: s, headers: { 'content-type': 'application/json; charset=utf-8' } };
+  } catch { return { status: 404, body: { error: 'openapi_not_found' } }; }
+});
+
+// /docs — the human documentation landing page.
+const docsPath = new URL('../public/docs.html', import.meta.url);
+router.add('GET', '/docs', async () => {
+  try {
+    const s = await readFile(docsPath, 'utf8');
+    return { status: 200, body: s, headers: { 'content-type': 'text/html; charset=utf-8' } };
+  } catch { return { status: 404, body: { error: 'docs_not_found' } }; }
+});
+// '/' redirects to the docs.
+router.add('GET', '/', async () => ({ status: 302, body: '', headers: { location: '/docs' } }));
 
 // --- auto-load modules ---
 const modulesDir = new URL('./modules/', import.meta.url);

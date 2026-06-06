@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardano Data Layer — API documentation</title>
+<meta name="description" content="A neutral, read-only Cardano data API. Token, market, NFT, project, category, governance, and Catalyst data — every response carries provenance.">
+<style>
+  :root{--bg:#fafaf7;--card:#fff;--text:#1a1a1a;--muted:#666;--faint:#999;--accent:#2c5670;--accent-soft:rgba(44,86,112,.08);--border:rgba(0,0,0,.1);--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+  header{border-bottom:1px solid var(--border);margin-bottom:28px;padding:28px 0 18px}
+  h1{font-size:1.6rem;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0}
+  h2{font-size:1.15rem;margin:34px 0 10px;border-bottom:1px solid var(--border);padding-bottom:6px}
+  code,.mono{font-family:var(--mono);font-size:.85em}
+  pre{background:#1f2937;color:#e5e7eb;padding:12px 14px;border-radius:6px;overflow:auto;font-size:.82rem}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .chips a{display:inline-block;background:var(--accent-soft);border:1px solid var(--border);border-radius:14px;padding:3px 11px;margin:3px 5px 3px 0;font-size:.85rem}
+  .ep{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin:8px 0}
+  .ep .method{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:.8rem;background:var(--accent-soft);padding:1px 7px;border-radius:3px;margin-right:8px}
+  .ep .path{font-family:var(--mono);font-size:.9rem}
+  .ep .desc{color:var(--muted);font-size:.86rem;margin-top:3px}
+  .tag-h{font-size:1rem;margin:22px 0 6px;color:var(--accent)}
+  table{border-collapse:collapse;width:100%;font-size:.85rem;margin:8px 0}
+  th,td{border:1px solid var(--border);padding:6px 9px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft)}
+  .note{color:var(--faint);font-size:.82rem}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Cardano Data Layer API</h1>
+  <p class="sub">A neutral, <strong>read-only</strong> Cardano data API — token, market, NFT, project, category, governance &amp; Catalyst data, consolidated over open sources. Documentation, not a product.</p>
+</header>
+
+<p>Base URL: <code id="base">—</code> · Spec: <a href="/openapi.json">/openapi.json</a> · Health: <a href="/health">/health</a> · Source: <a href="https://github.com/cryptoleo79/cardano-data-layer" target="_blank" rel="noopener">github.com/cryptoleo79/cardano-data-layer</a></p>
+
+<h2>What this is</h2>
+<p>A thin, neutral consolidation layer over open Cardano data sources (Koios, CIP-26, DexHunter/Minswap, OpenCNFT) and the project's own preservation/observatory memory layers. It does not host a wallet, take writes, or give advice. Every endpoint is a GET; no API key is required.</p>
+
+<h2>Data quality envelope</h2>
+<p>Every response carries a <code>_quality</code> block so you always know where a value came from and how much to trust it:</p>
+<table>
+<tr><th>field</th><th>meaning</th></tr>
+<tr><td><code>source</code></td><td>upstream(s) the data came from</td></tr>
+<tr><td><code>authority_class</code></td><td>A on-chain · B official · C at-risk platform · D community · E researcher</td></tr>
+<tr><td><code>refresh</code></td><td>cadence: realtime · ~1m · ~5m · hourly · daily · static · on-demand</td></tr>
+<tr><td><code>confidence</code></td><td>high · medium · low</td></tr>
+<tr><td><code>provenance</code></td><td>how the value was derived</td></tr>
+<tr><td><code>as_of</code></td><td>ISO timestamp of the response</td></tr>
+</table>
+
+<h2>Quick start</h2>
+<pre id="quickstart">curl <span class="b">BASE</span>/health
+curl <span class="b">BASE</span>/token/279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b
+curl <span class="b">BASE</span>/price/279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b
+curl "<span class="b">BASE</span>/projects?status=defunct"
+curl <span class="b">BASE</span>/dreps
+curl <span class="b">BASE</span>/openapi.json</pre>
+
+<h2>Endpoints</h2>
+<div class="chips" id="tagchips"></div>
+<div id="endpoints"><p class="note">Loading from /openapi.json…</p></div>
+
+<footer>
+  Read-only. No write paths, no accounts. Code Apache-2.0 · data licenses vary by upstream (see each <code>_quality.source</code>). Built on open Cardano data; not affiliated with the upstreams.
+</footer>
+</div>
+
+<script>
+const base = location.origin;
+document.getElementById('base').textContent = base;
+for (const el of document.querySelectorAll('#quickstart .b')) el.textContent = base;
+
+fetch('/openapi.json').then(r=>r.json()).then(spec=>{
+  const groups={};
+  for (const [path,methods] of Object.entries(spec.paths||{})){
+    for (const [m,op] of Object.entries(methods)){
+      const tag=(op.tags&&op.tags[0])||'Other';
+      (groups[tag] ||= []).push({m:m.toUpperCase(),path,summary:op.summary||''});
+    }
+  }
+  const order=['System','Token','Market','NFT','Project','Category','Governance','Catalyst','Other'];
+  const tags=Object.keys(groups).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});
+  const chips=document.getElementById('tagchips');
+  const wrap=document.getElementById('endpoints');
+  wrap.innerHTML='';
+  for(const tag of tags){
+    const a=document.createElement('a');a.href='#tag-'+tag;a.textContent=tag+' ('+groups[tag].length+')';chips.appendChild(a);
+    const h=document.createElement('div');h.className='tag-h';h.id='tag-'+tag;h.textContent=tag;wrap.appendChild(h);
+    for(const ep of groups[tag].sort((x,y)=>x.path.localeCompare(y.path))){
+      const d=document.createElement('div');d.className='ep';
+      d.innerHTML='<span class="method">'+ep.m+'</span><span class="path"></span><div class="desc"></div>';
+      d.querySelector('.path').textContent=ep.path;
+      d.querySelector('.desc').textContent=ep.summary;
+      wrap.appendChild(d);
+    }
+  }
+}).catch(e=>{
+  document.getElementById('endpoints').innerHTML='<p class="note">Could not load /openapi.json. Try <a href="/routes">/routes</a>.</p>';
+});
+</script>
+</body>
+</html>
