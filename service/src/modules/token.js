@@ -346,7 +346,26 @@ async function mcapHandler({ query, ctx }) {
   };
 }
 
-/** GET /tokens/top?by=mcap|volume|liquidity&limit= */
+/** Run fn over items with bounded concurrency (keeps /tokens/top under the proxy timeout). */
+async function mapLimit(items, limit, fn) {
+  const out = new Array(items.length);
+  let i = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (i < items.length) { const idx = i++; out[idx] = await fn(items[idx], idx); }
+  });
+  await Promise.all(workers);
+  return out;
+}
+
+/** Latest poller-collected price (ADA) for a unit from the ohlcv table, or null. */
+function latestTickAda(unit) {
+  const r = get("SELECT c FROM ohlcv WHERE unit = ? AND interval = 'raw' ORDER BY ts DESC LIMIT 1", unit);
+  return r && r.c != null ? r.c : null;
+}
+
+/** GET /tokens/top?by=mcap|volume|liquidity&limit=
+ *  Ranks over the tracked/seed set. Cached as a whole; prices come from the
+ *  poller-collected ohlcv table (not live per-unit) so it stays fast at scale. */
 async function topHandler({ query, ctx }) {
   const by = (query.by || 'mcap').trim();
   const limit = Math.min(Math.max(Number.parseInt(query.limit, 10) || 10, 1), 100);
@@ -354,80 +373,54 @@ async function topHandler({ query, ctx }) {
     throw new UpstreamError('invalid by; expected mcap|volume|liquidity', { status: 400, source: 'token' });
   }
 
-  // Coverage is the union of: units that have OHLCV rows + the seed set. This is
-  // a TRACKED set, not the whole ecosystem — we say so loudly in the note.
-  const tracked = all('SELECT DISTINCT unit FROM ohlcv').map((r) => r.unit);
-  const seedUnits = SEED_UNITS.map((s) => s.unit);
-  const units = [...new Set([...tracked, ...seedUnits])];
+  return ctx.cache.getOrSet(`token:top:${by}`, config.cache.rankings, async () => {
+    const tracked = all('SELECT DISTINCT unit FROM ohlcv').map((r) => r.unit);
+    const tickerOf = new Map(SEED_UNITS.map((s) => [s.unit, s.ticker]));
+    const units = [...new Set([...tracked, ...SEED_UNITS.map((s) => s.unit)])];
+    const usdPerAda = await adaUsd(ctx).catch(() => null);
 
-  const usdPerAda = await adaUsd(ctx).catch(() => null);
-
-  // Build a row per unit with whatever metric we can actually compute on-chain.
-  const ranked = [];
-  for (const unit of units) {
-    try {
-      let metricAda = null;
-      let priceAda = null;
-      if (by === 'volume') {
-        // Sum recorded volume from candles (poller currently writes null volume,
-        // so this stays honest: it's 0/unknown until volume capture lands).
-        const row = get('SELECT SUM(v) AS vol FROM ohlcv WHERE unit = ?', unit);
-        metricAda = row && row.vol != null ? row.vol : null;
-      } else if (by === 'liquidity') {
-        // Liquidity comes only from Minswap pool stats when reachable.
-        const s = await minswap.tokenStats(unit).catch(() => null);
-        metricAda = s ? s.liquidityAda : null;
-        priceAda = s ? s.adaPerToken : null;
-      } else {
-        // mcap = price x on-chain supply.
-        const [p, sup] = await Promise.all([
-          dexhunter.averagePriceInAda(unit).catch(() => null),
-          koiosSupply(ctx, unit).catch(() => null),
-        ]);
-        priceAda = p ? p.adaPerToken : null;
-        if (priceAda != null && sup && sup.supply != null) metricAda = priceAda * sup.supply;
-      }
-      ranked.push({
-        unit,
-        ticker: SEED_UNITS.find((s) => s.unit === unit)?.ticker || null,
+    const ranked = await mapLimit(units, 10, async (unit) => {
+      let metricAda = null, priceAda = latestTickAda(unit);
+      try {
+        if (by === 'volume') {
+          const row = get('SELECT SUM(v) AS vol FROM ohlcv WHERE unit = ?', unit);
+          metricAda = row && row.vol != null ? row.vol : null;
+        } else if (by === 'liquidity') {
+          const s = await minswap.tokenStats(unit).catch(() => null);
+          metricAda = s ? s.liquidityAda : null;
+          if (s && s.adaPerToken) priceAda = s.adaPerToken;
+        } else if (priceAda != null) { // mcap = poller price x on-chain supply (only when priced; supply cached)
+          const sup = await koiosSupply(ctx, unit).catch(() => null);
+          if (sup && sup.supply != null) metricAda = priceAda * sup.supply;
+        }
+      } catch { /* leave nulls */ }
+      return {
+        unit, ticker: tickerOf.get(unit) || null,
         metric: { ada: metricAda, usd: metricAda != null && usdPerAda != null ? metricAda * usdPerAda : null },
-        price: priceAda != null ? { ada: priceAda, usd: priceAda != null && usdPerAda != null ? priceAda * usdPerAda : null } : null,
-      });
-    } catch {
-      ranked.push({ unit, ticker: SEED_UNITS.find((s) => s.unit === unit)?.ticker || null, metric: { ada: null, usd: null }, price: null });
-    }
-  }
+        price: priceAda != null ? { ada: priceAda, usd: usdPerAda != null ? priceAda * usdPerAda : null } : null,
+      };
+    });
 
-  // Sort: computable metrics first (desc), nulls last.
-  ranked.sort((a, b) => {
-    const av = a.metric.ada, bv = b.metric.ada;
-    if (av == null && bv == null) return 0;
-    if (av == null) return 1;
-    if (bv == null) return -1;
-    return bv - av;
+    ranked.sort((a, b) => {
+      const av = a.metric.ada, bv = b.metric.ada;
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1; if (bv == null) return -1; return bv - av;
+    });
+    const computable = ranked.filter((r) => r.metric.ada != null).length;
+    const source = by === 'liquidity' ? 'minswap' : (by === 'mcap' ? 'ohlcv+koios' : 'ohlcv-table');
+    return {
+      status: 200,
+      body: dq({
+        by, ranking: ranked.slice(0, limit), coverage: 'partial', tracked_units: units.length, computable,
+        source, as_of: nowIso(),
+        note: 'Partial ranking over a tracked set (110 tokens), NOT a full ecosystem ranking. Prices are poller-collected (mcap = price x Koios supply).',
+      }, {
+        source, authority_class: by === 'mcap' ? 'B' : 'C', refresh: '~5m',
+        confidence: computable ? 'medium' : 'low',
+        provenance: 'partial ranking over the tracked set; prices from the OHLCV poller, supply from Koios',
+      }),
+    };
   });
-
-  const computable = ranked.filter((r) => r.metric.ada != null).length;
-  const source = by === 'liquidity' ? 'minswap' : (by === 'mcap' ? 'dexhunter+koios' : 'ohlcv-table');
-  return {
-    status: 200,
-    body: dq({
-      by,
-      ranking: ranked.slice(0, limit),
-      coverage: 'partial',
-      tracked_units: units.length,
-      computable,
-      source,
-      as_of: nowIso(),
-      note: 'Partial ranking over a tracked/seed set only — NOT a full ecosystem ranking. Expand coverage via CDL_POLL_UNITS and the poller.',
-    }, {
-      source,
-      authority_class: by === 'mcap' ? 'B' : 'C', // mcap leans on Koios supply (B); volume/liquidity are C
-      refresh: 'on-demand',
-      confidence: 'low', // partial coverage; explicitly not an ecosystem ranking
-      provenance: 'partial ranking over the tracked/seed set (DexHunter/Minswap/Koios)',
-    }),
-  };
 }
 
 /** The known-token universe: the seed set unioned with any unit that has ohlcv rows. */

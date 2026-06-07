@@ -1,44 +1,739 @@
 {
-  "note": "Tracked token universe for price/OHLCV/rankings. Units (policyId+assetNameHex) are Koios-verified (POST /asset_info returned a real asset row). Sourced from the minswap/minswap-tokens verified list + CIP-26 registry, cross-checked on cexplorer/cardanoscan. No unconfirmed units.",
+  "note": "Tracked token universe. First 38 Koios-verified with categories (minswap/CIP-26). Remainder from the DexHunter verified token list (is_verified=true) — real on-chain DEX-traded assets; source per token. No guessed/synthetic units.",
   "as_of": "2026-06-07",
+  "count": 110,
   "tokens": [
-    { "ticker": "SNEK", "name": "Snek", "category": "meme", "unit": "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b" },
-    { "ticker": "MIN", "name": "Minswap", "category": "defi", "unit": "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e" },
-    { "ticker": "HOSKY", "name": "Hosky Token", "category": "meme", "unit": "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235484f534b59" },
-    { "ticker": "AGIX", "name": "SingularityNET", "category": "ai", "unit": "f43a62fdc3965df486de8a0d32fe800963589c41b38946602a0dc53541474958" },
-    { "ticker": "WMT", "name": "World Mobile Token", "category": "infrastructure", "unit": "1d7f33bd23d85e1a25d87d86fac4f199c3197a2f7afeb662a0f34e1e776f726c646d6f62696c65746f6b656e" },
-    { "ticker": "WMTX", "name": "World Mobile Token X", "category": "infrastructure", "unit": "e5a42a1a1d3d1da71b0449663c32798725888d2eb0843c4dabeca05a576f726c644d6f62696c65546f6b656e58" },
-    { "ticker": "IAG", "name": "Iagon", "category": "infrastructure", "unit": "5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d114494147" },
-    { "ticker": "INDY", "name": "Indigo DAO Token", "category": "defi", "unit": "533bb94a8850ee3ccbe483106489399112b74c905342cb1792a797a0494e4459" },
-    { "ticker": "DJED", "name": "Djed", "category": "stablecoin", "unit": "8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd61446a65644d6963726f555344" },
-    { "ticker": "iUSD", "name": "Indigo iUSD", "category": "stablecoin", "unit": "f66d78b4a3cb3d37afa0ec36461e51ecbde00f26c8f0a68f94b6988069555344" },
-    { "ticker": "SHEN", "name": "Shen", "category": "stablecoin", "unit": "8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd615368656e4d6963726f555344" },
-    { "ticker": "USDM", "name": "Moneta USDM", "category": "stablecoin", "unit": "c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d" },
-    { "ticker": "SUNDAE", "name": "SundaeSwap", "category": "defi", "unit": "9a9693a9a37912a5097918f97918d15240c92ab729a0b7c4aa144d7753554e444145" },
-    { "ticker": "MILK", "name": "MuesliSwap MILK", "category": "defi", "unit": "8a1cfae21368b8bebbbed9800fec304e95cce39a2a57dc35e2e3ebaa4d494c4b" },
-    { "ticker": "COPI", "name": "Cornucopias", "category": "gaming", "unit": "b6a7467ea1deb012808ef4e87b5ff371e85f7142d7b356a40d9b42a0436f726e75636f70696173" },
-    { "ticker": "NMKR", "name": "NMKR", "category": "infrastructure", "unit": "5dac8536653edc12f6f5e1045d8164b9f59998d3bdc300fc928434894e4d4b52" },
-    { "ticker": "NTX", "name": "NuNet", "category": "ai", "unit": "edfd7a1d77bcb8b884c474bdc92a16002d1fb720e454fa6e993444794e5458" },
-    { "ticker": "CLAY", "name": "Clay Nation", "category": "gaming", "unit": "38ad9dc3aec6a2f38e220142b9aa6ade63ebe71f65e7cc2b7d8a8535434c4159" },
-    { "ticker": "GENS", "name": "Genius Yield", "category": "defi", "unit": "dda5fdb1002f7389b33e036b6afee82a8189becb6cba852e8b79b4fb0014df1047454e53" },
-    { "ticker": "LQ", "name": "Liqwid Finance", "category": "defi", "unit": "da8c30857834c6ae7203935b89278c532b3995245295456f993e1d244c51" },
-    { "ticker": "VYFI", "name": "VyFinance", "category": "defi", "unit": "804f5544c1962a40546827cab750a88404dc7108c0f588b72964754f56594649" },
-    { "ticker": "BOOK", "name": "Book.io", "category": "utility", "unit": "51a5e236c4de3af2b8020442e2a26f454fda3b04cb621c1294a0ef34424f4f4b" },
-    { "ticker": "GERO", "name": "GeroWallet", "category": "infrastructure", "unit": "10a49b996e2402269af553a8a96fb8eb90d79e9eca79e2b4223057b64745524f" },
-    { "ticker": "MELD", "name": "MELD", "category": "defi", "unit": "a2944573e99d2ed3055b808eaa264f0bf119e01fc6b18863067c63e44d454c44" },
-    { "ticker": "DANA", "name": "Ardana", "category": "defi", "unit": "c88bbd1848db5ea665b1fffbefba86e8dcd723b5085348e8a8d2260f44414e41" },
-    { "ticker": "PAVIA", "name": "Pavia", "category": "gaming", "unit": "884892bcdc360bcef87d6b3f806e7f9cd5ac30d999d49970e7a903ae5041564941" },
-    { "ticker": "AADA", "name": "Aada / Lenfi", "category": "defi", "unit": "8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441" },
-    { "ticker": "C3", "name": "Charli3", "category": "infrastructure", "unit": "8e51398904a5d3fc129fbf4f1589701de23c7824d5c90fdb9490e15a434841524c4933" },
-    { "ticker": "FACT", "name": "Orcfax", "category": "infrastructure", "unit": "a3931691f5c4e65d01c429e473d0dd24c51afdb6daf88e632a6c1e516f7263666178746f6b656e" },
-    { "ticker": "EMP", "name": "Empowa", "category": "utility", "unit": "6c8642400e8437f737eb86df0fc8a8437c760f48592b1ba8f5767e81456d706f7761" },
-    { "ticker": "NEWM", "name": "NEWM", "category": "utility", "unit": "682fe60c9918842b3323c43b5144bc3d52a23bd2fb81345560d73f634e45574d" },
-    { "ticker": "FLDT", "name": "Fluid Tokens", "category": "defi", "unit": "577f0b1342f8f8f4aed3388b80a8535812950c7a892495c0ecdf0f1e0014df10464c4454" },
-    { "ticker": "SOCIETY", "name": "Society", "category": "utility", "unit": "25f0fc240e91bd95dcdaebd2ba7713fc5168ac77234a3d79449fc20c534f4349455459" },
-    { "ticker": "OPTIM", "name": "Optim Finance", "category": "defi", "unit": "1bf6e75d64e577209cc1d74709d8f930a7fe365cf526c5fbc2aedbd40014df104f5054494d5553" },
-    { "ticker": "LOBSTER", "name": "Lobster", "category": "meme", "unit": "8654e8b350e298c80d2451beb5ed80fc9eee9f38ce6b039fb8706bc34c4f4253544552" },
-    { "ticker": "SURGE", "name": "Surge", "category": "meme", "unit": "e992ef75f2367e6ecd93716ae88eba0d005dd91fd3a21f650b6496b55355524745" },
-    { "ticker": "cNETA", "name": "anetaBTC cNETA", "category": "defi", "unit": "b34b3ea80060ace9427bda98690a73d33840e27aaa8d6edb7f0c757a634e455441" },
-    { "ticker": "PURR", "name": "Purrcat", "category": "meme", "unit": "d3a034e403b98cbdb0adbc8a3144d7779330916e190d387815bb85c650555252" }
+    {
+      "ticker": "SNEK",
+      "name": "Snek",
+      "category": "meme",
+      "unit": "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b"
+    },
+    {
+      "ticker": "MIN",
+      "name": "Minswap",
+      "category": "defi",
+      "unit": "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
+    },
+    {
+      "ticker": "HOSKY",
+      "name": "Hosky Token",
+      "category": "meme",
+      "unit": "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235484f534b59"
+    },
+    {
+      "ticker": "AGIX",
+      "name": "SingularityNET",
+      "category": "ai",
+      "unit": "f43a62fdc3965df486de8a0d32fe800963589c41b38946602a0dc53541474958"
+    },
+    {
+      "ticker": "WMT",
+      "name": "World Mobile Token",
+      "category": "infrastructure",
+      "unit": "1d7f33bd23d85e1a25d87d86fac4f199c3197a2f7afeb662a0f34e1e776f726c646d6f62696c65746f6b656e"
+    },
+    {
+      "ticker": "WMTX",
+      "name": "World Mobile Token X",
+      "category": "infrastructure",
+      "unit": "e5a42a1a1d3d1da71b0449663c32798725888d2eb0843c4dabeca05a576f726c644d6f62696c65546f6b656e58"
+    },
+    {
+      "ticker": "IAG",
+      "name": "Iagon",
+      "category": "infrastructure",
+      "unit": "5d16cc1a177b5d9ba9cfa9793b07e60f1fb70fea1f8aef064415d114494147"
+    },
+    {
+      "ticker": "INDY",
+      "name": "Indigo DAO Token",
+      "category": "defi",
+      "unit": "533bb94a8850ee3ccbe483106489399112b74c905342cb1792a797a0494e4459"
+    },
+    {
+      "ticker": "DJED",
+      "name": "Djed",
+      "category": "stablecoin",
+      "unit": "8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd61446a65644d6963726f555344"
+    },
+    {
+      "ticker": "iUSD",
+      "name": "Indigo iUSD",
+      "category": "stablecoin",
+      "unit": "f66d78b4a3cb3d37afa0ec36461e51ecbde00f26c8f0a68f94b6988069555344"
+    },
+    {
+      "ticker": "SHEN",
+      "name": "Shen",
+      "category": "stablecoin",
+      "unit": "8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd615368656e4d6963726f555344"
+    },
+    {
+      "ticker": "USDM",
+      "name": "Moneta USDM",
+      "category": "stablecoin",
+      "unit": "c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d"
+    },
+    {
+      "ticker": "SUNDAE",
+      "name": "SundaeSwap",
+      "category": "defi",
+      "unit": "9a9693a9a37912a5097918f97918d15240c92ab729a0b7c4aa144d7753554e444145"
+    },
+    {
+      "ticker": "MILK",
+      "name": "MuesliSwap MILK",
+      "category": "defi",
+      "unit": "8a1cfae21368b8bebbbed9800fec304e95cce39a2a57dc35e2e3ebaa4d494c4b"
+    },
+    {
+      "ticker": "COPI",
+      "name": "Cornucopias",
+      "category": "gaming",
+      "unit": "b6a7467ea1deb012808ef4e87b5ff371e85f7142d7b356a40d9b42a0436f726e75636f70696173"
+    },
+    {
+      "ticker": "NMKR",
+      "name": "NMKR",
+      "category": "infrastructure",
+      "unit": "5dac8536653edc12f6f5e1045d8164b9f59998d3bdc300fc928434894e4d4b52"
+    },
+    {
+      "ticker": "NTX",
+      "name": "NuNet",
+      "category": "ai",
+      "unit": "edfd7a1d77bcb8b884c474bdc92a16002d1fb720e454fa6e993444794e5458"
+    },
+    {
+      "ticker": "CLAY",
+      "name": "Clay Nation",
+      "category": "gaming",
+      "unit": "38ad9dc3aec6a2f38e220142b9aa6ade63ebe71f65e7cc2b7d8a8535434c4159"
+    },
+    {
+      "ticker": "GENS",
+      "name": "Genius Yield",
+      "category": "defi",
+      "unit": "dda5fdb1002f7389b33e036b6afee82a8189becb6cba852e8b79b4fb0014df1047454e53"
+    },
+    {
+      "ticker": "LQ",
+      "name": "Liqwid Finance",
+      "category": "defi",
+      "unit": "da8c30857834c6ae7203935b89278c532b3995245295456f993e1d244c51"
+    },
+    {
+      "ticker": "VYFI",
+      "name": "VyFinance",
+      "category": "defi",
+      "unit": "804f5544c1962a40546827cab750a88404dc7108c0f588b72964754f56594649"
+    },
+    {
+      "ticker": "BOOK",
+      "name": "Book.io",
+      "category": "utility",
+      "unit": "51a5e236c4de3af2b8020442e2a26f454fda3b04cb621c1294a0ef34424f4f4b"
+    },
+    {
+      "ticker": "GERO",
+      "name": "GeroWallet",
+      "category": "infrastructure",
+      "unit": "10a49b996e2402269af553a8a96fb8eb90d79e9eca79e2b4223057b64745524f"
+    },
+    {
+      "ticker": "MELD",
+      "name": "MELD",
+      "category": "defi",
+      "unit": "a2944573e99d2ed3055b808eaa264f0bf119e01fc6b18863067c63e44d454c44"
+    },
+    {
+      "ticker": "DANA",
+      "name": "Ardana",
+      "category": "defi",
+      "unit": "c88bbd1848db5ea665b1fffbefba86e8dcd723b5085348e8a8d2260f44414e41"
+    },
+    {
+      "ticker": "PAVIA",
+      "name": "Pavia",
+      "category": "gaming",
+      "unit": "884892bcdc360bcef87d6b3f806e7f9cd5ac30d999d49970e7a903ae5041564941"
+    },
+    {
+      "ticker": "AADA",
+      "name": "Aada / Lenfi",
+      "category": "defi",
+      "unit": "8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441"
+    },
+    {
+      "ticker": "C3",
+      "name": "Charli3",
+      "category": "infrastructure",
+      "unit": "8e51398904a5d3fc129fbf4f1589701de23c7824d5c90fdb9490e15a434841524c4933"
+    },
+    {
+      "ticker": "FACT",
+      "name": "Orcfax",
+      "category": "infrastructure",
+      "unit": "a3931691f5c4e65d01c429e473d0dd24c51afdb6daf88e632a6c1e516f7263666178746f6b656e"
+    },
+    {
+      "ticker": "EMP",
+      "name": "Empowa",
+      "category": "utility",
+      "unit": "6c8642400e8437f737eb86df0fc8a8437c760f48592b1ba8f5767e81456d706f7761"
+    },
+    {
+      "ticker": "NEWM",
+      "name": "NEWM",
+      "category": "utility",
+      "unit": "682fe60c9918842b3323c43b5144bc3d52a23bd2fb81345560d73f634e45574d"
+    },
+    {
+      "ticker": "FLDT",
+      "name": "Fluid Tokens",
+      "category": "defi",
+      "unit": "577f0b1342f8f8f4aed3388b80a8535812950c7a892495c0ecdf0f1e0014df10464c4454"
+    },
+    {
+      "ticker": "SOCIETY",
+      "name": "Society",
+      "category": "utility",
+      "unit": "25f0fc240e91bd95dcdaebd2ba7713fc5168ac77234a3d79449fc20c534f4349455459"
+    },
+    {
+      "ticker": "OPTIM",
+      "name": "Optim Finance",
+      "category": "defi",
+      "unit": "1bf6e75d64e577209cc1d74709d8f930a7fe365cf526c5fbc2aedbd40014df104f5054494d5553"
+    },
+    {
+      "ticker": "LOBSTER",
+      "name": "Lobster",
+      "category": "meme",
+      "unit": "8654e8b350e298c80d2451beb5ed80fc9eee9f38ce6b039fb8706bc34c4f4253544552"
+    },
+    {
+      "ticker": "SURGE",
+      "name": "Surge",
+      "category": "meme",
+      "unit": "e992ef75f2367e6ecd93716ae88eba0d005dd91fd3a21f650b6496b55355524745"
+    },
+    {
+      "ticker": "cNETA",
+      "name": "anetaBTC cNETA",
+      "category": "defi",
+      "unit": "b34b3ea80060ace9427bda98690a73d33840e27aaa8d6edb7f0c757a634e455441"
+    },
+    {
+      "ticker": "PURR",
+      "name": "Purrcat",
+      "category": "meme",
+      "unit": "d3a034e403b98cbdb0adbc8a3144d7779330916e190d387815bb85c650555252"
+    },
+    {
+      "ticker": "SKULL",
+      "name": "SKULL",
+      "category": "unknown",
+      "unit": "885742cd7e0dad321622b5d3ad186797bd50c44cbde8b48be1583fbd534b554c4c",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "PANDA",
+      "name": "PANDA",
+      "category": "unknown",
+      "unit": "8d7cc34c1a44ef419cf1560cbb84e7720ca6c03ab99f8745ab61d19d50414e4441",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "NOVA",
+      "name": "NOVA",
+      "category": "unknown",
+      "unit": "75fcc276057db5fc48eae0e11453c773c8a54604c3086bf9d95ac1b743485259",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "TRTL",
+      "name": "TRTL",
+      "category": "unknown",
+      "unit": "52162581184a457fad70470161179c5766f00237d4b67e0f1df1b4e65452544c",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "BANK",
+      "name": "BANK",
+      "category": "unknown",
+      "unit": "2b28c81dbba6d67e4b5a997c6be1212cba9d60d33f82444ab8b1f21842414e4b",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "CHRLZ",
+      "name": "CHRLZ",
+      "category": "unknown",
+      "unit": "e9c28a71273f825b13f38244ccf1fea97c4025813610d01a7c5d681f436861726c7a20546f6b656e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "MONET",
+      "name": "MONET",
+      "category": "unknown",
+      "unit": "782c158a98aed3aa676d9c85117525dcf3acc5506a30a8d87369fbcb4d6f6e6574",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "EUS",
+      "name": "EUS",
+      "category": "unknown",
+      "unit": "88691a70bb0fe49cf9124b4f78553c36c09fa6264844e2b2941191734575736b6f",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "DUMB",
+      "name": "DUMB",
+      "category": "unknown",
+      "unit": "c50e06eb7d36ce67af2b15dd38228b59e39a5dae644166c84e3d2d1344554d42",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "DINO",
+      "name": "DINO",
+      "category": "unknown",
+      "unit": "85d87212f6096732ac1cdbf604a12aa8cfd1fd0b66ab28fc77d3764c44494e4f",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "AWOO",
+      "name": "AWOO",
+      "category": "unknown",
+      "unit": "09f5f55fcad17503e6b7acc81de7c80f84b76e76d17085f0e32f1ce22d6d2041574f4f0a",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "TOKEN",
+      "name": "TOKEN",
+      "category": "unknown",
+      "unit": "0171c997b8853fde686763d93b36ab8e04ce947bb6aa09a9ee5c4401544f4b454e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "VNM",
+      "name": "VNM",
+      "category": "unknown",
+      "unit": "2d92af60ee429bce238d3fd9f2531b45457301d74dad1bcf3f9d1dca564e4d",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "SICK",
+      "name": "SICK",
+      "category": "unknown",
+      "unit": "ad1c1ed3a0bb6f83630ef052a31b71ba3287bf4bafa8370758f14d315349434b",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "CBLUE",
+      "name": "CBLUE",
+      "category": "unknown",
+      "unit": "74be1f6940dadc4ab85c643d7447b45cf4e1b5e9cfd5fed062e903f863617264616e6f2e626c7565",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "BOT",
+      "name": "BOT",
+      "category": "unknown",
+      "unit": "da247e71f71b0195c8188bf43827f34c9357cc388fceed596d100d95424f54",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "PBX",
+      "name": "PBX",
+      "category": "unknown",
+      "unit": "cc8d1b026353022abbfcc2e1e71159f9e308d9c6e905ac1db24c7fb650617269627573",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "CCCC",
+      "name": "CCCC",
+      "category": "unknown",
+      "unit": "ab3e31c490d248c592d5bb495823a45fd10f9c8e4f561f13551803fb43617264616e6f20436f6d6d756e697479204368617269747920436f696e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "MARS",
+      "name": "MARS",
+      "category": "unknown",
+      "unit": "9ff14600a3fdaee6da3b1e3d227e2235d1fad199c3691ba2c7d8665a4d415253",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "LEXY",
+      "name": "LEXY",
+      "category": "unknown",
+      "unit": "d244fcb1d038951eb4fcdba0cc77299453ec96d18ac786ccd284cc784c657879",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "BBW",
+      "name": "BBW",
+      "category": "unknown",
+      "unit": "2aabfe3792477b56c676fdf6f2695e04718aa30b2f0501fdd103c46e424257",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "OPT",
+      "name": "OPT",
+      "category": "unknown",
+      "unit": "1ddcb9c9de95361565392c5bdff64767492d61a96166cb16094e54be4f5054",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "PUW",
+      "name": "PUW",
+      "category": "unknown",
+      "unit": "87a59599f8f47db431de642329a275cd4b297f21f1517af9db442cee506f705570576f726c64",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "ELADR",
+      "name": "ELADR",
+      "category": "unknown",
+      "unit": "2d420236ffaada336c21e3f4520b799f6e246d8618f2fc89a4907da64564756c6164646572546f6b656e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "HUNT",
+      "name": "HUNT",
+      "category": "unknown",
+      "unit": "95a427e384527065f2f8946f5e86320d0117839a5e98ea2c0b55fb0048554e54",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "TADA",
+      "name": "TADA",
+      "category": "unknown",
+      "unit": "9eaed3f99f5c9da1695acaf2542cd6b9f3ef18bbf94dd3f77d17f9cb54414441",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "GaryCBDC",
+      "name": "GaryCBDC",
+      "category": "unknown",
+      "unit": "6106ab6d8912a8f7e08b5d3300d5f8bdd6371793caceee7e0859868547617279546865436c6f776e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "REVU",
+      "name": "REVU",
+      "category": "unknown",
+      "unit": "94cbb4fcbcaa2975779f273b263eb3b5f24a9951e446d6dc4c135864",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "STEVE",
+      "name": "STEVE",
+      "category": "unknown",
+      "unit": "826733e8e5d12c797f795be56b348982397e235d57074a992cb86b6c5354455645",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "QAI",
+      "name": "QAI",
+      "category": "unknown",
+      "unit": "354a6c0acd846b195768ead31c92693ad26d82ba013e7df5d9777081514149",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "FORGE",
+      "name": "FORGE",
+      "category": "unknown",
+      "unit": "0fc1a2c01b3b96e6fc18681852c26d904b4ca180150671e1b250369f464f524745",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "Love",
+      "name": "Love",
+      "category": "unknown",
+      "unit": "7192cee89b2cd731152e60de5fd849f3930c24ac97f6daca09b54cf34c6f7665",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "WAN",
+      "name": "WAN",
+      "category": "unknown",
+      "unit": "25c5de5f5b286073c593edfd77b48abc7a48e5a4f3d4cd9d428ff93557414e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "KWIC",
+      "name": "KWIC",
+      "category": "unknown",
+      "unit": "b3ad8b975d24235a43cb2a54d58c717ed9dd11560b4deba2273ffb1d0014df104b574943",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "BEPC",
+      "name": "BEPC",
+      "category": "unknown",
+      "unit": "4756b1e7626e84c6de4fe4256b874412c5529a8e75b707ba1e677f4642455043",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "TECKEL",
+      "name": "TECKEL",
+      "category": "unknown",
+      "unit": "3fc6548aed99326821131fc480ec65a03d01efe92f58978e24ab8e795445434b454c",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "WILD",
+      "name": "WILD",
+      "category": "unknown",
+      "unit": "50861cf745ea40fb79024380fa3b642152a47cb3acae2778a517f16357494c44",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "BCG",
+      "name": "BCG",
+      "category": "unknown",
+      "unit": "0c92aabef5a8f91a36470d0762806c165c0d04aa992541e25d55486a424347",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "CMC",
+      "name": "CMC",
+      "category": "unknown",
+      "unit": "a56b1bfd69d317076c5c864d647851e2961594b21ec056f3c84914856473636e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "rsRSN",
+      "name": "rsRSN",
+      "category": "unknown",
+      "unit": "04b95368393c821f180deee8229fbd941baaf9bd748ebcdbf7adbb14727352534e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "NFTC",
+      "name": "NFTC",
+      "category": "unknown",
+      "unit": "b0af30edf2c7f11465853821137e0a6ebc395cab71ee39c24127ffb44e465443",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "SAMU",
+      "name": "SAMU",
+      "category": "unknown",
+      "unit": "4632693c8a8ab3e325391bf319d69c24c54b823d70a85d870197fd3853414d55",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "RAKER",
+      "name": "RAKER",
+      "category": "unknown",
+      "unit": "ace2ea0fe142a3687acf86f55bcded860a920864163ee0d3dda8b60252414b4552",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "MITHR",
+      "name": "MITHR",
+      "category": "unknown",
+      "unit": "65bdf33f8f7fd4debeb2ad659473749eb4eac177e06650bb75a8fe504d69746872546f6b656e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "GRASS",
+      "name": "GRASS",
+      "category": "unknown",
+      "unit": "32cc9c6c3456bc048d14a4a8e4ee3592e9664e8daac921a8ef52d92a4752415353",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "ZOO",
+      "name": "ZOO",
+      "category": "unknown",
+      "unit": "15637826ecbdb4e5747fd41f830d9735a8c4e6d927e44d29ceef9e885a4f4f",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "FUD",
+      "name": "FUD",
+      "category": "unknown",
+      "unit": "dbc31b04d90b37332813cb4cee3e8f79994643d899a5366797e745ee465544",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "WYRM",
+      "name": "WYRM",
+      "category": "unknown",
+      "unit": "4ffaa4ef3217df37c4995bb96066af4cb68dfcc66b9f2a10e0c333b95779726d73746f6e65",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "XRAY",
+      "name": "XRAY",
+      "category": "unknown",
+      "unit": "86abe45be4d8fb2e8f28e8047d17d0ba5592f2a6c8c452fc88c2c14358524159",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "PTC",
+      "name": "PTC",
+      "category": "unknown",
+      "unit": "007394e3117755fbb0558b93c54ce3bc6c85770920044ade143dc742505443",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "rsERG",
+      "name": "rsERG",
+      "category": "unknown",
+      "unit": "04b95368393c821f180deee8229fbd941baaf9bd748ebcdbf7adbb147273455247",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "PUGCHIP",
+      "name": "PUGCHIP",
+      "category": "unknown",
+      "unit": "5ec2e9813fa385d9333d18186d8257d1b3ebea97bdec2dad74026d8d50554743484950",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "MNT",
+      "name": "MNT",
+      "category": "unknown",
+      "unit": "43b07d4037f0d75ee10f9863097463fc02ff3c0b8b705ae61d9c75bf4d796e746820546f6b656e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "MyUSD",
+      "name": "MyUSD",
+      "category": "unknown",
+      "unit": "92776616f1f32c65a173392e4410a3d8c39dcf6ef768c73af164779c4d79555344",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "SALTY",
+      "name": "SALTY",
+      "category": "unknown",
+      "unit": "07f019ce45fb638353258bda4316ce5eb3d0f76a3fb739c45174084953414c5459",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "iETH",
+      "name": "iETH",
+      "category": "unknown",
+      "unit": "f66d78b4a3cb3d37afa0ec36461e51ecbde00f26c8f0a68f94b6988069455448",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "TANG",
+      "name": "TANG",
+      "category": "unknown",
+      "unit": "bf9354cba4ee83c5de05c72830c6430967a26a1656b06293541d23e154414e47",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "RIZZ",
+      "name": "RIZZ",
+      "category": "unknown",
+      "unit": "ec791114f636d27a669ca74140be352da82f7c836ce52100e8abb34252495a5a",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "OSM",
+      "name": "OSM",
+      "category": "unknown",
+      "unit": "37a2b93b4aa2b286b92b7099faff0bb87e0c629a5079c0584da2d5774f534d",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "BUZZ",
+      "name": "BUZZ",
+      "category": "unknown",
+      "unit": "a1c94e56e4b24945338f2779e33b02e52fdd30d5f279c6131cc43c7c42555a5a",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "WW",
+      "name": "WW",
+      "category": "unknown",
+      "unit": "521ec1ae6f87ec944a4b32890d62cd4a243d612f80fe26db999628f05757",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "CPIGGY",
+      "name": "CPIGGY",
+      "category": "unknown",
+      "unit": "0c3b14ddb319c5a50bfd93e69d0706d1527e2b2169744665a1c534d0635049474759",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "YETI",
+      "name": "YETI",
+      "category": "unknown",
+      "unit": "96abe9a17b65c2133ed7e11864338e965efc418c0961ceecfac1617259455449",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "CD",
+      "name": "CD",
+      "category": "unknown",
+      "unit": "fed1c459a47cbff56bd7d29c2dde0de3e9bd15cee02b98622fce82f743617264616e6f436f70706572",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "ETERNAL",
+      "name": "ETERNAL",
+      "category": "unknown",
+      "unit": "86b116d8cfd880445825208b4a355b7715b63763d6d8f3d37338d211657465726e616c",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "STABLE",
+      "name": "STABLE",
+      "category": "unknown",
+      "unit": "2adf188218a66847024664f4f63939577627a56c090f679fe366c5ee535441424c45",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "PZA",
+      "name": "PZA",
+      "category": "unknown",
+      "unit": "ec6dcad2fefcf0989fa66bcef6fd6effd2b5c71f4a9ce498606b3aa2505a41",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "HYC",
+      "name": "HYC",
+      "category": "unknown",
+      "unit": "6ded36273214629f9ff35e9f9c7b8945d937a80a3796ddc4a646a50e485943",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "GNUG",
+      "name": "GNUG",
+      "category": "unknown",
+      "unit": "dc280dbb5381ef28afbab4ca31751f13c29562d376998e907ff1af32474e5547",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "RHOD",
+      "name": "RHOD",
+      "category": "unknown",
+      "unit": "a5039068cb2b3ebcf874c0a4b012f19409befcf99e38c34c080af9d552686f6469756d436f696e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "NfA",
+      "name": "NfA",
+      "category": "unknown",
+      "unit": "9f144f7c7c9e656f905c09442e08376dbb6ee0ef80dd8afe0a4fc07347726f6f7065657a546f6b656e",
+      "source": "dexhunter-verified"
+    },
+    {
+      "ticker": "aDKASH",
+      "name": "aDKASH",
+      "category": "unknown",
+      "unit": "91fbce324827fcb04240e95772277225997fde8af6bfebd16b3f381c4469676974616c4b617368",
+      "source": "dexhunter-verified"
+    }
   ]
 }

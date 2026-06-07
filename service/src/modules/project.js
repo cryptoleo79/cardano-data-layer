@@ -71,7 +71,19 @@ async function projectHandler({ params }) {
 }
 
 async function categoriesHandler() {
-  return { status: 200, body: wrap({ ...listCategories(), source: 'project-memory' }) };
+  const base = listCategories();
+  // Explicit per-category coverage status so there is no ambiguity (every
+  // category is populated, pending, or deprecated — never silently empty).
+  const categories = base.categories.map((c) => ({
+    ...c,
+    status: c.deprecated ? 'deprecated' : (c.project_count > 0 ? 'populated' : 'pending'),
+  }));
+  const summary = {
+    populated: categories.filter((c) => c.status === 'populated').length,
+    pending: categories.filter((c) => c.status === 'pending').length,
+    deprecated: categories.filter((c) => c.status === 'deprecated').length,
+  };
+  return { status: 200, body: wrap({ ...base, categories, coverage: summary, source: 'project-memory' }) };
 }
 
 // One category + its active project assignments, read inline from the projection

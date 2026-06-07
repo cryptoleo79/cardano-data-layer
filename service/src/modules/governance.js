@@ -23,7 +23,7 @@
 //   GET /votes?limit=        recent votes from live/recent_votes.json
 //   GET /treasury            latest treasury state + epoch series (+ withdrawals)
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { dq } from '../lib/envelope.js';
 
@@ -75,7 +75,13 @@ async function drepsHandler({ query, ctx }) {
   if (!res.ok) return unavailable('top30.json');
   const all = Array.isArray(res.data.entries) ? res.data.entries : [];
   const limit = toInt(query.limit, all.length);
-  const dreps = all.slice(0, Math.max(0, limit));
+  const dir = observatoryDir(ctx);
+  // Discoverability: flag which DReps have a full per-DRep detail doc (/dreps/:id).
+  const dreps = all.slice(0, Math.max(0, limit)).map((d) => {
+    const id = d.drep_id;
+    const has = !!(id && dir && existsSync(path.join(dir, 'dreps', `${id}.json`)));
+    return { ...d, has_detail: has, ...(has ? { detail_path: `/dreps/${id}` } : {}) };
+  });
   return {
     status: 200,
     body: dq(
@@ -84,6 +90,7 @@ async function drepsHandler({ query, ctx }) {
         epoch: res.data.epoch ?? null,
         total: all.length,
         count: dreps.length,
+        note: 'Top-30 DReps by voting weight (bounded by the observatory methodology). has_detail flags a full per-DRep record at /dreps/:id.',
         dreps,
       },
       DQ,
@@ -154,7 +161,14 @@ async function actionHandler({ params, ctx }) {
   if (!action) {
     return { status: 404, body: dq({ error: 'not_found', action_id: params.id }, { ...DQ, confidence: 'low' }) };
   }
-  return { status: 200, body: dq({ action }, DQ) };
+  // Enrichment: join any treasury withdrawals that reference this action_id
+  // (already-loaded data, no extra ETL). Makes "what did this action pay out?"
+  // a single call. Only TreasuryWithdrawals-type actions will match.
+  const wRes = loadJson(ctx, 'treasury_withdrawals.json');
+  const withdrawals = wRes.ok && Array.isArray(wRes.data.withdrawals)
+    ? wRes.data.withdrawals.filter((w) => w.action_id === params.id)
+    : [];
+  return { status: 200, body: dq({ action, withdrawals, withdrawal_count: withdrawals.length }, DQ) };
 }
 
 // GET /votes?limit= — recent votes from live/recent_votes.json.
