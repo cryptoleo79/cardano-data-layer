@@ -23,6 +23,7 @@
 // purely on-chain from the ADA/stablecoin pair (no centralized oracle), so a
 // USD figure only appears when that pair is routable.
 
+import { readFileSync } from 'node:fs';
 import { run, get, all } from '../db.js';
 import { config } from '../config.js';
 import { fetchJSON, UpstreamError } from '../http.js';
@@ -39,14 +40,24 @@ const nowSec = () => Math.floor(Date.now() / 1000);
 // ADA/USDM average price is, by construction, ADA's price in (≈1 USD) USDM.
 const USDM_UNIT = 'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d';
 
-// A small, well-known seed set so /tokens/top and the poller have something to
-// rank even before the operator configures CDL_POLL_UNITS. Coverage is
-// explicitly partial — this is NOT a full ecosystem ranking.
-const SEED_UNITS = [
+// Tracked token universe so /tokens/top + the poller have a real set to rank.
+// Loaded from seed/tracked-tokens.json (Koios-verified units); falls back to a
+// minimal hardcoded set if the file is absent. Coverage is still a curated set,
+// not the whole ecosystem — surfaced honestly as `coverage: 'partial'`.
+const FALLBACK_SEED_UNITS = [
   { unit: '29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e', ticker: 'MIN', name: 'Minswap' },
   { unit: '279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b', ticker: 'SNEK', name: 'SNEK' },
   { unit: 'a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235484f534b59', ticker: 'HOSKY', name: 'Hosky Token' },
 ];
+function loadSeedUnits() {
+  try {
+    const p = new URL('../../seed/tracked-tokens.json', import.meta.url);
+    const j = JSON.parse(readFileSync(p, 'utf8'));
+    const toks = (j.tokens || []).filter((t) => t.unit && /^[0-9a-f]+$/.test(t.unit));
+    return toks.length ? toks.map((t) => ({ unit: t.unit, ticker: t.ticker, name: t.name })) : FALLBACK_SEED_UNITS;
+  } catch { return FALLBACK_SEED_UNITS; }
+}
+const SEED_UNITS = loadSeedUnits();
 
 const VALID_INTERVALS = new Set(['1m', '5m', '15m', '1h', '4h', '1d']);
 const INTERVAL_SECONDS = { '1m': 60, '5m': 300, '15m': 900, '1h': 3600, '4h': 14400, '1d': 86400 };
@@ -243,7 +254,7 @@ async function ohlcvHandler({ query, ctx }) {
     const source = candles.length ? [...new Set(candles.map((c) => c.source))].join('+') : 'ohlcv-table';
     return { status: 200, body: dq({ unit, interval, candles, count: candles.length, source,
       as_of: nowIso(), ...(note ? { note } : {}) }, {
-      source, authority_class: 'C', refresh: '~5m', confidence: 'high',
+      source, authority_class: 'C', refresh: '~5m', confidence: 'medium',
       provenance: 'ohlcv table — DexHunter price ticks collected by the CDL poller',
     }) };
   }
@@ -289,7 +300,7 @@ async function ohlcvHandler({ query, ctx }) {
       as_of: nowIso(),
       note,
     }, {
-      source, authority_class: 'C', refresh: '~5m', confidence: 'high',
+      source, authority_class: 'C', refresh: '~5m', confidence: 'medium',
       provenance: 'ohlcv table — DexHunter price ticks collected by the CDL poller, bucketed on read',
     }),
   };
@@ -515,7 +526,7 @@ async function listHandler() {
     }, {
       source: 'seed+ohlcv-table',
       authority_class: 'B', // curated/on-chain-derived known set
-      refresh: '~5m',
+      refresh: 'static',
       confidence: 'high',
       provenance: 'CDL seed set + units observed by the ohlcv poller',
     }),

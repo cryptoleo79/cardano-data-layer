@@ -379,8 +379,8 @@ function metadataFromBlockfrost(a) {
 export default {
   name: 'onchain',
   routes: [
-    { method: 'GET', path: '/token/holders', handler: withDq(holdersHandler, { source: 'koios+blockfrost', authority_class: 'A', refresh: '~10m', provenance: 'on-chain holder set (Koios asset_addresses → Blockfrost)' }), meta: { desc: 'holder count + top holders (Koios→Blockfrost)' } },
-    { method: 'GET', path: '/token/supply', handler: withDq(supplyHandler, { source: 'koios+blockfrost', authority_class: 'A', refresh: '~10m', provenance: 'on-chain supply (Koios asset_info → Blockfrost)' }), meta: { desc: 'total/circulating supply (Koios→Blockfrost)' } },
+    { method: 'GET', path: '/token/holders', handler: withDq(holdersHandler, { source: 'koios+blockfrost', authority_class: 'A', refresh: '~5m', provenance: 'on-chain holder set (Koios asset_addresses → Blockfrost)' }), meta: { desc: 'holder count + top holders (Koios→Blockfrost)' } },
+    { method: 'GET', path: '/token/supply', handler: withDq(supplyHandler, { source: 'koios+blockfrost', authority_class: 'A', refresh: '~5m', provenance: 'on-chain supply (Koios asset_info → Blockfrost)' }), meta: { desc: 'total/circulating supply (Koios→Blockfrost)' } },
     { method: 'GET', path: '/token/metadata', handler: withDq(metadataHandler, { source: 'cip26+onchain', authority_class: 'B', refresh: 'hourly', provenance: 'CIP-26 registry → on-chain mint metadata' }), meta: { desc: 'ticker/name/decimals/logo/url (CIP-26→on-chain)' } },
   ],
   // exported for tests

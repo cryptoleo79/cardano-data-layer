@@ -125,5 +125,33 @@ export function seedIfEmpty() {
     }
   }
 
-  return { seeded: true, sources: 2, categories, projects, tokens, snapshot: tt?.file || null };
+  // --- Built on Cardano directory: projects + category assignments ---
+  let boc = 0, bocAssign = 0;
+  const bocFile = join(config.seedDir, 'builtoncardano-projects.json');
+  if (existsSync(bocFile)) {
+    const bj = readJson(bocFile);
+    append('source.registered', { actor: ACTOR, payload: {
+      source_id: 'builtoncardano', kind: 'builtoncardano', authority_class: 'B',
+      url: bj.source_url, label: 'Built on Cardano directory (Cardano Foundation)' } });
+    const ev = [{ kind: 'url', ref: bj.source_url,
+      description: 'Listed in the Built on Cardano ecosystem directory (Cardano Foundation curation)' }];
+    const mk = (id, field, value) => append('claim.asserted', { actor: ACTOR, subject: id, ts: bj.as_of, payload: {
+      project_id: id, field, value, source_id: 'builtoncardano', authority_class: 'B', as_of: bj.as_of, asserted_by: ACTOR, evidence: ev } });
+    for (const p of bj.projects) {
+      append('project.imported', { actor: ACTOR, subject: p.id, ts: bj.as_of, payload: { id: p.id, kind: 'project' } });
+      mk(p.id, 'name', p.name);
+      if (p.link) mk(p.id, 'website', p.link);
+      if (p.description) mk(p.id, 'description', p.description);
+      mk(p.id, 'status', p.status);
+      for (const slug of p.categories) {
+        append('category.assigned', { actor: ACTOR, subject: p.id, ts: bj.as_of, payload: {
+          project_id: p.id, category_slug: slug, source_id: 'builtoncardano', authority_class: 'B',
+          as_of: bj.as_of, confidence: 'high', evidence: ev } });
+        bocAssign++;
+      }
+      boc++;
+    }
+  }
+
+  return { seeded: true, sources: 3, categories, projects, tokens, boc, bocAssign, snapshot: tt?.file || null };
 }

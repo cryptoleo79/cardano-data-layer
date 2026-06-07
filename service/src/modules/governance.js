@@ -32,7 +32,7 @@ import { dq } from '../lib/envelope.js';
 // votes feed refreshes faster (~10m).
 const DQ = {
   source: 'observatory',
-  authority_class: 'A',
+  authority_class: 'B',
   refresh: 'daily',
   provenance: 'Governance/Treasury Memory — observatory CC0 export (Koios-derived)',
 };
@@ -172,10 +172,12 @@ async function votesHandler({ query, ctx }) {
         window_hours: res.data.window_hours ?? null,
         total: all.length,
         count: votes.length,
+        coverage: 'rolling-window-sample',
+        note: 'A rolling recent-votes sample (see window_hours), not the full vote history. For a DRep’s complete vote record use /dreps/:id.',
         votes,
       },
-      // The live votes feed refreshes far faster than the daily snapshot.
-      { ...DQ, refresh: 'realtime' },
+      // Rolling live sample, refreshed ~every 10 min by the upstream telemetry.
+      { ...DQ, refresh: '~5m' },
     ),
   };
 }
