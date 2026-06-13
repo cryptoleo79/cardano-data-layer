@@ -24,12 +24,13 @@
 // USD figure only appears when that pair is routable.
 
 import { readFileSync } from 'node:fs';
-import { run, get, all } from '../db.js';
+import { db, run, get, all } from '../db.js';
 import { config } from '../config.js';
 import { fetchJSON, UpstreamError } from '../http.js';
 import { dq } from '../lib/envelope.js';
 import * as dexhunter from '../sources/dexhunter.js';
 import * as minswap from '../sources/minswap.js';
+import * as geckoterminal from '../sources/geckoterminal.js';
 import * as cip26 from '../sources/cip26.js';
 import * as koios from '../sources/koios.js';
 
@@ -81,7 +82,30 @@ export async function init(ctx) {
     );
   `);
   ctx.db.exec('CREATE INDEX IF NOT EXISTS idx_ohlcv_unit_interval_ts ON ohlcv (unit, interval, ts);');
-  ctx.log?.('token: ohlcv table ready');
+
+  // token_market: per-token market snapshot collected by the poller from
+  // GeckoTerminal. This is what /tokens/top and /token/mcap rank/read so the
+  // request path is a fast local read, never a live multi-page upstream sweep.
+  // mcap_usd is circulating (CoinGecko); fdv_usd is price x total supply — we
+  // keep both so the ranking can prefer circulating and fall back to fdv
+  // honestly (flagged via mcap_basis). All money is USD as the source reports
+  // it; ADA columns are derived at read time from the on-chain ADA/USD rate.
+  ctx.db.exec(`
+    CREATE TABLE IF NOT EXISTS token_market (
+      unit          TEXT PRIMARY KEY,
+      symbol        TEXT,
+      price_usd     REAL,
+      mcap_usd      REAL,    -- circulating market cap (null when untracked)
+      fdv_usd       REAL,    -- fully diluted (price x total supply)
+      liquidity_usd REAL,    -- aggregate DEX pool reserves
+      volume24h_usd REAL,    -- 24h traded volume
+      total_supply  REAL,
+      decimals      INTEGER,
+      source        TEXT,
+      as_of         INTEGER  -- epoch seconds of last refresh
+    );
+  `);
+  ctx.log?.('token: ohlcv + token_market tables ready');
 }
 
 // ---------------------------------------------------------------------------
@@ -306,42 +330,95 @@ async function ohlcvHandler({ query, ctx }) {
   };
 }
 
-/** GET /token/mcap?unit= */
+/** GET /token/mcap?unit=
+ *  Market cap, preferring CIRCULATING (GeckoTerminal/CoinGecko). Falls back to
+ *  FDV (price x GeckoTerminal total supply), then to price x Koios total supply
+ *  — each fallback flagged via `supply_basis` with a downgraded confidence, so a
+ *  mint-cap artifact (e.g. Djed's 1e12 total_supply) can never masquerade as a
+ *  real circulating market cap the way it did before. */
 async function mcapHandler({ query, ctx }) {
   const unit = requireUnit(query);
+  const usdPerAda = await adaUsd(ctx).catch(() => null);
+  const gt = await ctx.cache.getOrSet(`token:gt:${unit}`, config.cache.price, () => geckoterminal.tokenMarket(unit)).catch(() => null);
+
+  const usdToAda = (u) => (u != null && usdPerAda ? u / usdPerAda : null);
+
+  // 1) Circulating market cap straight from GeckoTerminal (the honest figure).
+  if (gt && gt.mcapUsd != null) {
+    const priceUsd = gt.priceUsd;
+    return mcapBody(unit, {
+      priceUsd, priceAda: usdToAda(priceUsd),
+      supply: priceUsd ? gt.mcapUsd / priceUsd : null, decimals: gt.decimals,
+      mcapUsd: gt.mcapUsd, mcapAda: usdToAda(gt.mcapUsd),
+      supply_basis: 'circulating', confidence: 'high',
+      source: 'geckoterminal',
+      provenance: 'circulating market cap from GeckoTerminal (CoinGecko circulating supply); ADA derived from on-chain ADA/USD',
+    });
+  }
+
+  // 2) FDV from GeckoTerminal (price x total supply) — flagged, not circulating.
+  if (gt && gt.fdvUsd != null) {
+    const priceUsd = gt.priceUsd;
+    // GeckoTerminal total_supply is raw (undivided); normalize to whole tokens
+    // so `supply` is consistent with the circulating branch.
+    const wholeSupply = gt.totalSupply != null && gt.decimals != null
+      ? gt.totalSupply / 10 ** gt.decimals
+      : (priceUsd ? gt.fdvUsd / priceUsd : gt.totalSupply);
+    return mcapBody(unit, {
+      priceUsd, priceAda: usdToAda(priceUsd),
+      supply: wholeSupply, decimals: gt.decimals,
+      mcapUsd: gt.fdvUsd, mcapAda: usdToAda(gt.fdvUsd),
+      supply_basis: 'fdv', confidence: 'medium',
+      source: 'geckoterminal',
+      note: 'circulating supply unavailable; reporting fully-diluted valuation (price x total supply)',
+      provenance: 'FDV from GeckoTerminal (price x total supply); circulating supply not available',
+    });
+  }
+
+  // 3) Last resort: price (DexHunter) x Koios total supply. total_supply can be
+  //    a mint cap, so this is flagged supply_basis:'total' at low confidence.
   const [price, sup] = await Promise.all([
     ctx.cache.getOrSet(`token:price:${unit}`, config.cache.price, () => resolvePrice(ctx, unit)),
     koiosSupply(ctx, unit).catch((e) => ({ supply: null, decimals: null, rawSupply: null, note: `supply lookup failed: ${e.message}` })),
   ]);
-
   const supply = sup.supply;
   const mcapAda = price.ada != null && supply != null ? price.ada * supply : null;
   const mcapUsd = price.usd != null && supply != null ? price.usd * supply : null;
-
-  const notes = [];
+  const notes = ['market-data source (GeckoTerminal) unavailable; falling back to price x Koios total_supply (may be a mint cap, not circulating)'];
   if (price.note) notes.push(price.note);
   if (supply == null) notes.push(sup.note || 'on-chain supply unavailable from Koios');
+  return mcapBody(unit, {
+    priceUsd: price.usd, priceAda: price.ada,
+    supply, decimals: sup.decimals,
+    mcapUsd, mcapAda,
+    supply_basis: 'total', confidence: 'low',
+    source: [price.sources.join('+') || 'none', supply != null ? 'koios' : null].filter(Boolean).join('+'),
+    note: notes.join('; '),
+    provenance: 'fallback: price = DexHunter; supply = Koios asset_info total_supply (NOT circulating; may be a mint cap)',
+  });
+}
 
-  const confidence = mcapAda == null ? 'low' : price.confidence;
-  const source = [price.sources.join('+') || 'none', supply != null ? 'koios' : null].filter(Boolean).join('+');
+/** Shared body builder for /token/mcap so the three supply bases stay consistent. */
+function mcapBody(unit, x) {
   return {
     status: 200,
     body: dq({
       unit,
-      price: { ada: price.ada, usd: price.usd },
-      supply,
-      decimals: sup.decimals,
-      mcap: { ada: mcapAda, usd: mcapUsd },
-      confidence,
-      source,
+      price: { ada: x.priceAda ?? null, usd: x.priceUsd ?? null },
+      supply: x.supply ?? null,
+      decimals: x.decimals ?? null,
+      mcap: { ada: x.mcapAda ?? null, usd: x.mcapUsd ?? null },
+      supply_basis: x.supply_basis,   // 'circulating' | 'fdv' | 'total'
+      confidence: x.confidence,
+      source: x.source,
       as_of: nowIso(),
-      ...(notes.length ? { note: notes.join('; ') } : {}),
+      ...(x.note ? { note: x.note } : {}),
     }, {
-      source,
-      authority_class: 'B', // mcap combines Koios on-chain supply (B) with DEX price
+      source: x.source,
+      authority_class: x.supply_basis === 'circulating' ? 'C' : 'B',
       refresh: 'on-demand',
-      confidence,
-      provenance: 'price = DexHunter (Minswap cross-check); supply = Koios asset_info (on-chain)',
+      confidence: x.confidence,
+      provenance: x.provenance,
     }),
   };
 }
@@ -363,9 +440,28 @@ function latestTickAda(unit) {
   return r && r.c != null ? r.c : null;
 }
 
+// A token_market row is "stale" once it is older than this — we still serve it
+// but downgrade its confidence and flag it, rather than pretend it's fresh.
+const MARKET_STALE_S = 30 * 60; // 30 min (poller runs every 5 min)
+
+/**
+ * Confidence for a single ranked metric, from source quality + freshness.
+ *   mcap  : circulating (CoinGecko) -> high · fdv fallback -> medium · none -> low
+ *   liq/vol: GeckoTerminal aggregate -> medium (single authoritative source)
+ * Any stale row is knocked down one notch.
+ */
+function metricConfidence(by, basis, value, ageS) {
+  if (value == null) return 'low';
+  let c = by === 'mcap' ? (basis === 'circulating' ? 'high' : 'medium') : 'medium';
+  if (ageS != null && ageS > MARKET_STALE_S) c = c === 'high' ? 'medium' : 'low';
+  return c;
+}
+
 /** GET /tokens/top?by=mcap|volume|liquidity&limit=
- *  Ranks over the tracked/seed set. Cached as a whole; prices come from the
- *  poller-collected ohlcv table (not live per-unit) so it stays fast at scale. */
+ *  Ranks over the tracked set from the poller-collected `token_market` table
+ *  (GeckoTerminal). A pure local read, so it stays fast at any coverage size.
+ *  mcap prefers circulating market cap and falls back to FDV (flagged); every
+ *  row declares its own per-metric confidence and the basis used. */
 async function topHandler({ query, ctx }) {
   const by = (query.by || 'mcap').trim();
   const limit = Math.min(Math.max(Number.parseInt(query.limit, 10) || 10, 1), 100);
@@ -374,50 +470,68 @@ async function topHandler({ query, ctx }) {
   }
 
   return ctx.cache.getOrSet(`token:top:${by}`, config.cache.rankings, async () => {
-    const tracked = all('SELECT DISTINCT unit FROM ohlcv').map((r) => r.unit);
     const tickerOf = new Map(SEED_UNITS.map((s) => [s.unit, s.ticker]));
-    const units = [...new Set([...tracked, ...SEED_UNITS.map((s) => s.unit)])];
     const usdPerAda = await adaUsd(ctx).catch(() => null);
+    const nowS = nowSec();
+    const rows = all('SELECT * FROM token_market');
 
-    const ranked = await mapLimit(units, 10, async (unit) => {
-      let metricAda = null, priceAda = latestTickAda(unit);
-      try {
-        if (by === 'volume') {
-          const row = get('SELECT SUM(v) AS vol FROM ohlcv WHERE unit = ?', unit);
-          metricAda = row && row.vol != null ? row.vol : null;
-        } else if (by === 'liquidity') {
-          const s = await minswap.tokenStats(unit).catch(() => null);
-          metricAda = s ? s.liquidityAda : null;
-          if (s && s.adaPerToken) priceAda = s.adaPerToken;
-        } else if (priceAda != null) { // mcap = poller price x on-chain supply (only when priced; supply cached)
-          const sup = await koiosSupply(ctx, unit).catch(() => null);
-          if (sup && sup.supply != null) metricAda = priceAda * sup.supply;
-        }
-      } catch { /* leave nulls */ }
+    const ranked = rows.map((m) => {
+      const ageS = m.as_of != null ? nowS - m.as_of : null;
+      let metricUsd = null, basis = null;
+      if (by === 'mcap') {
+        if (m.mcap_usd != null) { metricUsd = m.mcap_usd; basis = 'circulating'; }
+        else if (m.fdv_usd != null) { metricUsd = m.fdv_usd; basis = 'fdv'; }
+      } else if (by === 'liquidity') {
+        metricUsd = m.liquidity_usd;
+      } else { // volume
+        metricUsd = m.volume24h_usd;
+      }
+      const priceUsd = m.price_usd;
       return {
-        unit, ticker: tickerOf.get(unit) || null,
-        metric: { ada: metricAda, usd: metricAda != null && usdPerAda != null ? metricAda * usdPerAda : null },
-        price: priceAda != null ? { ada: priceAda, usd: usdPerAda != null ? priceAda * usdPerAda : null } : null,
+        unit: m.unit, ticker: tickerOf.get(m.unit) || m.symbol || null,
+        metric: { usd: metricUsd, ada: metricUsd != null && usdPerAda ? metricUsd / usdPerAda : null },
+        price: priceUsd != null
+          ? { usd: priceUsd, ada: usdPerAda ? priceUsd / usdPerAda : null }
+          : null,
+        ...(by === 'mcap' ? { basis } : {}),
+        confidence: metricConfidence(by, basis, metricUsd, ageS),
+        stale: ageS != null && ageS > MARKET_STALE_S,
       };
     });
 
+    // For mcap, tier circulating ABOVE fdv so a fully-diluted figure can never
+    // masquerade as the #1 market cap; within a tier, sort by value. For
+    // liquidity/volume there is no basis distinction — straight value sort.
+    const tier = (r) => (by === 'mcap' ? (r.basis === 'circulating' ? 0 : 1) : 0);
     ranked.sort((a, b) => {
-      const av = a.metric.ada, bv = b.metric.ada;
+      const ta = tier(a), tb = tier(b);
+      if (ta !== tb) return ta - tb;
+      const av = a.metric.usd, bv = b.metric.usd;
       if (av == null && bv == null) return 0;
       if (av == null) return 1; if (bv == null) return -1; return bv - av;
     });
-    const computable = ranked.filter((r) => r.metric.ada != null).length;
-    const source = by === 'liquidity' ? 'minswap' : (by === 'mcap' ? 'ohlcv+koios' : 'ohlcv-table');
+    const computable = ranked.filter((r) => r.metric.usd != null).length;
+    const fdvCount = by === 'mcap' ? ranked.filter((r) => r.basis === 'fdv' && r.metric.usd != null).length : 0;
+
+    const noteBits = [
+      `Partial ranking over a tracked set (${rows.length} tokens with market data), NOT a full-ecosystem ranking.`,
+      'Source: GeckoTerminal (on-chain DEX aggregation; mcap via CoinGecko circulating supply).',
+    ];
+    if (by === 'mcap' && fdvCount) noteBits.push(`${fdvCount} token(s) lack circulating supply — ranked by FDV (price x total supply), flagged basis:"fdv".`);
+    if (computable === 0) noteBits.push('No market data collected yet for this metric — run the poller (npm run poller --once) to populate token_market.');
+
     return {
       status: 200,
       body: dq({
-        by, ranking: ranked.slice(0, limit), coverage: 'partial', tracked_units: units.length, computable,
-        source, as_of: nowIso(),
-        note: 'Partial ranking over a tracked set (110 tokens), NOT a full ecosystem ranking. Prices are poller-collected (mcap = price x Koios supply).',
+        by, ranking: ranked.slice(0, limit), coverage: 'partial',
+        tracked_units: rows.length, computable,
+        ...(by === 'mcap' ? { fdv_fallback_count: fdvCount } : {}),
+        source: 'geckoterminal', as_of: nowIso(),
+        note: noteBits.join(' '),
       }, {
-        source, authority_class: by === 'mcap' ? 'B' : 'C', refresh: '~5m',
+        source: 'geckoterminal', authority_class: 'C', refresh: '~5m',
         confidence: computable ? 'medium' : 'low',
-        provenance: 'partial ranking over the tracked set; prices from the OHLCV poller, supply from Koios',
+        provenance: 'ranking over the tracked set from the token_market table (GeckoTerminal: circulating mcap, FDV fallback, DEX liquidity, 24h volume); ADA values derived from on-chain ADA/USD',
       }),
     };
   });
@@ -668,9 +782,35 @@ async function detailHandler({ params, ctx }) {
 }
 
 // ---------------------------------------------------------------------------
+// Market snapshot refresh — called by the poller each tick to fill token_market
+// from GeckoTerminal. Kept here (next to the schema) so the table's reader and
+// writer share one definition. Upserts every unit GeckoTerminal returns;
+// units it doesn't track are simply left absent (no fabricated zero rows).
+// Returns { fetched, written } for the poller log.
+// ---------------------------------------------------------------------------
+async function refreshTokenMarket(units, log) {
+  const market = await geckoterminal.tokenMarketData(units, { log });
+  const ts = nowSec();
+  const upsert = db.prepare(`
+    INSERT INTO token_market (unit, symbol, price_usd, mcap_usd, fdv_usd, liquidity_usd, volume24h_usd, total_supply, decimals, source, as_of)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(unit) DO UPDATE SET
+      symbol=excluded.symbol, price_usd=excluded.price_usd, mcap_usd=excluded.mcap_usd,
+      fdv_usd=excluded.fdv_usd, liquidity_usd=excluded.liquidity_usd, volume24h_usd=excluded.volume24h_usd,
+      total_supply=excluded.total_supply, decimals=excluded.decimals, source=excluded.source, as_of=excluded.as_of
+  `);
+  let written = 0;
+  for (const m of market.values()) {
+    upsert.run(m.unit, m.symbol, m.priceUsd, m.mcapUsd, m.fdvUsd, m.liquidityUsd, m.volume24hUsd, m.totalSupply, m.decimals, m.source, ts);
+    written++;
+  }
+  return { fetched: market.size, written };
+}
+
+// ---------------------------------------------------------------------------
 // Exports used by the poller and tests.
 // ---------------------------------------------------------------------------
-export const internals = { resolvePrice, adaUsd, koiosSupply, knownTokens, SEED_UNITS, USDM_UNIT };
+export const internals = { resolvePrice, adaUsd, koiosSupply, knownTokens, refreshTokenMarket, SEED_UNITS, USDM_UNIT };
 
 export default {
   name: 'token',

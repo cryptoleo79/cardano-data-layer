@@ -51,6 +51,8 @@ export const config = {
     opencnft: { base: env.OPENCNFT_BASE || 'https://api.opencnft.io/2', apiKey: env.OPENCNFT_API_KEY || null },
     minswap: { base: env.MINSWAP_BASE || 'https://api.minswap.org' },
     dexhunter: { base: env.DEXHUNTER_BASE || 'https://api-us.dexhunterv3.app', partnerId: env.DEXHUNTER_PARTNER_ID || null },
+    // GeckoTerminal: free, keyless on-chain DEX market data (mcap/liquidity/volume).
+    geckoterminal: { base: env.GECKOTERMINAL_BASE || 'https://api.geckoterminal.com/api/v2' },
   },
 
   // ohlcv poller cadence (ms) and which units to track

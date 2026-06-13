@@ -48,6 +48,17 @@ function writePoint(unit, price, source) {
 async function pollOnce() {
   const units = resolveUnits();
   log(`tick: polling ${units.length} unit(s)`);
+
+  // Market snapshot (mcap/liquidity/volume) from GeckoTerminal into token_market.
+  // Done in one batched sweep so /tokens/top and /token/mcap read locally. A
+  // failure here must not stop price-tick collection below.
+  try {
+    const r = await internals.refreshTokenMarket(units, (m) => log(`  market: ${m}`));
+    log(`market: ${r.written} token_market row(s) written (${r.fetched} returned by GeckoTerminal)`);
+  } catch (err) {
+    log(`market: refresh failed (continuing): ${err.message}`);
+  }
+
   let ok = 0, skipped = 0, failed = 0;
 
   for (const unit of units) {
