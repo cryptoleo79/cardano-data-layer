@@ -60,6 +60,29 @@ function loadSeedUnits() {
 }
 const SEED_UNITS = loadSeedUnits();
 
+// The market universe: the DexHunter-verified tradeable token set (~1,044),
+// snapshot to seed/market-universe.json. This is the sweep set the poller pulls
+// market data for from GeckoTerminal and what /tokens/top ranks over — so
+// "coverage" is the whole verified ecosystem, not a hand-picked 110. The curated
+// SEED_UNITS stay the *priority* set (refreshed every tick + nicer tickers).
+function loadMarketUniverse() {
+  try {
+    const p = new URL('../../seed/market-universe.json', import.meta.url);
+    const j = JSON.parse(readFileSync(p, 'utf8'));
+    const toks = (j.tokens || []).filter((t) => t.unit && /^[0-9a-f]+$/.test(t.unit));
+    return toks.map((t) => ({ unit: t.unit.toLowerCase(), ticker: t.ticker || null, name: t.name || null }));
+  } catch { return []; }
+}
+const MARKET_UNIVERSE = loadMarketUniverse();
+
+// Unit -> ticker, preferring the curated seed's label over the universe snapshot.
+const TICKER_OF = new Map();
+for (const t of MARKET_UNIVERSE) if (t.ticker) TICKER_OF.set(t.unit, t.ticker);
+for (const s of SEED_UNITS) if (s.ticker) TICKER_OF.set(s.unit, s.ticker);
+
+// The full set of units we attempt to track market data for (priority + universe).
+const MARKET_UNITS = [...new Set([...SEED_UNITS.map((s) => s.unit), ...MARKET_UNIVERSE.map((t) => t.unit)])];
+
 const VALID_INTERVALS = new Set(['1m', '5m', '15m', '1h', '4h', '1d']);
 const INTERVAL_SECONDS = { '1m': 60, '5m': 300, '15m': 900, '1h': 3600, '4h': 14400, '1d': 86400 };
 
@@ -441,8 +464,10 @@ function latestTickAda(unit) {
 }
 
 // A token_market row is "stale" once it is older than this — we still serve it
-// but downgrade its confidence and flag it, rather than pretend it's fresh.
-const MARKET_STALE_S = 30 * 60; // 30 min (poller runs every 5 min)
+// but downgrade its confidence and flag it, rather than pretend it's fresh. Set
+// above the long-tail rotation cycle (~30 min) so freshly-cycled tokens aren't
+// perpetually flagged; the priority set refreshes every 5-min tick.
+const MARKET_STALE_S = 45 * 60;
 
 /**
  * Confidence for a single ranked metric, from source quality + freshness.
@@ -470,7 +495,7 @@ async function topHandler({ query, ctx }) {
   }
 
   return ctx.cache.getOrSet(`token:top:${by}`, config.cache.rankings, async () => {
-    const tickerOf = new Map(SEED_UNITS.map((s) => [s.unit, s.ticker]));
+    const tickerOf = TICKER_OF;
     const usdPerAda = await adaUsd(ctx).catch(() => null);
     const nowS = nowSec();
     const rows = all('SELECT * FROM token_market');
@@ -513,8 +538,9 @@ async function topHandler({ query, ctx }) {
     const computable = ranked.filter((r) => r.metric.usd != null).length;
     const fdvCount = by === 'mcap' ? ranked.filter((r) => r.basis === 'fdv' && r.metric.usd != null).length : 0;
 
+    const universe = MARKET_UNITS.length;
     const noteBits = [
-      `Partial ranking over a tracked set (${rows.length} tokens with market data), NOT a full-ecosystem ranking.`,
+      `Ranking over the verified tradeable universe (${universe} tokens swept); ${rows.length} have live market data, ${computable} are rankable by this metric.`,
       'Source: GeckoTerminal (on-chain DEX aggregation; mcap via CoinGecko circulating supply).',
     ];
     if (by === 'mcap' && fdvCount) noteBits.push(`${fdvCount} token(s) lack circulating supply — ranked by FDV (price x total supply), flagged basis:"fdv".`);
@@ -524,7 +550,7 @@ async function topHandler({ query, ctx }) {
       status: 200,
       body: dq({
         by, ranking: ranked.slice(0, limit), coverage: 'partial',
-        tracked_units: rows.length, computable,
+        universe, tracked_units: rows.length, with_data: rows.length, computable,
         ...(by === 'mcap' ? { fdv_fallback_count: fdvCount } : {}),
         source: 'geckoterminal', as_of: nowIso(),
         note: noteBits.join(' '),
@@ -810,7 +836,7 @@ async function refreshTokenMarket(units, log) {
 // ---------------------------------------------------------------------------
 // Exports used by the poller and tests.
 // ---------------------------------------------------------------------------
-export const internals = { resolvePrice, adaUsd, koiosSupply, knownTokens, refreshTokenMarket, SEED_UNITS, USDM_UNIT };
+export const internals = { resolvePrice, adaUsd, koiosSupply, knownTokens, refreshTokenMarket, SEED_UNITS, MARKET_UNITS, MARKET_UNIVERSE, USDM_UNIT };
 
 export default {
   name: 'token',

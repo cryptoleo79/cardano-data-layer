@@ -26,10 +26,35 @@ const ctx = { db, cache: new TtlCache(), config, log };
 
 const INTERVAL_LABEL = 'raw'; // these are raw points, not bucketed candles
 
-// Which units to poll: operator config first, else the module's seed set.
+// Which units to poll for OHLCV price ticks: operator config first, else the
+// curated seed set. (Kept to the curated set — the long tail's price history
+// isn't worth a DexHunter call per token per tick.)
 function resolveUnits() {
   if (config.poller.units.length) return config.poller.units;
   return internals.SEED_UNITS.map((s) => s.unit);
+}
+
+// How many long-tail units to refresh per tick. Kept small because the keyless
+// GeckoTerminal tier throttles bursts hard — the priority set already consumes
+// most of a tick's usable budget, so the tail advances a little each tick and
+// the whole universe is covered over many ticks (token_market persists between
+// ticks, so partial progress is never lost).
+const TAIL_SLICE = 90;
+
+// The token_market refresh set for THIS tick: all priority (seed) units every
+// time, plus a rotating slice of the rest of the verified universe so the whole
+// set is covered over ceil(tail / TAIL_SLICE) ticks without tripping the rate
+// limit. Slice index is derived from the clock so no cursor state is needed.
+function marketRefreshSet() {
+  const priority = internals.SEED_UNITS.map((s) => s.unit);
+  const prioritySet = new Set(priority);
+  const tail = internals.MARKET_UNITS.filter((u) => !prioritySet.has(u));
+  if (!tail.length) return priority;
+  const slices = Math.ceil(tail.length / TAIL_SLICE);
+  const idx = Math.floor(Date.now() / config.poller.intervalMs) % slices;
+  const slice = tail.slice(idx * TAIL_SLICE, idx * TAIL_SLICE + TAIL_SLICE);
+  log(`market: priority ${priority.length} + tail slice ${idx + 1}/${slices} (${slice.length})`);
+  return [...priority, ...slice];
 }
 
 // Insert (or replace) one raw point for a unit at the current second.
@@ -50,11 +75,15 @@ async function pollOnce() {
   log(`tick: polling ${units.length} unit(s)`);
 
   // Market snapshot (mcap/liquidity/volume) from GeckoTerminal into token_market.
-  // Done in one batched sweep so /tokens/top and /token/mcap read locally. A
-  // failure here must not stop price-tick collection below.
+  // The verified universe (~1,044) is too large to sweep every tick under the
+  // free GeckoTerminal rate limit, so we ROTATE: the curated priority set
+  // refreshes every tick (fresh headline rankings) plus one rotating slice of
+  // the long tail, covering the whole universe over a handful of ticks. Reads
+  // stay local; a failure here must not stop price-tick collection below.
   try {
-    const r = await internals.refreshTokenMarket(units, (m) => log(`  market: ${m}`));
-    log(`market: ${r.written} token_market row(s) written (${r.fetched} returned by GeckoTerminal)`);
+    const refreshSet = marketRefreshSet();
+    const r = await internals.refreshTokenMarket(refreshSet, (m) => log(`  market: ${m}`));
+    log(`market: refreshed ${refreshSet.length} unit(s) -> ${r.written} written (${r.fetched} returned by GeckoTerminal)`);
   } catch (err) {
     log(`market: refresh failed (continuing): ${err.message}`);
   }

@@ -27,7 +27,12 @@ import { config } from '../config.js';
 const SOURCE = 'geckoterminal';
 const NETWORK = 'cardano';
 const MULTI_MAX = 30;          // GeckoTerminal caps /tokens/multi at 30 addresses
-const CHUNK_PACE_MS = 2_100;   // ~30 req/min ceiling -> ~1 call / 2.1s
+// The keyless free tier throttles hard: bursts of more than ~3 multi-calls trip
+// a sustained 429 (observed empirically; documented "30/min" is not what the
+// keyless tier actually grants). So we pace gently and rely on rotation +
+// persistence: whatever a tick can't refresh keeps its last value and is picked
+// up on a later tick (and flagged stale meanwhile). Pace is deliberately slow.
+const CHUNK_PACE_MS = 5_000;
 const ACCEPT = 'application/json;version=20230302';
 
 const num = (v) => (v != null && Number.isFinite(Number(v)) ? Number(v) : null);
@@ -39,12 +44,20 @@ function normalize(d) {
   const a = d.attributes;
   const unit = (a.address || (typeof d.id === 'string' ? d.id.split('_').pop() : null) || '').toLowerCase();
   if (!unit) return null;
+  const priceUsd = num(a.price_usd);
+  // Price-derived valuations are only trustworthy with a price behind them.
+  // GeckoTerminal occasionally returns an orphaned market_cap_usd with a null
+  // price (observed: a token reporting a $24B "market cap" and no price) — those
+  // are corrupt and would otherwise top the ranking. Drop mcap/FDV when there is
+  // no price; liquidity and 24h volume are real USD figures independent of spot
+  // price, so they are kept regardless.
+  const priced = priceUsd != null;
   return {
     unit,
     symbol: a.symbol ?? null,
-    priceUsd: num(a.price_usd),
-    mcapUsd: num(a.market_cap_usd),     // circulating (CoinGecko); null when untracked
-    fdvUsd: num(a.fdv_usd),             // price x total supply
+    priceUsd,
+    mcapUsd: priced ? num(a.market_cap_usd) : null,  // circulating (CoinGecko); null when untracked/unpriced
+    fdvUsd: priced ? num(a.fdv_usd) : null,           // price x total supply
     liquidityUsd: num(a.total_reserve_in_usd),
     volume24hUsd: num(a.volume_usd ? a.volume_usd.h24 : null),
     totalSupply: num(a.total_supply),
