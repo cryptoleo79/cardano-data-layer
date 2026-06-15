@@ -22,7 +22,7 @@
 import { initEventStore, eventCount, verifyChain } from '../projectmemory/eventstore.js';
 import { initProjections } from '../projectmemory/schema.js';
 import { rebuildProjections } from '../projectmemory/reducer.js';
-import { seedIfEmpty } from '../projectmemory/seed.js';
+import { seedIfEmpty, seedCardanocubeCategories } from '../projectmemory/seed.js';
 import { listProjects, getProject, listCategories, historyForProject } from '../projectmemory/read.js';
 import { dq } from '../lib/envelope.js';
 
@@ -44,10 +44,15 @@ export async function init(ctx) {
   initEventStore();        // append-only log + tamper-evident triggers
   initProjections();       // read-model tables
   const seed = seedIfEmpty(); // bootstrap from the archive (events only), once
-  const replayed = rebuildProjections(); // derive projections purely from the log
+  rebuildProjections();       // build projections so the category import can see existing projects
+  // Incremental, idempotent: import cardanocube per-category assignments for the
+  // categories Built-on-Cardano doesn't cover (appends to the existing log).
+  const cc = seedCardanocubeCategories();
+  const replayed = rebuildProjections(); // re-derive projections from the full log
   const chain = verifyChain();
   ctx.log?.(`project-memory: events=${eventCount()} seeded=${seed.seeded} replayed=${replayed} chain_ok=${chain.ok}` +
-    (seed.seeded ? ` (cats=${seed.categories} projects=${seed.projects} tokens=${seed.tokens} snapshot=${seed.snapshot})` : ''));
+    (seed.seeded ? ` (cats=${seed.categories} projects=${seed.projects} tokens=${seed.tokens} snapshot=${seed.snapshot})` : '') +
+    (cc.ran ? ` (cardanocube-cats: assigned=${cc.assigned} new_projects=${cc.newProjects} deprecated=${cc.deprecated})` : ` (cardanocube-cats: ${cc.reason})`));
 }
 
 async function projectsHandler({ query }) {

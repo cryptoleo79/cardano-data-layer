@@ -1,0 +1,273 @@
+{
+  "source": "cardanocube",
+  "source_url": "https://cardanocube.com/categories",
+  "authority_class": "D",
+  "as_of": "2026-06-15",
+  "note": "Per-category project listings for the 13 categories the Built-on-Cardano directory does not cover. Each category traces to a preserved cardanocube category page (Wayback URL + SHA-256 where available). Captured 2026-06-15T22:29:24Z. \"investment\" was removed from the source taxonomy (HTTP 404) and is recorded as deprecated; \"partner-chain\" captured by direct fetch (Wayback SPN unavailable at capture time).",
+  "categories": [
+    {
+      "slug": "ai",
+      "wayback_url": "https://web.archive.org/web/20260603133517id_/https://cardanocube.com/categories/ai",
+      "source_url": "https://cardanocube.com/categories/ai",
+      "sha256": "12d76d572cead5e51ac2a2ec2956e8b2f6fe0e9f2963779e88b403921658b232",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 13,
+      "projects": [
+        "catskyai",
+        "masumi",
+        "nunet",
+        "rejuve-ai",
+        "singularitydao",
+        "singularitynet",
+        "sync-ai",
+        "cardanogpt",
+        "cogito-protocol",
+        "dedium",
+        "health2win",
+        "marketraker",
+        "quatern-ai"
+      ]
+    },
+    {
+      "slug": "cross-chain-bridge",
+      "wayback_url": "https://web.archive.org/web/20250426045830id_/https://cardanocube.com/categories/cross-chain-bridge",
+      "source_url": "https://cardanocube.com/categories/cross-chain-bridge",
+      "sha256": "4fe996b36aec029c733ec17c563816dd9adadd27899364330cc24f81a8785aa1",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 6,
+      "projects": [
+        "chainport-io",
+        "dcspark-milkomeda",
+        "fourier",
+        "rosen-bridge",
+        "sundial",
+        "wanchain"
+      ]
+    },
+    {
+      "slug": "data",
+      "wayback_url": "https://web.archive.org/web/20251205030602id_/https://cardanocube.com/categories/data",
+      "source_url": "https://cardanocube.com/categories/data",
+      "sha256": "6ec37910263b837238a06fd7ed21fc8546e2e99263f95864e8cca815f9b388c2",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 4,
+      "projects": [
+        "dhealth",
+        "iagon",
+        "nuncius",
+        "profila"
+      ]
+    },
+    {
+      "slug": "governance",
+      "wayback_url": "https://web.archive.org/web/20260603051709id_/https://cardanocube.com/categories/governance",
+      "source_url": "https://cardanocube.com/categories/governance",
+      "sha256": "d293737bf7d8e22fb1babb282382d6c3b556f8210b731eff746c536c260aa095",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 16,
+      "projects": [
+        "lace",
+        "adamail",
+        "agora",
+        "agora-cardano",
+        "cardanoballot",
+        "cardano-govtool",
+        "cardanosigner",
+        "clarity-protocol",
+        "intersect",
+        "nufi",
+        "project-catalyst",
+        "adanordic-sanchonet-explorer",
+        "summonplatform",
+        "the-worldeater",
+        "voteaire",
+        "vote-chain"
+      ]
+    },
+    {
+      "slug": "infrastructure",
+      "wayback_url": "https://web.archive.org/web/20260204152107id_/https://cardanocube.com/categories/infrastructure",
+      "source_url": "https://cardanocube.com/categories/infrastructure",
+      "sha256": "182d90bbd0746e3edacb1b3a040744561bef50dbcd7259c4856daa83db0025af",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 20,
+      "projects": [
+        "world-mobile",
+        "adahandle",
+        "adamail",
+        "cns",
+        "daedalus-turbo",
+        "empowa",
+        "eonpower",
+        "maestro",
+        "midnight",
+        "mithril",
+        "nuvola",
+        "ogmios",
+        "smart-contract-audit-token",
+        "unbox-the-universe",
+        "worldads",
+        "3air",
+        "adadomains",
+        "adaresolver",
+        "ada-solar",
+        "bondly"
+      ]
+    },
+    {
+      "slug": "ispo",
+      "wayback_url": "https://web.archive.org/web/20260603133517id_/https://cardanocube.com/categories/ispo",
+      "source_url": "https://cardanocube.com/categories/ispo",
+      "sha256": "c85155cbaa2f51899d025364737ab9fd86355e21b944c7db3bda2f900a31cc85",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 12,
+      "projects": [
+        "cswapdex",
+        "iamx",
+        "nmkr",
+        "tokeo",
+        "adaquest",
+        "beerhouse-io",
+        "cardania",
+        "cerra-io",
+        "coinecta",
+        "linkberry",
+        "summonplatform",
+        "zengate-global-palmyra"
+      ]
+    },
+    {
+      "slug": "marketplaces",
+      "wayback_url": "https://web.archive.org/web/20260603133517id_/https://cardanocube.com/categories/marketplaces",
+      "source_url": "https://cardanocube.com/categories/marketplaces",
+      "sha256": "1bfb3cd8148c98d0b32f0f50c13fbc22f982ee1e4ca6285cf362b252a2d903fc",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 20,
+      "projects": [
+        "bookio",
+        "crashr",
+        "empowa",
+        "everlens",
+        "jam-on-bread",
+        "jpg-store",
+        "singularitynet",
+        "soundrig",
+        "wayup",
+        "handles-exchange",
+        "adafund-me",
+        "ada-makers",
+        "adanft",
+        "ada-theinkwhale",
+        "blueshrmp-co",
+        "bworks",
+        "centaurify",
+        "cnftswap",
+        "dataplanet",
+        "dropspot"
+      ]
+    },
+    {
+      "slug": "music",
+      "wayback_url": "https://web.archive.org/web/20260505020927id_/https://cardanocube.com/categories/music",
+      "source_url": "https://cardanocube.com/categories/music",
+      "sha256": "916045e40bee0d08dfd26d8f6fd3506fe1b040197e4015b9e637a72b3283c025",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 2,
+      "projects": [
+        "demu",
+        "newm"
+      ]
+    },
+    {
+      "slug": "partner-chain",
+      "wayback_url": null,
+      "source_url": "https://www.cardanocube.com/categories/partner-chain",
+      "sha256": "505f1904f06e0656989ce68eeae64a2fed9a2c91ee81f33301e5c4046eee62b4",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 2,
+      "projects": [
+        "materios",
+        "midnight"
+      ]
+    },
+    {
+      "slug": "popular",
+      "wayback_url": "https://web.archive.org/web/20260509193424id_/https://cardanocube.com/categories/popular",
+      "source_url": "https://cardanocube.com/categories/popular",
+      "sha256": "70b66cd44cd159c475dcdeed4956e9df9de43b6f8d30cff8396bcf278acd212e",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 20,
+      "projects": [
+        "world-mobile",
+        "lace",
+        "adaanvil",
+        "adahandle",
+        "adastat",
+        "atala-prism",
+        "blockfrost",
+        "cardanobits",
+        "cardano-govtool",
+        "cardanokidz",
+        "cardanoscan",
+        "cexplorer",
+        "charli3",
+        "clay-nation",
+        "cnft-tools",
+        "cornucopias",
+        "crossmint",
+        "cswapdex",
+        "daedalus-wallet",
+        "deadpxlz"
+      ]
+    },
+    {
+      "slug": "prediction-market",
+      "wayback_url": "https://web.archive.org/web/20251205032350id_/https://cardanocube.com/categories/prediction-market",
+      "source_url": "https://cardanocube.com/categories/prediction-market",
+      "sha256": "eb68c58a067f4a68bb55ffbe5565332176de87e4036759f41e30d87cde992b0b",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 2,
+      "projects": [
+        "bodega-market",
+        "foreonnetwork"
+      ]
+    },
+    {
+      "slug": "utility-nfts",
+      "wayback_url": "https://web.archive.org/web/20260603133952id_/https://cardanocube.com/categories/utility-nfts",
+      "source_url": "https://cardanocube.com/categories/utility-nfts",
+      "sha256": "9e942dd886f24264f95b0b15a1e7ea38be4610104b5c336d9b27d1afd35e20f3",
+      "capture_date": "2026-06-15T22:29:24Z",
+      "project_count": 20,
+      "projects": [
+        "cardanoisland-mediumplot",
+        "cardanolands",
+        "chainsofwar",
+        "crypto-heroez",
+        "cryptoraggies",
+        "deadpxlz",
+        "derpbirds",
+        "fuzzyfellas",
+        "goofygophers-miningclub",
+        "havoc-worlds",
+        "mvpz",
+        "rakebit-com",
+        "the-mallard-order",
+        "the-working-dead",
+        "walkerscnft",
+        "cardanospace",
+        "cardano-trees",
+        "chibidango-heroes",
+        "clumsy-ghosts",
+        "cryptodino"
+      ]
+    },
+    {
+      "slug": "investment",
+      "deprecated": true,
+      "source_url": "https://cardanocube.com/categories/investment",
+      "http_status": 404,
+      "note": "Removed from the cardanocube taxonomy (HTTP 404 at capture time, no Wayback snapshot); no projects to classify."
+    }
+  ]
+}

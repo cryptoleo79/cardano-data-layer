@@ -12,6 +12,11 @@ mkdirSync(dirname(config.dbPath), { recursive: true });
 export const db = new DatabaseSync(config.dbPath);
 db.exec('PRAGMA journal_mode = WAL;');
 db.exec('PRAGMA foreign_keys = ON;');
+// Wait (rather than immediately erroring with SQLITE_BUSY) when another writer
+// holds the lock — e.g. the OHLCV/market poller cron writing while the service
+// rebuilds projections at startup. Without this, a concurrent write surfaced as
+// "database is locked" and aborted module init.
+db.exec('PRAGMA busy_timeout = 8000;');
 
 /** Convenience: run a statement with params, return changes info. */
 export function run(sql, ...params) {

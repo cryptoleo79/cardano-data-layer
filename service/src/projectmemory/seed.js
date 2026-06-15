@@ -14,6 +14,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { config } from '../config.js';
+import { db } from '../db.js';
 import { append, eventCount } from './eventstore.js';
 
 const ARCHIVE = process.env.CDL_ARCHIVE || join(homedir(), 'cardano-project-memory-archive');
@@ -154,4 +155,58 @@ export function seedIfEmpty() {
   }
 
   return { seeded: true, sources: 3, categories, projects, tokens, boc, bocAssign, snapshot: tt?.file || null };
+}
+
+// Humanize a cardanocube project slug into a display name ("rejuve-ai" -> "Rejuve Ai").
+function humanizeSlug(slug) {
+  return slug.split('-').map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(' ');
+}
+
+/**
+ * Import cardanocube per-category project assignments — the 13 categories the
+ * Built-on-Cardano directory doesn't cover (ai, infrastructure, governance, …).
+ * Every assignment traces to a preserved cardanocube category page (Wayback URL
+ * + SHA-256), authority class D. Unlike seedIfEmpty this runs against a NON-empty
+ * log: it only appends, and is idempotent (a 'via' marker on the events means a
+ * re-run is a no-op). Categories the source has dropped (e.g. a 404'd category)
+ * are recorded as category.deprecated rather than fabricated. Returns counts.
+ */
+export function seedCardanocubeCategories() {
+  const file = join(config.seedDir, 'cardanocube-categories.json');
+  if (!existsSync(file)) return { ran: false, reason: 'no seed file' };
+  // Idempotency: if we already imported this batch, do nothing.
+  const already = db.prepare(
+    "SELECT 1 FROM pm_event WHERE type IN ('category.assigned','category.deprecated') AND payload LIKE '%\"via\":\"cardanocube-categories\"%' LIMIT 1",
+  ).get();
+  if (already) return { ran: false, reason: 'already imported' };
+
+  const cj = readJson(file);
+  const asOf = cj.as_of;
+  let assigned = 0, deprecated = 0, newProjects = 0;
+  for (const c of cj.categories || []) {
+    if (c.deprecated) {
+      append('category.deprecated', { actor: ACTOR, ts: asOf, payload: {
+        slug: c.slug, source_id: 'cardanocube', reason: c.note || 'removed from source taxonomy', via: 'cardanocube-categories' } });
+      deprecated++;
+      continue;
+    }
+    if (!c.projects || !c.projects.length) continue;
+    const evidence = [{ kind: 'wayback', ref: c.wayback_url, sha256: c.sha256 || null,
+      description: `cardanocube /categories/${c.slug} listing (chain-of-custody from the Wayback Machine)` }];
+    for (const pid of c.projects) {
+      const had = db.prepare('SELECT 1 FROM pm_project WHERE id = ?').get(pid);
+      append('project.imported', { actor: ACTOR, subject: pid, ts: asOf, payload: { id: pid, kind: 'project' } });
+      if (!had) {
+        append('claim.asserted', { actor: ACTOR, subject: pid, ts: asOf, payload: {
+          project_id: pid, field: 'name', value: humanizeSlug(pid), source_id: 'cardanocube', authority_class: 'D',
+          as_of: asOf, asserted_by: ACTOR, evidence, note: 'display name derived from the cardanocube project slug' } });
+        newProjects++;
+      }
+      append('category.assigned', { actor: ACTOR, subject: pid, ts: asOf, payload: {
+        project_id: pid, category_slug: c.slug, source_id: 'cardanocube', authority_class: 'D',
+        as_of: asOf, confidence: 'medium', via: 'cardanocube-categories', evidence } });
+      assigned++;
+    }
+  }
+  return { ran: true, assigned, deprecated, newProjects };
 }
