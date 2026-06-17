@@ -16,7 +16,7 @@
 
 import { TtlCache } from '../cache.js';
 import { config } from '../config.js';
-import { db, run } from '../db.js';
+import { db, run, all } from '../db.js';
 import tokenModule, { internals } from '../modules/token.js';
 
 const log = (...a) => console.log(new Date().toISOString(), '[poller]', ...a);
@@ -34,27 +34,74 @@ function resolveUnits() {
   return internals.SEED_UNITS.map((s) => s.unit);
 }
 
-// How many long-tail units to refresh per tick. Kept small because the keyless
-// GeckoTerminal tier throttles bursts hard — the priority set already consumes
-// most of a tick's usable budget, so the tail advances a little each tick and
-// the whole universe is covered over many ticks (token_market persists between
-// ticks, so partial progress is never lost).
-const TAIL_SLICE = 90;
+// Per-tick rate budget. The keyless GeckoTerminal tier throttles bursts hard
+// (~3 multi-calls before sustained 429s; 30 units/multi-call), so we cap the
+// whole tick at ~7 chunks worth of units. Priority is filled first; whatever
+// budget remains funds one rotating tail slice that advances coverage.
+const UNITS_PER_CHUNK = 30;
+const MAX_CHUNKS = 7;
+const MAX_UNITS = UNITS_PER_CHUNK * MAX_CHUNKS; // ~210
+const TAIL_SLICE = 90; // tail units per tick when budget allows
+// How many of the top liquidity / volume rows feed the dynamic priority set.
+const TOP_LIQ = 40;
+const TOP_VOL = 40;
 
-// The token_market refresh set for THIS tick: all priority (seed) units every
-// time, plus a rotating slice of the rest of the verified universe so the whole
-// set is covered over ceil(tail / TAIL_SLICE) ticks without tripping the rate
-// limit. Slice index is derived from the clock so no cursor state is needed.
+// The token_market refresh set for THIS tick. Rather than refreshing only the
+// curated seed every tick, we build a DYNAMIC priority set from the current
+// token_market table so the *visible top* of every ranking stays fresh:
+//   - every unit with a non-null mcap_usd (the accurate circulating-mcap set),
+//   - the top TOP_LIQ by liquidity_usd, the top TOP_VOL by volume24h_usd,
+//   - the curated SEED_UNITS (nicer tickers + guaranteed floor),
+// deduped. Then we ADD one rotating slice of the remaining universe so coverage
+// still advances over many ticks. The total is capped at MAX_UNITS (priority
+// first); if priority alone exceeds the cap it's truncated and the tail is
+// skipped this tick. Slice index is clock-derived so no cursor state is needed.
 function marketRefreshSet() {
-  const priority = internals.SEED_UNITS.map((s) => s.unit);
+  const seed = internals.SEED_UNITS.map((s) => s.unit);
+
+  // Pull the dynamic priority signals from the live market table. Reads are
+  // local SQLite; on any failure fall back to the curated seed alone.
+  let dynamic = [];
+  try {
+    const withMcap = all('SELECT unit FROM token_market WHERE mcap_usd IS NOT NULL').map((r) => r.unit);
+    const topLiq = all(
+      'SELECT unit FROM token_market WHERE liquidity_usd IS NOT NULL ORDER BY liquidity_usd DESC LIMIT ?',
+      TOP_LIQ,
+    ).map((r) => r.unit);
+    const topVol = all(
+      'SELECT unit FROM token_market WHERE volume24h_usd IS NOT NULL ORDER BY volume24h_usd DESC LIMIT ?',
+      TOP_VOL,
+    ).map((r) => r.unit);
+    dynamic = [...withMcap, ...topLiq, ...topVol];
+  } catch (err) {
+    log(`market: dynamic priority query failed (using seed only): ${err.message}`);
+  }
+
+  // Priority = dynamic signals + curated seed, deduped, capped at MAX_UNITS.
+  let priority = [...new Set([...dynamic, ...seed])];
+  let capped = false;
+  if (priority.length > MAX_UNITS) {
+    priority = priority.slice(0, MAX_UNITS);
+    capped = true;
+  }
+
   const prioritySet = new Set(priority);
   const tail = internals.MARKET_UNITS.filter((u) => !prioritySet.has(u));
-  if (!tail.length) return priority;
-  const slices = Math.ceil(tail.length / TAIL_SLICE);
+  const tailBudget = Math.max(0, Math.min(TAIL_SLICE, MAX_UNITS - priority.length));
+
+  if (!tail.length || tailBudget === 0) {
+    log(`market: priority ${priority.length}${capped ? ' (capped)' : ''} + tail 0` +
+        ` = ${priority.length} unit(s)`);
+    return priority;
+  }
+
+  const slices = Math.ceil(tail.length / tailBudget);
   const idx = Math.floor(Date.now() / config.poller.intervalMs) % slices;
-  const slice = tail.slice(idx * TAIL_SLICE, idx * TAIL_SLICE + TAIL_SLICE);
-  log(`market: priority ${priority.length} + tail slice ${idx + 1}/${slices} (${slice.length})`);
-  return [...priority, ...slice];
+  const slice = tail.slice(idx * tailBudget, idx * tailBudget + tailBudget);
+  const set = [...priority, ...slice];
+  log(`market: priority ${priority.length}${capped ? ' (capped)' : ''}` +
+      ` + tail slice ${idx + 1}/${slices} (${slice.length}) = ${set.length} unit(s)`);
+  return set;
 }
 
 // Insert (or replace) one raw point for a unit at the current second.
