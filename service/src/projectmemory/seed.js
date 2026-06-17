@@ -168,10 +168,17 @@ export function seedIfEmpty() {
 export function seedBocEnrichment() {
   const file = join(config.seedDir, 'builtoncardano-enrichment.json');
   if (!existsSync(file)) return { ran: false, reason: 'no seed file' };
-  const already = db.prepare(
-    "SELECT 1 FROM pm_event WHERE type='claim.asserted' AND payload LIKE '%\"via\":\"boc-enrichment\"%' LIMIT 1",
-  ).get();
-  if (already) return { ran: false, reason: 'already imported' };
+
+  // Incremental: collect the (project_id, field) pairs already imported via this
+  // enrichment so re-running with an EXPANDED seed only appends the new ones
+  // (and re-imports never duplicate). The 'via' marker lives in the event
+  // payload, so we read it from the log.
+  const done = new Set();
+  for (const row of db.prepare(
+    "SELECT payload FROM pm_event WHERE type='claim.asserted' AND payload LIKE '%\"via\":\"boc-enrichment\"%'",
+  ).all()) {
+    try { const p = JSON.parse(row.payload); done.add(`${p.project_id} ${p.field}`); } catch { /* skip */ }
+  }
 
   const ej = readJson(file);
   const asOf = ej.as_of;
@@ -184,14 +191,14 @@ export function seedBocEnrichment() {
     if (!p.id) continue;
     for (const f of FIELDS) {
       const v = p[f];
-      if (!v) continue;
+      if (!v || done.has(`${p.id} ${f}`)) continue;
       append('claim.asserted', { actor: ACTOR, subject: p.id, ts: asOf, payload: {
         project_id: p.id, field: f, value: v, source_id: 'builtoncardano', authority_class: 'B',
         as_of: asOf, asserted_by: ACTOR, confidence: 'high', via: 'boc-enrichment', evidence } });
       claims++; counts[f]++;
     }
   }
-  return { ran: true, claims, ...counts };
+  return { ran: claims > 0, claims, ...counts };
 }
 
 // Humanize a cardanocube project slug into a display name ("rejuve-ai" -> "Rejuve Ai").
