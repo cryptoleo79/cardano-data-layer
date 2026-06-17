@@ -43,8 +43,14 @@ const MAX_CHUNKS = 7;
 const MAX_UNITS = UNITS_PER_CHUNK * MAX_CHUNKS; // ~210
 const TAIL_SLICE = 90; // tail units per tick when budget allows
 // How many of the top liquidity / volume rows feed the dynamic priority set.
-const TOP_LIQ = 40;
-const TOP_VOL = 40;
+// Raised from 40 -> 80: at 40 the cutoff sat at ~$35k liquidity, so the genuine
+// mid-tier (the $10k-100k band) rotated through the slow tail and went stale even
+// though it is real, non-dust depth. 80 pushes the cutoff down to ~$7k, keeping
+// every liquidity/volume-bearing row that a user would plausibly rank by fresh,
+// while the deduped priority set still stays well under MAX_UNITS (leaving room
+// for the rotating tail slice that advances long-tail coverage each tick).
+const TOP_LIQ = 80;
+const TOP_VOL = 80;
 
 // The token_market refresh set for THIS tick. Rather than refreshing only the
 // curated seed every tick, we build a DYNAMIC priority set from the current

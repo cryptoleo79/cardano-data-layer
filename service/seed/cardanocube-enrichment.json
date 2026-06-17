@@ -1,0 +1,1255 @@
+{
+  "source": "cardanocube",
+  "source_id": "cardanocube",
+  "source_url": "https://cardanocube.com/projects",
+  "authority_class": "D",
+  "as_of": "2026-06-17",
+  "note": "Per-project external links (website/github/documentation/whitepaper) harvested from cardanocube.com project pages preserved via the Wayback Machine. Each link is verbatim from the captured page; the raw id_ snapshot URL and the SHA-256 of the exact fetched bytes are recorded as evidence. Social links (twitter/discord/telegram/etc.) and cardanocube own footer links are excluded. No fabrication: projects with no published link in their snapshot are omitted (see skipped log).",
+  "count": 102,
+  "bare_slug_universe": 142,
+  "skipped": [
+    {
+      "slug": "discoin",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20260603134209id_/https://cardanocube.com/projects/discoin"
+    },
+    {
+      "slug": "virusx",
+      "reason": "no classifiable links",
+      "wayback_url": "https://web.archive.org/web/20240722133646id_/https://cardanocube.com/projects/virusx",
+      "sha256": "7e0ea52040e6630518f62e9f1c01a175ee41f936e3aee718c1916b08553647c2"
+    },
+    {
+      "slug": "nunet",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20260603134325id_/https://www.cardanocube.com/projects/nunet"
+    },
+    {
+      "slug": "cardanogpt",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250120024939id_/https://www.cardanocube.com/projects/cardanogpt"
+    },
+    {
+      "slug": "wanchain",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250120025528id_/https://www.cardanocube.com/projects/wanchain"
+    },
+    {
+      "slug": "agora-cardano",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "daedalus-turbo",
+      "reason": "no classifiable links",
+      "wayback_url": "https://web.archive.org/web/20250212192733id_/https://www.cardanocube.com/projects/daedalus-turbo",
+      "sha256": "1ef920af2c06d0bc66b37a4ac2c9c6e187f06c05ce697f743618cf51eaab90c1"
+    },
+    {
+      "slug": "eonpower",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250119223040id_/https://www.cardanocube.com/projects/eonpower"
+    },
+    {
+      "slug": "smart-contract-audit-token",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "3air",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "ada-solar",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "nmkr",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20260303061004id_/https://www.cardanocube.com/projects/nmkr"
+    },
+    {
+      "slug": "jam-on-bread",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250120022947id_/https://www.cardanocube.com/projects/jam-on-bread"
+    },
+    {
+      "slug": "jpg-store",
+      "reason": "no classifiable links",
+      "wayback_url": "https://web.archive.org/web/20240415025214id_/https://www.cardanocube.com/projects/jpg-store",
+      "sha256": "f40068234b0356b6c2c6262406057dce1f06cee72e345142c25b86073dd3f31f"
+    },
+    {
+      "slug": "adafund-me",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250617114143id_/https://www.cardanocube.com/projects/adafund-me"
+    },
+    {
+      "slug": "adanft",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "ada-theinkwhale",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "blueshrmp-co",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "cnftswap",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "dataplanet",
+      "reason": "no classifiable links",
+      "wayback_url": "https://web.archive.org/web/20240226015155id_/https://www.cardanocube.com/projects/dataplanet",
+      "sha256": "13a3ed1b13c80da7220038afce640a0dd0868c096b612c2ef818a7478f5f7f1d"
+    },
+    {
+      "slug": "newm",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250320124111id_/https://www.cardanocube.com/projects/newm"
+    },
+    {
+      "slug": "materios",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "adastat",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250209071652id_/https://www.cardanocube.com/projects/adastat"
+    },
+    {
+      "slug": "cardanobits",
+      "reason": "http 503",
+      "wayback_url": "https://web.archive.org/web/20250318000913id_/https://www.cardanocube.com/projects/cardanobits"
+    },
+    {
+      "slug": "chainsofwar",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "crypto-heroez",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "cryptoraggies",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "derpbirds",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "fuzzyfellas",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "goofygophers-miningclub",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "havoc-worlds",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "mvpz",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "rakebit-com",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "the-mallard-order",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "the-working-dead",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "walkerscnft",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "cardanospace",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "cardano-trees",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "clumsy-ghosts",
+      "reason": "no wayback snapshot"
+    },
+    {
+      "slug": "cryptodino",
+      "reason": "no wayback snapshot"
+    }
+  ],
+  "projects": [
+    {
+      "id": "adax",
+      "website": "https://adax.pro/",
+      "whitepaper": "https://adax.pro/static/Adax_PRO_Whitepaper.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204064152id_/https://cardanocube.com/projects/adax",
+        "sha256": "df45b12b464eccec871c065a3502b672a5c41c6c5a94eb4e2b6a6d014e087ee8",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "blocktree",
+      "website": "https://blocktree.asia/en/",
+      "documentation": "https://docs.blocktree.asia/faq/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250317233214id_/https://cardanocube.com/projects/blocktree",
+        "sha256": "609f70e857206be2d53fb2f2c0f81601e18f763550d1119d1bd51a94468fc29a",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "cardano-nuts",
+      "website": "http://www.cardanonuts.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204052929id_/https://cardanocube.com/projects/cardano-nuts",
+        "sha256": "e38840a137b1fa633067566f261ae9b126edee58caa2312972acbf4d90ffe156",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "cerra-io",
+      "website": "https://cerra.io/",
+      "documentation": "https://documentation.cerra.io/cerra_io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603133802id_/https://cardanocube.com/projects/cerra-io",
+        "sha256": "b9ac50e69a5192ea5293189c209e2d10852621a517fc3e5a091e8f483554e195",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "charlz-token",
+      "website": "https://www.charlz.io/",
+      "whitepaper": "https://d2saw6je89goi1.cloudfront.net/uploads/digital_asset/file/979605/Bison_Paper_Final.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206121131id_/https://cardanocube.com/projects/charlz-token",
+        "sha256": "233e745b5841d3e8f5201195d3a91118e37ba04876de166542c58e8e831c11a2",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "chibidango-heroes",
+      "website": "https://chibidangoheroes.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603133938id_/https://cardanocube.com/projects/chibidango-heroes",
+        "sha256": "9fd38c6c9dfae9401882ab0facdc66c7815e1f9788da0d8ff264008db7eda060",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "cns",
+      "website": "https://cns.space/",
+      "documentation": "https://cns-space.gitbook.io/docs/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260204042051id_/https://cardanocube.com/projects/cns",
+        "sha256": "850c7bea9569b9a76ed85f549ed39949af89e1fb9d4c4ca1fbbcfcb4366fc6d1",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "cobraking",
+      "website": "https://cobraking.meme/",
+      "whitepaper": "https://cobraking.meme/wp-content/uploads/2024/01/COBRA-KING-whitepaper-1.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119224421id_/https://cardanocube.com/projects/cobraking",
+        "sha256": "7bc2122078eb6641edd66575eb9099d5a93d8fc6079aceedbd1ee09252bcbb88",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "community-cyber-security-support",
+      "website": "https://epochsec.io/",
+      "documentation": "https://epochsec.gitbook.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134016id_/https://cardanocube.com/projects/community-cyber-security-support",
+        "sha256": "52f6fe4ff135d25a1d0b4a6ed5509e70ee8006879da219a4cce3bf05c1a42895",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "comunidadcardano",
+      "website": "https://comunidadcardano.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250317235142id_/https://cardanocube.com/projects/comunidadcardano",
+        "sha256": "065a79327346599bcebe0eee7268165840eea02f107b5ec4966ad0b8897820a1",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "eikonikos",
+      "website": "https://eikonikos.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120014747id_/https://cardanocube.com/projects/eikonikos",
+        "sha256": "51427267b88ea8791a8e5100c32d5465c37f1b3dd1c281c18f67b399cb425729",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "entheosai",
+      "website": "http://www.entheosart.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250313005217id_/https://cardanocube.com/projects/entheosai",
+        "sha256": "55db8eb0a78a531502ecbcbfb3d50ebc5c2cdfe402ef2379335c73ff48505140",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "lucid",
+      "website": "https://lucid.spacebudz.io/",
+      "github": "https://github.com/spacebudz/lucid",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134246id_/https://cardanocube.com/projects/lucid",
+        "sha256": "7020169202d281ffb125da32424dc17e3ae04595b47d3ae394161b60f61d01fe",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "marketraker",
+      "website": "https://raker.market/",
+      "documentation": "https://docs.google.com/document/d/1QaoH42virzcq4JFuct_woPT2VHdzXtGP8jiwB7RXDEs/edit#heading=h.exaepzxh2e7v",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134312id_/https://cardanocube.com/projects/marketraker",
+        "sha256": "7bfcda478e5788f4dd89e598670ca868115fba6498e287dd2dd9f1c12b1715cc",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "occam-fi",
+      "website": "https://occam.fi/",
+      "whitepaper": "https://occam.fi/docs/occamrazer_wp_v1.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250523211043id_/https://cardanocube.com/projects/occam-fi",
+        "sha256": "90c0bf911f80fe10fe2a329a98b7f44bc73427a26871f37038c6f6f5b6bda547",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "occamrazer",
+      "whitepaper": "https://occam.fi/docs/occamrazer_wp_v1.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240714113029id_/https://cardanocube.com/projects/occamrazer",
+        "sha256": "e3983ebeba93e0b6f656e30e5ee8b75b008830484b587e7c66c08e6e34b15240",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "pepeblue",
+      "website": "https://pepeblue.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204053033id_/https://cardanocube.com/projects/pepeblue",
+        "sha256": "c6d3db08ba13c7084e543505bb2c0b4c64de0b02fdeedc2ebabf042995e5b3e6",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "rats-dao",
+      "website": "https://ratsdao.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116072946id_/https://cardanocube.com/projects/rats-dao",
+        "sha256": "8e561718e4327be0b6de462f7c3120cafda5597e5e7e3c5c5f76e2804dddf3a0",
+        "sha_matched_custody": true,
+        "capture_date": "2026-06-03T08:30:00Z"
+      }
+    },
+    {
+      "id": "catskyai",
+      "website": "https://catsky.io/",
+      "whitepaper": "https://catsky.io/white-paper/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250209074718id_/https://www.cardanocube.com/projects/catskyai",
+        "sha256": "d2ed745e494bd8b2e4e5b732ec2dd05e6d61ce2c2f91bc5b6ab0f302a73efeaf",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "masumi",
+      "website": "https://www.masumi.network/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119225604id_/https://www.cardanocube.com/projects/masumi",
+        "sha256": "32aaea2dd02f685d6ca11fb7487a6a8597ccdb8c5fe7c1bcd801c9a18d70ea65",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "rejuve-ai",
+      "website": "https://www.rejuve.ai/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116090216id_/https://www.cardanocube.com/projects/rejuve-ai",
+        "sha256": "472e44dd99ea369ea20e44be97e03bc3198ceee6bfdf2e9dcda0aeee51ffd564",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "singularitydao",
+      "website": "https://www.singularitydao.ai/",
+      "whitepaper": "https://www.singularitydao.ai/file/2021/04/Platform-Whitepaper-3.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134325id_/https://www.cardanocube.com/projects/singularitydao",
+        "sha256": "51fe4415226a792780fc32ccb08c9c295f98735a64cc5ea4dad22d981dd37f92",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "singularitynet",
+      "website": "https://singularitynet.io/",
+      "whitepaper": "https://public.singularitynet.io/whitepaper.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134326id_/https://www.cardanocube.com/projects/singularitynet",
+        "sha256": "41f19a900bb3231937ebb51e74b857dc4e4b5fc1e107ca24ca65ecfd1a5b1b95",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "sync-ai",
+      "website": "https://www.syncai.network/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206132705id_/https://www.cardanocube.com/projects/sync-ai",
+        "sha256": "a153087714bd951bf625fcfe95afa9d73aaab22cf5b8c23ed45c4284c92524e8",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cogito-protocol",
+      "website": "https://www.cogitoprotocol.com/",
+      "whitepaper": "https://cogito-protocol-2.gitbook.io/whitepaper/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120032814id_/https://www.cardanocube.com/projects/cogito-protocol",
+        "sha256": "9fc3738d46a9d9972082aaf8f900d21837a5543f3632bcf554da90e368b1c78a",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "dedium",
+      "website": "https://dedium.io/",
+      "whitepaper": "https://dedium.io/whitepaper.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250307203419id_/https://www.cardanocube.com/projects/dedium",
+        "sha256": "c1f3f4e24ce0c31bba998c586fbdec43355467a2a25802309f5cf57452a6dbfe",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "health2win",
+      "website": "https://health2win.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116092621id_/https://www.cardanocube.com/projects/health2win",
+        "sha256": "0fc58a678027ccd9938fda8161af2504214d794035659a5aee8dccf259d51ab9",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "quatern-ai",
+      "website": "https://www.quatern.ai/",
+      "whitepaper": "https://www.quatern.ai/#whitepaper",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119232455id_/https://www.cardanocube.com/projects/quatern-ai",
+        "sha256": "b7ac59caa1fe93cbbf907dd90a70f8294b3791e7fb44c8a38c7ac3d847094c2f",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "chainport-io",
+      "website": "https://chainport.io/",
+      "documentation": "https://docs.chainport.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206124527id_/https://www.cardanocube.com/projects/chainport-io",
+        "sha256": "5d27563dca377934e79689d2618884b04e5dd8dfd58556858642e7061430df36",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "dcspark-milkomeda",
+      "documentation": "https://dcspark.gitbook.io/milkomeda",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240806002323id_/https://www.cardanocube.com/projects/dcspark-milkomeda",
+        "sha256": "5990e1768dcee995a68038f7381b10ecbf56687c67ed0243425e0e957ae2cf52",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "fourier",
+      "website": "https://fourierlabs.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250320120802id_/https://www.cardanocube.com/projects/fourier",
+        "sha256": "3e67232f90946ed2a28ffb2669f44c6689dedd3a0a95eb427041006d2f932d13",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "rosen-bridge",
+      "github": "https://github.com/rosen-bridge",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120022832id_/https://www.cardanocube.com/projects/rosen-bridge",
+        "sha256": "5d5af2cc4422b7ea2b2c65cf99e0c428c4fe8cabb01e542494d953b91d63e25d",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "sundial",
+      "website": "https://www.sundialprotocol.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250317143309id_/https://www.cardanocube.com/projects/sundial",
+        "sha256": "301d1dff2b554644c88cf72e2d187b4ce8a43560d42cdb58f3681fdbd20a116a",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "dhealth",
+      "website": "https://dhealth.network/",
+      "whitepaper": "https://dhealth.network/docs/Whitepaper-dHealth-Network.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250305213058id_/https://www.cardanocube.com/projects/dhealth",
+        "sha256": "1526927ae64adf3da4c663e1cbf28fc9d3b4a5def7af910f0258f40a6e2a6aec",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "iagon",
+      "website": "https://www.iagon.com/",
+      "whitepaper": "https://iagon.com/pdf/Iagon%20Whitepaper%20v4.5.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206131145id_/https://www.cardanocube.com/projects/iagon",
+        "sha256": "094b7b69fd08cd33cde915af331185773265eef3225f48d583e46729c2ac8cce",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "nuncius",
+      "website": "https://www.nuncius.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250713211629id_/https://www.cardanocube.com/projects/nuncius",
+        "sha256": "15c72885307e796b5cee124b02b974d0ef29e6ec47711884a29df00027d36c8b",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "profila",
+      "website": "https://profila.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120023950id_/https://www.cardanocube.com/projects/profila",
+        "sha256": "c522170b497e876394a51113afa9e5dc0a3104253555e562c8b6949741413c4d",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "lace",
+      "website": "https://www.lace.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603051653id_/https://www.cardanocube.com/projects/lace",
+        "sha256": "51a28c39c8033547f6d5260f0cec5f7aefbfa2fc4a5fcf9d1c044019a17dde77",
+        "sha_matched_custody": false,
+        "capture_date": "2026-06-03T05:15:35Z"
+      }
+    },
+    {
+      "id": "adamail",
+      "website": "https://www.adamail.me/",
+      "whitepaper": "https://uploads-ssl.webflow.com/64cec6c8d20fcc84690f4a51/64e381a1e07eacad81995d0c_ADAmail%20Product%20Features%2008-2023.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116081745id_/https://www.cardanocube.com/projects/adamail",
+        "sha256": "641bf5828d465f065ed88d2afcffd5106198d4f51e0e8e837a3b62ed96439520",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "agora",
+      "website": "https://gov.liqwid.finance/",
+      "github": "https://github.com/Liqwid-Labs/agora?tab=readme-ov-file#readme",
+      "documentation": "https://docs.summonplatform.io/agora-feature-set/overview",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250318001159id_/https://www.cardanocube.com/projects/agora",
+        "sha256": "10e0325b8b4b998afc1bb7c16bc557435b1681c738155103813fec77da2a7582",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardanoballot",
+      "github": "https://github.com/cardano-foundation/cf-cardano-ballot",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206133534id_/https://www.cardanocube.com/projects/cardanoballot",
+        "sha256": "e41879a38d4ff658c72d713ec18ea784fe72d1a97cc8232a7015393ccb7543da",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardano-govtool",
+      "website": "https://gov.tools/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250321023932id_/https://www.cardanocube.com/projects/cardano-govtool",
+        "sha256": "4920c0f55ee6c863b308fccb660ccb3f30ead9bb456a99318b3386d3d35f5af7",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardanosigner",
+      "github": "https://github.com/gitmachtl/cardano-signer",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204051451id_/https://www.cardanocube.com/projects/cardanosigner",
+        "sha256": "2ea3dd567bfce8c8c5afc78d9e7fe4b19c4bb4d5623c2dafc728fbf5df3a4497",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "clarity-protocol",
+      "website": "https://www.clarity.vote/",
+      "documentation": "https://docs.clarity.vote/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250305224356id_/https://www.cardanocube.com/projects/clarity-protocol",
+        "sha256": "c4b7b4b855e7378cec49d2cd25b118ce6b9d42cf70dd6affe4cf4677d5ff95dd",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "intersect",
+      "website": "https://www.intersectmbo.org/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116074435id_/https://www.cardanocube.com/projects/intersect",
+        "sha256": "f4ac10890315da3da82707723e790f18859f608944898dd08e856f11b0295858",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "nufi",
+      "website": "https://nu.fi/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250212192845id_/https://www.cardanocube.com/projects/nufi",
+        "sha256": "289aef41a755ffd1be821e9c2b78d3e3aabac98204cb3c7018720b8c7acefed8",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "project-catalyst",
+      "website": "https://projectcatalyst.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603051709id_/https://www.cardanocube.com/projects/project-catalyst",
+        "sha256": "f2a41facc90675c88db8c2bff52b8ec63fd20e0aa5b4df0d8614383d69c71a3b",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "adanordic-sanchonet-explorer",
+      "website": "https://adanordic.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206121523id_/https://www.cardanocube.com/projects/adanordic-sanchonet-explorer",
+        "sha256": "2197e79bcb437e0dc289ec7e737dbc6738d79d504f470caef90e69f50301d393",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "summonplatform",
+      "website": "http://summonplatform.io/",
+      "documentation": "https://docs.google.com/document/d/1jALavHb5xVJwSQtKYBmX8ENDFFZHVbh2ykLRCUB0CAg/edit",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250903162734id_/https://www.cardanocube.com/projects/summonplatform",
+        "sha256": "9a5615fcf18cb208ff62e136095618140259f3f2df4ceb886e6233755c04ce26",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "the-worldeater",
+      "website": "https://www.worldeater.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206122643id_/https://www.cardanocube.com/projects/the-worldeater",
+        "sha256": "181b9d9c1d2ff9bc6a7f2fd2be58bfa91c785c0e4becb340dc4229695616298c",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "voteaire",
+      "website": "https://voteaire.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206133648id_/https://www.cardanocube.com/projects/voteaire",
+        "sha256": "5d064e9ca2d010a18f30e011eb10ac452d38db135a477e5bc722caf90f5136c7",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "vote-chain",
+      "website": "https://www.votechain.pro/",
+      "whitepaper": "https://votechain.pro/whitepaper/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206135255id_/https://www.cardanocube.com/projects/vote-chain",
+        "sha256": "29ba6bdeae18dd5e8b37e2ed2302bcd13d5f6ab5d937754a4c494588861ba033",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "world-mobile",
+      "website": "https://worldmobile.io/",
+      "whitepaper": "https://worldmobiletoken.com/WhitePaper.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260226154115id_/https://www.cardanocube.com/projects/world-mobile",
+        "sha256": "2713ac50823aa3b3f3527f4cb9fd034a0b38ffeac01e8b2d56b7e0eb700c562a",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "adahandle",
+      "website": "https://adahandle.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260312021751id_/https://www.cardanocube.com/projects/adahandle",
+        "sha256": "5b625723627823936f90b7d6f814744a04b29ccb63eb6474b067a7c5100f15fb",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "empowa",
+      "website": "https://empowa.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260308215558id_/https://www.cardanocube.com/projects/empowa",
+        "sha256": "7f9e35457656fa38005c27ad60112a2964f9b0b77375277b7660272eb7d65ebe",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "maestro",
+      "website": "https://www.gomaestro.org/",
+      "documentation": "https://docs.gomaestro.org/docs/intro",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241213113338id_/https://www.cardanocube.com/projects/maestro",
+        "sha256": "ae9721361f14129a6b17125fa5d603b2fe030e05e2a2d6a4d4fd752d4805fbb6",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "midnight",
+      "website": "https://midnight.network/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260303082136id_/https://www.cardanocube.com/projects/midnight",
+        "sha256": "b45404e1403d78f8b477fc64e9e2f5d865800c13af9536655a2d9598a134bd1a",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "mithril",
+      "website": "https://mithril.network/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119221234id_/https://www.cardanocube.com/projects/mithril",
+        "sha256": "4a335cc214e981f5dd5c1a42055d614591d1a21d663076bfd5de68cec2968d4f",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "nuvola",
+      "website": "https://www.nuvoladigital.io/",
+      "whitepaper": "https://nuvola.gitbook.io/nuvola-digital-whitepaper-v1",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250320124605id_/https://www.cardanocube.com/projects/nuvola",
+        "sha256": "6073f0a101c4b1f7e56c4a6190d473643eb87780f868827bd488d6152899ea8c",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "ogmios",
+      "website": "https://ogmios.dev/",
+      "github": "https://github.com/CardanoSolutions/ogmios",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206122511id_/https://www.cardanocube.com/projects/ogmios",
+        "sha256": "1340090e74e9644be70da3794e431a91b7a9ecb3529a9ea74b86092ec20be32d",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "unbox-the-universe",
+      "website": "https://www.unboxuniverse.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250318012200id_/https://www.cardanocube.com/projects/unbox-the-universe",
+        "sha256": "0bc2357fd098fb0b99b12d9f2ad11c94ac36cc9db5a3941069b96bcf75632643",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "worldads",
+      "website": "https://worldads.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206140747id_/https://www.cardanocube.com/projects/worldads",
+        "sha256": "cc96cb91ac6d3948bca7f5870368c0420c80c11a033a396b89346201c7cc7c44",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "adadomains",
+      "website": "https://www.adadomains.io/",
+      "whitepaper": "https://www.adadomains.io/white_paper.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119231744id_/https://www.cardanocube.com/projects/adadomains",
+        "sha256": "ab7e6fa4d34bc272a94296cb30790b092304c3f1d296f75382e5902a4348aa75",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "adaresolver",
+      "website": "https://adaresolver.com/",
+      "whitepaper": "https://whitepaper.adaresolver.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119233258id_/https://www.cardanocube.com/projects/adaresolver",
+        "sha256": "63f2d98312db50b9a1c4670227164771217f8e9a36c07426e1f39454228caa90",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "bondly",
+      "website": "https://bondly.finance/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119230416id_/https://www.cardanocube.com/projects/bondly",
+        "sha256": "c7a860dc305bbeec73010c1593dd76d67e6ccc06b7c82f85da114585dd7292d0",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cswapdex",
+      "website": "https://www.cswap.info/",
+      "documentation": "https://docs.cswap.info/information/cswap-lightpaper",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240917170025id_/https://www.cardanocube.com/projects/cswapdex",
+        "sha256": "631eb410ec1266d2750d401e79446053108a249158616c69e1ec9da1a21db81e",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "iamx",
+      "website": "https://iamx.id/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250920100258id_/https://www.cardanocube.com/projects/iamx",
+        "sha256": "b93eb5f1a53ab2b05dbe124133d9d3222d09a1b9205f8d717647b4c5ae735522",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "tokeo",
+      "website": "https://tokeopay.io/",
+      "documentation": "https://tokeo.gitbook.io/tokeo",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250212192922id_/https://www.cardanocube.com/projects/tokeo",
+        "sha256": "22bb8c909120804662465acb7c2c07f4c59c42ff123a0e27516c263e325b5633",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "adaquest",
+      "website": "http://www.ada-quest.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120013429id_/https://www.cardanocube.com/projects/adaquest",
+        "sha256": "a9395108553687d8af98054c6ede3de173361fcc5e42391b376a101a93a641c8",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "beerhouse-io",
+      "website": "https://beerhouse.io/",
+      "documentation": "https://docs.beerhouse.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120015636id_/https://www.cardanocube.com/projects/beerhouse-io",
+        "sha256": "0d27e59b7ec7a099e6cca8a74b0a3cfe1e4b793333fc08c5a5dc5b85d003e7af",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardania",
+      "whitepaper": "https://cardania.com/wp-content/uploads/2022/06/Cardania-RAD-Paper-v2-June-2022-1.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240620024127id_/https://www.cardanocube.com/projects/cardania",
+        "sha256": "c80e61430db97b06478911a927deb22f805046cdaad0a273d35c4e7ca8274086",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "coinecta",
+      "website": "https://coinecta.fi/",
+      "documentation": "https://docs.coinecta.fi/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250318005017id_/https://www.cardanocube.com/projects/coinecta",
+        "sha256": "9f7807a5feaeb9564ad29e6d24b267935a1213bc0ed034d4a59287212bbca840",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "linkberry",
+      "website": "https://linkberry.info/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204052329id_/https://www.cardanocube.com/projects/linkberry",
+        "sha256": "90aeb4ae35ce3f298b144b003412b9de91b3421fec23154976038a0afff96a48",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "zengate-global-palmyra",
+      "website": "https://www.zengate.global/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116085312id_/https://www.cardanocube.com/projects/zengate-global-palmyra",
+        "sha256": "9458674d3f51cc957ace9f1fc558201de803401d8f59250f2112c0e1244332a0",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "bookio",
+      "website": "https://www.book.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241213122246id_/https://www.cardanocube.com/projects/bookio",
+        "sha256": "9986c3cd23898d7c1f64af8921c84e39a82f6e0588a4630b0b8766aff5e92b8a",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "crashr",
+      "website": "https://crashr.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206131511id_/https://www.cardanocube.com/projects/crashr",
+        "sha256": "3adc5d4e2982039c427fb3ebfda1b633bfd4148c66dc203a2606651c9432470f",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "everlens",
+      "website": "https://everlens.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250523215231id_/https://www.cardanocube.com/projects/everlens",
+        "sha256": "c2ffb7e945c86e5d2b91664366ba5e356b85a80f8099177447f712b6f58caf10",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "soundrig",
+      "website": "https://www.soundrig.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120022027id_/https://www.cardanocube.com/projects/soundrig",
+        "sha256": "a2ade2f92fb5125eb34e8ad78134af1c602d03e7acb246454b50338bedc1aebd",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "wayup",
+      "website": "https://www.wayup.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120021940id_/https://www.cardanocube.com/projects/wayup",
+        "sha256": "a3414ec628f88bbd29049e3df9f88c203cf5d8417d67a1d01d31d9dbf0ba1772",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "handles-exchange",
+      "website": "https://handles.exchange/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204050952id_/https://www.cardanocube.com/projects/handles-exchange",
+        "sha256": "d51bde9c5f959d23307dfaea3014c05a2d96a096b010135b3d1b41c81f06d40e",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "ada-makers",
+      "website": "https://ada-makers.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250512214849id_/https://www.cardanocube.com/projects/ada-makers",
+        "sha256": "2124b37ea23435b05c3f29a618d3dc0224b8106cb535c25a45c0659df2f02e25",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "bworks",
+      "website": "https://www.bworks.app/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240917152421id_/https://www.cardanocube.com/projects/bworks",
+        "sha256": "5f7203f41a6b7fc2b64b52ee53487f10d67bb630fa5de10e07b7f9bb7b68f5fc",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "centaurify",
+      "website": "https://www.centaurify.com/",
+      "whitepaper": "https://www.centaurify.com/whitepaper/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250209091317id_/https://www.cardanocube.com/projects/centaurify",
+        "sha256": "4ab1427837f88d50cebc3fd8d0616c660f57094691c8570a911bc0417734cd1b",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "dropspot",
+      "website": "https://dropspot.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250116074534id_/https://www.cardanocube.com/projects/dropspot",
+        "sha256": "84facdbae4dc6006073c759505407c09a010c97f909e15b2f48431babc4c8e73",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "demu",
+      "website": "https://demu.pro/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260505020914id_/https://www.cardanocube.com/projects/demu",
+        "sha256": "7a29bb3379438ca00964e7affe36c102e87c90790b70875ba58cb6b04919d556",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "adaanvil",
+      "website": "https://ada-anvil.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260130103454id_/https://www.cardanocube.com/projects/adaanvil",
+        "sha256": "9f06d8002a8c8552dc20e09c777b89508a449730653a6021329e2bb47bfc9d04",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "atala-prism",
+      "website": "https://atalaprism.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204055053id_/https://www.cardanocube.com/projects/atala-prism",
+        "sha256": "0ede0fc51d4ef70b1f0c55bffed4215a46b98736e0cdfaf49b6d2326b299d0f1",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "blockfrost",
+      "website": "https://blockfrost.io/",
+      "documentation": "https://docs.blockfrost.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20241204063144id_/https://www.cardanocube.com/projects/blockfrost",
+        "sha256": "d254c4cdd9ff8a6e73bfcd1f95ff1b5476114645f2d7f82798e93b3b18accc49",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardanokidz",
+      "website": "https://www.cardanokidz.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250320123603id_/https://www.cardanocube.com/projects/cardanokidz",
+        "sha256": "600dc7568fbb1a7ba75fa99a955bb118cbe6d0f38809d60485f62026e2f9d07c",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardanoscan",
+      "website": "https://cardanoscan.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250318001609id_/https://www.cardanocube.com/projects/cardanoscan",
+        "sha256": "1a0f6f8f162e173a1de6f6cfd1db8304ef3dbba05108867fa27e966b94bf200f",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cexplorer",
+      "website": "https://cexplorer.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250917105128id_/https://www.cardanocube.com/projects/cexplorer",
+        "sha256": "af09d0e5469e138c3d39505fab907dd3ce4f3608cf341fafbe7240d4e2264894",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "charli3",
+      "website": "https://charli3.io/",
+      "whitepaper": "https://charli3.io/assets/downloads/charli3-whitepaper.pdf?v=0.0.1",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250318125006id_/https://www.cardanocube.com/projects/charli3",
+        "sha256": "2910919102685529ef8ee8f54227ba15f79dc21942b2bbdd613915eccbb76bfd",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "clay-nation",
+      "website": "https://www.claynation.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250617122053id_/https://www.cardanocube.com/projects/clay-nation",
+        "sha256": "53f1b8b5b3f2aa31e181fd04c08072b54f4e0a6f1a84615d3683584002dbd8f9",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cnft-tools",
+      "website": "https://cnft.tools/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260202194433id_/https://www.cardanocube.com/projects/cnft-tools",
+        "sha256": "b403db746e0c8f13350926589b93d1a8ad12727fa516f52d25fa521ece9b38f7",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cornucopias",
+      "website": "https://www.cornucopias.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119222821id_/https://www.cardanocube.com/projects/cornucopias",
+        "sha256": "f4d6f677bd5e926f43cbd48b7ecf03c12dab4f758bdd8d6ef93890aef8c6c796",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "crossmint",
+      "website": "https://crossmint.com/",
+      "documentation": "https://docs.crossmint.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206123808id_/https://www.cardanocube.com/projects/crossmint",
+        "sha256": "4eb6eef875904b4edb2e7baedadfe93036ef7f60cdb741be66d4da57044011cd",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "daedalus-wallet",
+      "website": "https://daedaluswallet.io/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250421021545id_/https://www.cardanocube.com/projects/daedalus-wallet",
+        "sha256": "69df0b4017caf928a3bf9e14ab11f71030104f37037eec9a5d4e62cb8a1ec76e",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "deadpxlz",
+      "website": "https://pxlz.org/",
+      "whitepaper": "https://www.pxlz.org/whitepaper.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603133952id_/https://www.cardanocube.com/projects/deadpxlz",
+        "sha256": "0ee73252e4dad24343ee52285c56df625cfc8899e79176cf3040a46ce0329b73",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "bodega-market",
+      "website": "https://www.bodegacardano.org/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206131749id_/https://www.cardanocube.com/projects/bodega-market",
+        "sha256": "48d3394f3244ce4c9f5cdc6ab678ea94c799c348f16eb8b837ee3c5fc9aa295d",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "foreonnetwork",
+      "website": "https://foreon.network/",
+      "documentation": "https://docs.foreon.network/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250520040428id_/https://www.cardanocube.com/projects/foreonnetwork",
+        "sha256": "619194fc85f2a61b0348d456c48e01f706e2ecd10d469333a2c66a1c7c449638",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardanoisland-mediumplot",
+      "website": "https://cardano.virtua.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603133952id_/https://www.cardanocube.com/projects/cardanoisland-mediumplot",
+        "sha256": "9f08812def74d7bef2fff551f81ebc52e4acbada62f09b1619baa3a7e9e327f0",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    },
+    {
+      "id": "cardanolands",
+      "website": "https://onchainkingdoms.com/",
+      "whitepaper": "https://whitepaper.cardanolands.com/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603133952id_/https://www.cardanocube.com/projects/cardanolands",
+        "sha256": "08e9964ef9408c225c1a650610e4647501cdc0f537ba1b85141e6c91f5bdf542",
+        "sha_matched_custody": null,
+        "capture_date": null
+      }
+    }
+  ]
+}

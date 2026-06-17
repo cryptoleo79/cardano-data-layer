@@ -1,0 +1,5 @@
+{
+  "note": "Curated circulating-supply OVERRIDES for tokens whose circulating supply is publicly, verifiably known but for which GeckoTerminal/CoinGecko does NOT return a circulating market_cap_usd (so the ranking would otherwise fall back to FDV = price x total supply). Each entry MUST carry a public `source`, the `method` used to derive the figure, and an `as_of` date. The poller multiplies `circulating_supply` (in WHOLE tokens) by the live GeckoTerminal price to produce a circulating market cap, flagged source 'geckoterminal+cdl-override'. RULE: if a circulating supply cannot be publicly verified, it is NOT added here — an FDV fallback (flagged) is always preferable to an invented circulating figure. Empty by default; populate only with spot-checkable entries.",
+  "as_of": "2026-06-17",
+  "overrides": []
+}

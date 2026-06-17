@@ -22,7 +22,7 @@
 import { initEventStore, eventCount, verifyChain } from '../projectmemory/eventstore.js';
 import { initProjections } from '../projectmemory/schema.js';
 import { rebuildProjections } from '../projectmemory/reducer.js';
-import { seedIfEmpty, seedCardanocubeCategories, seedBocEnrichment } from '../projectmemory/seed.js';
+import { seedIfEmpty, seedCardanocubeCategories, seedBocEnrichment, seedCardanocubeEnrichment } from '../projectmemory/seed.js';
 import { listProjects, getProject, listCategories, historyForProject } from '../projectmemory/read.js';
 import { dq } from '../lib/envelope.js';
 
@@ -51,12 +51,17 @@ export async function init(ctx) {
   // Incremental, idempotent: enrich projects with sourced external links
   // (website/github/documentation/whitepaper) from Built on Cardano.
   const en = seedBocEnrichment();
+  // Incremental, idempotent: enrich the cardanocube-origin projects (the ones
+  // Built on Cardano doesn't cover) with sourced external links harvested from
+  // their preserved cardanocube project pages.
+  const ce = seedCardanocubeEnrichment();
   const replayed = rebuildProjections(); // re-derive projections from the full log
   const chain = verifyChain();
   ctx.log?.(`project-memory: events=${eventCount()} seeded=${seed.seeded} replayed=${replayed} chain_ok=${chain.ok}` +
     (seed.seeded ? ` (cats=${seed.categories} projects=${seed.projects} tokens=${seed.tokens} snapshot=${seed.snapshot})` : '') +
     (cc.ran ? ` (cardanocube-cats: assigned=${cc.assigned} new_projects=${cc.newProjects} deprecated=${cc.deprecated})` : ` (cardanocube-cats: ${cc.reason})`) +
-    (en.ran ? ` (boc-enrich: claims=${en.claims} web=${en.website} gh=${en.github} docs=${en.documentation} wp=${en.whitepaper})` : ` (boc-enrich: ${en.reason})`));
+    (en.ran ? ` (boc-enrich: claims=${en.claims} web=${en.website} gh=${en.github} docs=${en.documentation} wp=${en.whitepaper})` : ` (boc-enrich: ${en.reason})`) +
+    (ce.ran ? ` (cc-enrich: claims=${ce.claims} web=${ce.website} gh=${ce.github} docs=${ce.documentation} wp=${ce.whitepaper})` : ` (cc-enrich: ${ce.reason})`));
 }
 
 async function projectsHandler({ query }) {

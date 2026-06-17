@@ -83,6 +83,46 @@ for (const s of SEED_UNITS) if (s.ticker) TICKER_OF.set(s.unit, s.ticker);
 // The full set of units we attempt to track market data for (priority + universe).
 const MARKET_UNITS = [...new Set([...SEED_UNITS.map((s) => s.unit), ...MARKET_UNIVERSE.map((t) => t.unit)])];
 
+// Curated circulating-supply overrides (seed/circulating-supply.json): a small,
+// hand-verified map of unit -> circulating supply (WHOLE tokens) for assets whose
+// circulating supply is publicly known but which GeckoTerminal does NOT return a
+// circulating market_cap_usd for. Used ONLY to upgrade an honest circulating mcap
+// where we can verify the supply; never to invent one. Each entry must carry a
+// public source/method/as_of in the file. Absent file => empty map (no-op).
+function loadCirculatingOverrides() {
+  const m = new Map();
+  try {
+    const p = new URL('../../seed/circulating-supply.json', import.meta.url);
+    const j = JSON.parse(readFileSync(p, 'utf8'));
+    for (const o of j.overrides || []) {
+      const unit = (o.unit || '').toLowerCase();
+      const supply = Number(o.circulating_supply);
+      if (/^[0-9a-f]+$/.test(unit) && Number.isFinite(supply) && supply > 0) m.set(unit, supply);
+    }
+  } catch { /* file absent or malformed -> no overrides */ }
+  return m;
+}
+const CIRCULATING_OVERRIDES = loadCirculatingOverrides();
+
+// Reject an FDV figure that is almost certainly a MINT-CAP artifact rather than a
+// real valuation. GeckoTerminal's fdv_usd = price x total_supply, and for some
+// tokens total_supply is a protocol/mint cap, not what actually circulates on
+// Cardano (e.g. wrapped cBTC reports the full 21M-BTC cap -> a ~$479B "FDV" with
+// ~$750 of real DEX liquidity). We never fabricate a corrected number; we simply
+// WITHHOLD an FDV we can demonstrate is unreliable, so it can't masquerade as a
+// market cap in the ranking. Heuristic (deliberately conservative): an FDV above
+// a billion-dollar floor whose value is grossly out of proportion to the token's
+// real on-chain liquidity (>1e6 : 1, or no liquidity at all). A genuine $1B+
+// asset has circulating mcap (so never reaches the FDV branch) and proportionate
+// liquidity, so this only catches mint-cap artifacts.
+const FDV_ARTIFACT_FLOOR_USD = 1e9;
+const FDV_TO_LIQ_MAX_RATIO = 1e6;
+function fdvIsMintCapArtifact(fdvUsd, liquidityUsd) {
+  if (fdvUsd == null || fdvUsd < FDV_ARTIFACT_FLOOR_USD) return false;
+  if (liquidityUsd == null || liquidityUsd <= 0) return true;
+  return fdvUsd / liquidityUsd > FDV_TO_LIQ_MAX_RATIO;
+}
+
 const VALID_INTERVALS = new Set(['1m', '5m', '15m', '1h', '4h', '1d']);
 const INTERVAL_SECONDS = { '1m': 60, '5m': 300, '15m': 900, '1h': 3600, '4h': 14400, '1d': 86400 };
 
@@ -380,7 +420,10 @@ async function mcapHandler({ query, ctx }) {
   }
 
   // 2) FDV from GeckoTerminal (price x total supply) — flagged, not circulating.
-  if (gt && gt.fdvUsd != null) {
+  //    Skip when the FDV is a mint-cap artifact (huge total_supply vs. negligible
+  //    liquidity, e.g. wrapped cBTC's 21M-BTC cap); fall through to the Koios
+  //    branch / price-only rather than report a $100B+ figure we know is bogus.
+  if (gt && gt.fdvUsd != null && !fdvIsMintCapArtifact(gt.fdvUsd, gt.liquidityUsd)) {
     const priceUsd = gt.priceUsd;
     // GeckoTerminal total_supply is raw (undivided); normalize to whole tokens
     // so `supply` is consistent with the circulating branch.
@@ -505,7 +548,13 @@ async function topHandler({ query, ctx }) {
       let metricUsd = null, basis = null;
       if (by === 'mcap') {
         if (m.mcap_usd != null) { metricUsd = m.mcap_usd; basis = 'circulating'; }
-        else if (m.fdv_usd != null) { metricUsd = m.fdv_usd; basis = 'fdv'; }
+        // FDV fallback, but only when it isn't a mint-cap artifact (e.g. wrapped
+        // BTC reporting the full 21M-BTC supply). A withheld artifact stays out of
+        // the ranking rather than topping the FDV tier with a fabricated-looking
+        // valuation; the token still ranks under liquidity/volume.
+        else if (m.fdv_usd != null && !fdvIsMintCapArtifact(m.fdv_usd, m.liquidity_usd)) {
+          metricUsd = m.fdv_usd; basis = 'fdv';
+        }
       } else if (by === 'liquidity') {
         metricUsd = m.liquidity_usd;
       } else { // volume
@@ -826,17 +875,31 @@ async function refreshTokenMarket(units, log) {
       total_supply=excluded.total_supply, decimals=excluded.decimals, source=excluded.source, as_of=excluded.as_of
   `);
   let written = 0;
+  let overridden = 0;
   for (const m of market.values()) {
-    upsert.run(m.unit, m.symbol, m.priceUsd, m.mcapUsd, m.fdvUsd, m.liquidityUsd, m.volume24hUsd, m.totalSupply, m.decimals, m.source, ts);
+    let mcapUsd = m.mcapUsd;
+    let source = m.source;
+    // Curated circulating-supply upgrade: when GeckoTerminal has a live price but
+    // no circulating market cap, and we hold a publicly-verified circulating
+    // supply for this unit, compute the circulating mcap ourselves. Flagged in
+    // `source` so the provenance stays honest. Never invents supply — only uses
+    // the curated, spot-checkable seed map.
+    if (mcapUsd == null && m.priceUsd != null && CIRCULATING_OVERRIDES.has(m.unit)) {
+      mcapUsd = m.priceUsd * CIRCULATING_OVERRIDES.get(m.unit);
+      source = `${m.source}+cdl-override`;
+      overridden++;
+    }
+    upsert.run(m.unit, m.symbol, m.priceUsd, mcapUsd, m.fdvUsd, m.liquidityUsd, m.volume24hUsd, m.totalSupply, m.decimals, source, ts);
     written++;
   }
+  if (overridden) log?.(`applied ${overridden} curated circulating-supply override(s)`);
   return { fetched: market.size, written };
 }
 
 // ---------------------------------------------------------------------------
 // Exports used by the poller and tests.
 // ---------------------------------------------------------------------------
-export const internals = { resolvePrice, adaUsd, koiosSupply, knownTokens, refreshTokenMarket, SEED_UNITS, MARKET_UNITS, MARKET_UNIVERSE, USDM_UNIT };
+export const internals = { resolvePrice, adaUsd, koiosSupply, knownTokens, refreshTokenMarket, fdvIsMintCapArtifact, CIRCULATING_OVERRIDES, SEED_UNITS, MARKET_UNITS, MARKET_UNIVERSE, USDM_UNIT };
 
 export default {
   name: 'token',

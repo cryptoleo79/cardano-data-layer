@@ -201,6 +201,52 @@ export function seedBocEnrichment() {
   return { ran: claims > 0, claims, ...counts };
 }
 
+/**
+ * Enrich existing projects with sourced external links from cardanocube project
+ * pages — the cardanocube-origin projects (bare-slug ids) that the Built on
+ * Cardano directory does not cover. Each link is verbatim from a cardanocube
+ * project page preserved via the Wayback Machine; the seed file records, per
+ * project, the raw id_ snapshot URL and the SHA-256 of the exact captured bytes,
+ * which become the claim's chain-of-custody evidence. Social links and audit
+ * links are NOT imported (the page exposes the former as social-only and the
+ * latter not at all); nothing is fabricated. Appends to the existing log and is
+ * idempotent via a 'via:cardanocube-enrichment' marker. Returns counts.
+ */
+export function seedCardanocubeEnrichment() {
+  const file = join(config.seedDir, 'cardanocube-enrichment.json');
+  if (!existsSync(file)) return { ran: false, reason: 'no seed file' };
+
+  // Incremental: skip (project_id, field) pairs already imported by this enrichment.
+  const done = new Set();
+  for (const row of db.prepare(
+    "SELECT payload FROM pm_event WHERE type='claim.asserted' AND payload LIKE '%\"via\":\"cardanocube-enrichment\"%'",
+  ).all()) {
+    try { const p = JSON.parse(row.payload); done.add(`${p.project_id} ${p.field}`); } catch { /* skip */ }
+  }
+
+  const ej = readJson(file);
+  const asOf = ej.as_of;
+  const FIELDS = ['website', 'github', 'documentation', 'whitepaper'];
+  let claims = 0;
+  const counts = { website: 0, github: 0, documentation: 0, whitepaper: 0 };
+  for (const p of ej.projects || []) {
+    if (!p.id) continue;
+    // Per-project evidence: the exact snapshot we read these links from.
+    const ev = p.evidence || {};
+    const evidence = [{ kind: 'wayback', ref: ev.wayback_url || ej.source_url, sha256: ev.sha256 || null,
+      description: `cardanocube project page for "${p.id}" (chain-of-custody from the Wayback Machine; SHA-256 of the captured bytes)` }];
+    for (const f of FIELDS) {
+      const v = p[f];
+      if (!v || done.has(`${p.id} ${f}`)) continue;
+      append('claim.asserted', { actor: ACTOR, subject: p.id, ts: asOf, payload: {
+        project_id: p.id, field: f, value: v, source_id: 'cardanocube', authority_class: 'D',
+        as_of: asOf, asserted_by: ACTOR, confidence: 'medium', via: 'cardanocube-enrichment', evidence } });
+      claims++; counts[f]++;
+    }
+  }
+  return { ran: claims > 0, claims, ...counts };
+}
+
 // Humanize a cardanocube project slug into a display name ("rejuve-ai" -> "Rejuve Ai").
 function humanizeSlug(slug) {
   return slug.split('-').map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(' ');
