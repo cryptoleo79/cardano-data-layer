@@ -22,7 +22,7 @@
 import { initEventStore, eventCount, verifyChain } from '../projectmemory/eventstore.js';
 import { initProjections } from '../projectmemory/schema.js';
 import { rebuildProjections } from '../projectmemory/reducer.js';
-import { seedIfEmpty, seedCardanocubeCategories } from '../projectmemory/seed.js';
+import { seedIfEmpty, seedCardanocubeCategories, seedBocEnrichment } from '../projectmemory/seed.js';
 import { listProjects, getProject, listCategories, historyForProject } from '../projectmemory/read.js';
 import { dq } from '../lib/envelope.js';
 
@@ -48,11 +48,15 @@ export async function init(ctx) {
   // Incremental, idempotent: import cardanocube per-category assignments for the
   // categories Built-on-Cardano doesn't cover (appends to the existing log).
   const cc = seedCardanocubeCategories();
+  // Incremental, idempotent: enrich projects with sourced external links
+  // (website/github/documentation/whitepaper) from Built on Cardano.
+  const en = seedBocEnrichment();
   const replayed = rebuildProjections(); // re-derive projections from the full log
   const chain = verifyChain();
   ctx.log?.(`project-memory: events=${eventCount()} seeded=${seed.seeded} replayed=${replayed} chain_ok=${chain.ok}` +
     (seed.seeded ? ` (cats=${seed.categories} projects=${seed.projects} tokens=${seed.tokens} snapshot=${seed.snapshot})` : '') +
-    (cc.ran ? ` (cardanocube-cats: assigned=${cc.assigned} new_projects=${cc.newProjects} deprecated=${cc.deprecated})` : ` (cardanocube-cats: ${cc.reason})`));
+    (cc.ran ? ` (cardanocube-cats: assigned=${cc.assigned} new_projects=${cc.newProjects} deprecated=${cc.deprecated})` : ` (cardanocube-cats: ${cc.reason})`) +
+    (en.ran ? ` (boc-enrich: claims=${en.claims} web=${en.website} gh=${en.github} docs=${en.documentation} wp=${en.whitepaper})` : ` (boc-enrich: ${en.reason})`));
 }
 
 async function projectsHandler({ query }) {

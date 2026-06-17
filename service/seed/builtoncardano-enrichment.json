@@ -1,0 +1,1152 @@
+{
+  "source": "builtoncardano",
+  "source_url": "https://builtoncardano.com/ecosystem/all",
+  "authority_class": "B",
+  "as_of": "2026-06-17",
+  "sha256": "dd16fb48d83fe5082f17f008132301112014d3af08b53713b633a34580ae53f2",
+  "note": "Project links (website/github/documentation/whitepaper) extracted from the Built on Cardano ecosystem directory __NEXT_DATA__. Audit links are not exposed by this source and are intentionally omitted (never fabricated).",
+  "count": 252,
+  "projects": [
+    {
+      "id": "boc:double-spent",
+      "website": "https://unspenttx.com"
+    },
+    {
+      "id": "boc:ada-staking-calculator",
+      "website": "https://azureada.com/ada-staking-rewards-calculator/"
+    },
+    {
+      "id": "boc:realfi-info",
+      "website": "https://realfi.info"
+    },
+    {
+      "id": "boc:nft-sailing",
+      "website": "https://nftsailing.net"
+    },
+    {
+      "id": "boc:next-cnft",
+      "website": "https://www.nextcnft.com/"
+    },
+    {
+      "id": "boc:ispo-online",
+      "website": "https://ispo.online/"
+    },
+    {
+      "id": "boc:cnft-world",
+      "website": "https://cnftworld.io/"
+    },
+    {
+      "id": "boc:drop-cnft",
+      "website": "https://dropcnft.com/"
+    },
+    {
+      "id": "boc:staking-dao",
+      "website": "https://stakingdao.ai/",
+      "whitepaper": "https://stakingdao.ai/whitepaper/"
+    },
+    {
+      "id": "boc:stakeboard",
+      "website": "https://stakeboard.net/"
+    },
+    {
+      "id": "boc:the-art-bank",
+      "website": "https://www.theartbank.io/"
+    },
+    {
+      "id": "boc:cardano-stake-pool-explorer",
+      "website": "https://www.stakepoolcardano.io/"
+    },
+    {
+      "id": "boc:crci",
+      "website": "https://crci.review"
+    },
+    {
+      "id": "boc:adastack-io",
+      "website": "https://www.adastack.io/",
+      "github": "https://github.com/adastackio"
+    },
+    {
+      "id": "boc:beerhouse-io",
+      "website": "https://beerhouse.io"
+    },
+    {
+      "id": "boc:raw-cardano-explorer",
+      "website": "https://rawcardano.app",
+      "github": "https://github.com/QuixoteSystems"
+    },
+    {
+      "id": "boc:de-fi-yield-app",
+      "website": "https://defiyield.app/",
+      "github": "https://github.com/defiyeld-app",
+      "whitepaper": "https://defiyield.app/whitepaper.pdf"
+    },
+    {
+      "id": "boc:orcfax",
+      "website": "https://orcfax.io",
+      "github": "https://github.com/orcfax",
+      "documentation": "https://docs.orcfax.io"
+    },
+    {
+      "id": "boc:cardano-link",
+      "website": "https://www.cardanolink.net/"
+    },
+    {
+      "id": "boc:d-apps-on-cardano",
+      "website": "https://dappsoncardano.com/"
+    },
+    {
+      "id": "boc:dc-one-crypto",
+      "website": "https://dconecrypto.finance/",
+      "github": "https://github.com/DCOneCrypto/DCOneCrypto.Finance",
+      "whitepaper": "https://dconecrypto.finance/about-us.html"
+    },
+    {
+      "id": "boc:tadatek-insights",
+      "website": "https://blog.tadatek.com"
+    },
+    {
+      "id": "boc:cardano-feed",
+      "website": "https://www.cardanofeed.com/"
+    },
+    {
+      "id": "boc:linkberry",
+      "website": "https://linkberry.info/",
+      "whitepaper": "https://linkberry.info/whitepaper.pdf"
+    },
+    {
+      "id": "boc:vendano",
+      "website": "https://vendano.net",
+      "github": "https://github.com/vendano"
+    },
+    {
+      "id": "boc:machada",
+      "website": "https://machada.xyz"
+    },
+    {
+      "id": "boc:nio-app",
+      "website": "https://nioapp.io/"
+    },
+    {
+      "id": "boc:identity-token",
+      "website": "https://identity.adaph.io/",
+      "github": "https://github.com/ADAPhilippines/IdentityToken"
+    },
+    {
+      "id": "boc:raffleize",
+      "website": "https://raffleize.art",
+      "github": "https://github.com/mariusgeorgescu/raffleize"
+    },
+    {
+      "id": "boc:pergamon-agora",
+      "website": "https://pergamon.app/",
+      "documentation": "https://beta.pergamon.app/faq"
+    },
+    {
+      "id": "boc:cardahub",
+      "website": "https://cardahub.io/"
+    },
+    {
+      "id": "boc:fraction-estate",
+      "website": "https://fraction.estate",
+      "whitepaper": "https://fraction.estate/whitepaper/Fraction-Estate-Whitepaper-v1.1.pdf"
+    },
+    {
+      "id": "boc:wafini",
+      "website": "https://wafini.app/"
+    },
+    {
+      "id": "boc:digi-rack",
+      "website": "https://digirack.io",
+      "whitepaper": "https://bit.ly/3IKpLhd"
+    },
+    {
+      "id": "boc:the-ada",
+      "website": "https://theada.pro/",
+      "whitepaper": "https://theada.gitbook.io/whitepaper/the-ada/abstract"
+    },
+    {
+      "id": "boc:cardano-sounds",
+      "website": "https://cardanosounds.com",
+      "github": "https://github.com/cardanosounds/cardano-sounds",
+      "documentation": "https://cardano-sounds.gitbook.io/cardanosounds/"
+    },
+    {
+      "id": "boc:cardano-studio",
+      "website": "https://www.cardano-studio.app",
+      "documentation": "https://www.cardano-studio.app/documentation"
+    },
+    {
+      "id": "boc:digital-gold-series-two-mining-permit",
+      "website": "https://www.digitalgoldecosystem.com/",
+      "whitepaper": "https://www.digitalgoldecosystem.com/goldpaper"
+    },
+    {
+      "id": "boc:nft-machine",
+      "website": "https://nft-machine.com/#/"
+    },
+    {
+      "id": "boc:hydragames",
+      "website": "https://todagame.xyz/",
+      "whitepaper": "https://todagame.xyz/#Whitepaper"
+    },
+    {
+      "id": "boc:nft-gift-cards",
+      "website": "https://card-creator.shop/"
+    },
+    {
+      "id": "boc:mardano",
+      "website": "https://mardano.space"
+    },
+    {
+      "id": "boc:argus-nft",
+      "website": "https://argusnft.com/"
+    },
+    {
+      "id": "boc:ex-plorer",
+      "website": "https://ex.plorer.xyz/"
+    },
+    {
+      "id": "boc:handle-tools",
+      "website": "https://handle.tools"
+    },
+    {
+      "id": "boc:blocktrust",
+      "website": "https://blocktrust.dev",
+      "github": "https://github.com/bsandmann"
+    },
+    {
+      "id": "boc:fairy-frens",
+      "website": "https://www.fairies.cc/"
+    },
+    {
+      "id": "boc:beachmaster-club",
+      "website": "https://www.beachmaster.club"
+    },
+    {
+      "id": "boc:bulldoge-nft-bdoge",
+      "website": "https://bulldoge.io",
+      "whitepaper": "https://bulldoge.io/bulldoge-whitepaper/index.html"
+    },
+    {
+      "id": "boc:updephye",
+      "website": "https://www.updephye.com/"
+    },
+    {
+      "id": "boc:nft-gater",
+      "website": "https://nftgater.com"
+    },
+    {
+      "id": "boc:mad-dog-car-club",
+      "website": "https://maddogcarclub.io/"
+    },
+    {
+      "id": "boc:killer-club-house",
+      "website": "http://killerclubhouse.io/"
+    },
+    {
+      "id": "boc:goofy-gophers-mining-club",
+      "website": "https://ggmc.io/"
+    },
+    {
+      "id": "boc:adatropolis",
+      "website": "https://www.adatropolis.com"
+    },
+    {
+      "id": "boc:cardano-pass",
+      "website": "https://cardanopass.io/",
+      "whitepaper": "https://cardanopass.io/Cardanopass-whitepaper.pdf"
+    },
+    {
+      "id": "boc:a-day-at-the-lake",
+      "website": "https://www.lidonation.com/en/lido-minute-nft"
+    },
+    {
+      "id": "boc:frescos",
+      "website": "https://frescos.io"
+    },
+    {
+      "id": "boc:liberada",
+      "website": "https://liberada.io",
+      "whitepaper": "https://liberada.io/static/media/Liberada_Whitepaper_ENG.1f1ef532799dc986cd3a.pdf"
+    },
+    {
+      "id": "boc:the-worldeater",
+      "website": "https://worldeater.io"
+    },
+    {
+      "id": "boc:addax-nft",
+      "website": "https://www.addaxnft.com"
+    },
+    {
+      "id": "boc:fire-token",
+      "website": "https://firetokenada.com"
+    },
+    {
+      "id": "boc:mithr-token",
+      "website": "https://mithr.io",
+      "github": "https://github.com/Breakpoint-341/mithrandir",
+      "whitepaper": "https://mithr.io/whitepaper/WhitePaperMITHR.pdf"
+    },
+    {
+      "id": "boc:spacedoge",
+      "website": "https://www.spacedoge.org/",
+      "whitepaper": "https://www.spacedoge.org/whitepaper-1"
+    },
+    {
+      "id": "boc:music-box",
+      "website": "https://www.musicboxnft.com/"
+    },
+    {
+      "id": "boc:league-of-lions",
+      "website": "https://lionsleaguenft.com/",
+      "whitepaper": "https://lionsleaguenft.com/assets/League_of_Lions_Whitepaper.pdf"
+    },
+    {
+      "id": "boc:ada-ninjaz",
+      "whitepaper": "https://www.adaninjaz.com/whitepaper"
+    },
+    {
+      "id": "boc:fractalz-rare-crystals",
+      "website": "https://santoelectronics.com/crystals"
+    },
+    {
+      "id": "boc:ps-max-zaxster",
+      "website": "https://www.maxzaxster.com",
+      "github": "https://github.com/PSMaxZaxster"
+    },
+    {
+      "id": "boc:boozy-apes",
+      "website": "https://boozyapes.art/"
+    },
+    {
+      "id": "boc:airport-nft",
+      "website": "https://airportnft.io/"
+    },
+    {
+      "id": "boc:ada-punks",
+      "website": "https://adapunks.dev"
+    },
+    {
+      "id": "boc:cardano-species",
+      "website": "https://sheinixstaking.github.io/cardanospecies/gallery"
+    },
+    {
+      "id": "boc:ada-birds",
+      "website": "https://adabirds.art/"
+    },
+    {
+      "id": "boc:pudgy-cat",
+      "website": "https://pudgycat.io/",
+      "whitepaper": "https://pudgycat.io/pudgy-pawper"
+    },
+    {
+      "id": "boc:steve-3-p-0",
+      "website": "https://www.steve3p0.info/"
+    },
+    {
+      "id": "boc:weeblewibs-cnft",
+      "website": "https://weeblewibs.com/"
+    },
+    {
+      "id": "boc:masked-on-buttons",
+      "website": "https://mobcnft.xyz/"
+    },
+    {
+      "id": "boc:periodic-table-of-elements-on-cardano",
+      "website": "https://www.periodictable.io/",
+      "whitepaper": "https://periodictable-io.gitbook.io/litepaper/"
+    },
+    {
+      "id": "boc:pseudonymous",
+      "website": "https://pseudonymous.co"
+    },
+    {
+      "id": "boc:h-y-p-e",
+      "website": "https://www.seehype.com/"
+    },
+    {
+      "id": "boc:turf",
+      "website": "https://turfnft.com"
+    },
+    {
+      "id": "boc:shit-coinz-nft",
+      "website": "https://www.shitcoinz.me/"
+    },
+    {
+      "id": "boc:snow-punkz",
+      "website": "https://snowpunkz.io/"
+    },
+    {
+      "id": "boc:love-on-chain",
+      "website": "https://skipper-cnft.github.io/"
+    },
+    {
+      "id": "boc:ada-meds",
+      "website": "https://adameds.io"
+    },
+    {
+      "id": "boc:ada-shoppers-club",
+      "website": "http://ascnft.quantyam.com/"
+    },
+    {
+      "id": "boc:dendro-rithms",
+      "website": "https://dendrorithms.com/",
+      "github": "https://github.com/wout/dendro"
+    },
+    {
+      "id": "boc:bitlands",
+      "website": "https://bitlands.art"
+    },
+    {
+      "id": "boc:ada-minions",
+      "website": "https://adaminions.com/"
+    },
+    {
+      "id": "boc:hypnocat-io",
+      "website": "https://hypnocat.io"
+    },
+    {
+      "id": "boc:project-end",
+      "website": "https://project-end.art/"
+    },
+    {
+      "id": "boc:the-refresh",
+      "website": "https://therefreshcnft.com/"
+    },
+    {
+      "id": "boc:cswap-dex",
+      "website": "https://cswap.info",
+      "whitepaper": "https://docs.cswap.info/information/cswap-lightpaper"
+    },
+    {
+      "id": "boc:wing-riders",
+      "website": "https://wingriders.com/",
+      "documentation": "https://docs.wingriders.com/",
+      "whitepaper": "https://assets.wingriders.com/whitepaper.pdf"
+    },
+    {
+      "id": "boc:bashoswap",
+      "website": "https://bashoswap.finance/",
+      "github": "https://github.com/bashoswap/",
+      "documentation": "https://docs.bashoswap.finance/"
+    },
+    {
+      "id": "boc:doex",
+      "website": "https://do.exchange/",
+      "whitepaper": "https://do.exchange/whitepaper.pdf"
+    },
+    {
+      "id": "boc:cardance-swap",
+      "website": "http://cardance.finance/",
+      "whitepaper": "http://cardance.finance/Content/assets/documents/White_Paper.pdf"
+    },
+    {
+      "id": "boc:sundae-swap",
+      "website": "https://www.sundaeswap.finance/",
+      "whitepaper": "https://www.sundaeswap.finance/papers/SundaeSwap-2021-06-01-Fundamentals.pdf"
+    },
+    {
+      "id": "boc:symbiosis",
+      "website": "https://symbiosis.finance/",
+      "github": "https://github.com/symbiosis-finance",
+      "whitepaper": "https://docs.symbiosis.finance/"
+    },
+    {
+      "id": "boc:coinlink",
+      "website": "https://coinlink.finance"
+    },
+    {
+      "id": "boc:snapbrillia",
+      "website": "https://snapbrillia.com",
+      "github": "https://github.com/snapbrillia/"
+    },
+    {
+      "id": "boc:defipronto",
+      "website": "https://defipronto.com/",
+      "github": "https://github.com/Defipronto-Labs",
+      "documentation": "https://docs.defipronto.com/",
+      "whitepaper": "https://docs.defipronto.com/tutorial/overview"
+    },
+    {
+      "id": "boc:token-allies",
+      "website": "https://tokenallies.com/",
+      "whitepaper": "https://drive.google.com/file/d/1osbBuUkguz8GZxF87nOBgDKcBHrJZeEW/view"
+    },
+    {
+      "id": "boc:genius-x",
+      "website": "https://www.genius-x.co/"
+    },
+    {
+      "id": "boc:gada",
+      "whitepaper": "https://www.gada.finance/GADA_Litepaper.pdf"
+    },
+    {
+      "id": "boc:teiki",
+      "website": "https://teiki.network",
+      "github": "https://github.com/teiki-network"
+    },
+    {
+      "id": "boc:cardashift",
+      "website": "https://www.cardashift.com",
+      "github": "https://github.com/cardashift",
+      "whitepaper": "https://cardashift.com/cardashift_whitepaper.pdf"
+    },
+    {
+      "id": "boc:commonlands",
+      "website": "https://www.commonlands.org/",
+      "documentation": "https://docs.google.com/document/d/1r5dJ2RcxozzvmN7rYCiSw7JnfgnG0AVIK5U7IiQCGlo/edit#heading=h.8ahcg9gebjcc",
+      "whitepaper": "https://docs.google.com/document/d/1r5dJ2RcxozzvmN7rYCiSw7JnfgnG0AVIK5U7IiQCGlo/edit#heading=h.8ahcg9gebjcc"
+    },
+    {
+      "id": "boc:reitcircles",
+      "website": "https://www.reitcircles.com",
+      "whitepaper": "https://d2fivcpspfq879.cloudfront.net/docs/REITCIRCLES_WHITE_PAPER_v1.0.0_0622.pdf"
+    },
+    {
+      "id": "boc:go-key",
+      "website": "https://gokey.network"
+    },
+    {
+      "id": "boc:kirkstone",
+      "website": "https://www.kirkstone.io/",
+      "whitepaper": "https://www.kirkstone.io/whitepaper"
+    },
+    {
+      "id": "boc:liqwid",
+      "website": "https://www.liqwid.finance/",
+      "github": "https://github.com/Liqwid-Labs",
+      "documentation": "https://liqwid-labs.gitbook.io/liqwid-docs/",
+      "whitepaper": "https://drive.google.com/file/d/1FfSfstUA7lJ-YaLGxmrGFVGj6TNLGX5f/view?usp=sharing"
+    },
+    {
+      "id": "boc:bonds-org",
+      "website": "https://bonds.org",
+      "whitepaper": "https://bonds.org/2022.09.28_Bonds_whitepaper.pdf"
+    },
+    {
+      "id": "boc:azima",
+      "documentation": "https://www.azima.co.uk/how-to-buy-azima-tokens-in-the-public-token-sale/",
+      "whitepaper": "https://bit.ly/azm-whitepaper"
+    },
+    {
+      "id": "boc:kezex-token",
+      "website": "https://kezex.io/"
+    },
+    {
+      "id": "boc:gen-wealth",
+      "website": "https://genwealth.app",
+      "github": "https://github.com/gen-wealth"
+    },
+    {
+      "id": "boc:blueshift",
+      "website": "https://blueshift.finance/",
+      "github": "https://github.com/blueshift-fi",
+      "whitepaper": "https://blueshift.finance/pdf/blueshift-whitepaper.pdf"
+    },
+    {
+      "id": "boc:dotare",
+      "website": "https://www.dotare.io/",
+      "github": "https://github.com/dotareio"
+    },
+    {
+      "id": "boc:anzens",
+      "website": "https://www.anzens.com/"
+    },
+    {
+      "id": "boc:ada-dao",
+      "website": "https://adadao.org",
+      "documentation": "https://docs.adadao.org"
+    },
+    {
+      "id": "boc:cetf",
+      "website": "https://cardanoetf.io/",
+      "github": "https://github.com/CardanoETF"
+    },
+    {
+      "id": "boc:fibonacci-ada",
+      "website": "https://fibonacci-ada.com",
+      "github": "https://github.com/FibonacciADA"
+    },
+    {
+      "id": "boc:mint-matrix",
+      "website": "https://app.MintMatrix.io"
+    },
+    {
+      "id": "boc:stablemans",
+      "website": "https://www.stablemans.com/"
+    },
+    {
+      "id": "boc:shareslake",
+      "website": "https://www.shareslake.com",
+      "github": "https://github.com/shareslake",
+      "whitepaper": "https://www.shareslake.com/wp-content/uploads/2022/02/Shareslake-Whitepaper-Public-v0.0.41.pdf"
+    },
+    {
+      "id": "boc:langarnia",
+      "website": "https://www.langarnia.io"
+    },
+    {
+      "id": "boc:hash-guardians",
+      "website": "https://www.hashguardians.io/",
+      "whitepaper": "https://hashguardians-2.gitbook.io/whitepaper/"
+    },
+    {
+      "id": "boc:wizard-crypt",
+      "website": "https://wizardcrypt.com/"
+    },
+    {
+      "id": "boc:crypto-dino",
+      "website": "https://www.cryptodino.io/"
+    },
+    {
+      "id": "boc:ironsky",
+      "website": "https://ironsky.info",
+      "whitepaper": "https://ironsky.gitbook.io/ironsky-game-ver1.0.0/"
+    },
+    {
+      "id": "boc:stellar-hood",
+      "website": "https://stellarhood.com",
+      "documentation": "https://wiki.stellarhood.com",
+      "whitepaper": "https://guide.stellarhood.com"
+    },
+    {
+      "id": "boc:warriors-world",
+      "whitepaper": "https://docs.google.com/document/d/14HyeEtBbkQsLx7m25ZMyOerqZQd4O8kO/edit"
+    },
+    {
+      "id": "boc:cyber-verse",
+      "website": "https://www.cyberversegame.io/",
+      "whitepaper": "https://docs.cyberversegame.io/cyberverse-litepaper"
+    },
+    {
+      "id": "boc:crypto-petz",
+      "website": "https://cryptopetz.io/"
+    },
+    {
+      "id": "boc:cardania",
+      "website": "https://cardania.com/"
+    },
+    {
+      "id": "boc:aedou-realm-of-languages",
+      "website": "https://www.educhainment.com"
+    },
+    {
+      "id": "boc:ada-warriors",
+      "website": "https://adawarriors.io/",
+      "github": "https://github.com/11techasia",
+      "whitepaper": "https://ada-warriors.gitbook.io/ada-warriors/"
+    },
+    {
+      "id": "boc:hydralands",
+      "website": "https://www.hydralands.com/"
+    },
+    {
+      "id": "boc:mocossi",
+      "website": "https://mocossi.com/",
+      "whitepaper": "https://whitepaper.mocossi.com/"
+    },
+    {
+      "id": "boc:mech-verse",
+      "website": "https://mechverse.co",
+      "documentation": "https://whitepaper.mechverse.co",
+      "whitepaper": "https://whitepaper.mechverse.co"
+    },
+    {
+      "id": "boc:ziber-bugs",
+      "website": "https://ziberbugs.io/",
+      "whitepaper": "https://docs.google.com/document/d/1CvfTNH91hJkh9_8_3s-Rkh1KYEi_BDDnzeUJgLWnYZ4/"
+    },
+    {
+      "id": "boc:world-of-pirates",
+      "website": "https://www.worldofpirates.io/"
+    },
+    {
+      "id": "boc:xrace",
+      "website": "https://xrace.io/"
+    },
+    {
+      "id": "boc:w-3-ride",
+      "website": "https://www.w3ride.io",
+      "whitepaper": "https://whitepaper.cyclernft.com/"
+    },
+    {
+      "id": "boc:ridotto",
+      "website": "https://ridotto.io/"
+    },
+    {
+      "id": "boc:foreon-network",
+      "website": "https://foreon.network/",
+      "github": "https://github.com/Foreon-Network",
+      "documentation": "https://docs.foreon.network/",
+      "whitepaper": "https://docs.foreon.network/"
+    },
+    {
+      "id": "boc:crypto-raggies",
+      "website": "https://cryptoraggies.io"
+    },
+    {
+      "id": "boc:vaca-ninja",
+      "website": "https://www.vaca.ninja",
+      "whitepaper": "https://www.vaca.ninja/assets/documents/VacaNinja_Litepaper_v0.1.pdf"
+    },
+    {
+      "id": "boc:nft-fighters",
+      "website": "https://nftfighters.io/"
+    },
+    {
+      "id": "boc:ada-cards",
+      "website": "https://adafolio.com/"
+    },
+    {
+      "id": "boc:dracards",
+      "website": "https://dracards.com/",
+      "whitepaper": "https://dracards.gitbook.io/"
+    },
+    {
+      "id": "boc:psychoz",
+      "website": "https://psychoz.cards"
+    },
+    {
+      "id": "boc:worlds-within",
+      "website": "https://www.worldswithin.io/"
+    },
+    {
+      "id": "boc:cardano-lands",
+      "website": "https://cardanolands.com",
+      "whitepaper": "https://whitepaper.cardanolands.com/"
+    },
+    {
+      "id": "boc:unreal-cardano-plugin",
+      "github": "https://github.com/McManford/UnrealCardanoPlugin"
+    },
+    {
+      "id": "boc:slap-ventures",
+      "website": "https://slapventures.com/",
+      "whitepaper": "https://slapventures.gitbook.io/litepaper/"
+    },
+    {
+      "id": "boc:epic-apes",
+      "website": "https://epicapes.io/",
+      "whitepaper": "https://docs.epicapes.io/"
+    },
+    {
+      "id": "boc:magma",
+      "website": "https://magm.red",
+      "whitepaper": "https://magm.red/firepaper.pdf"
+    },
+    {
+      "id": "boc:pop-up-world-token",
+      "website": "https://www.popupworld.co.uk",
+      "whitepaper": "https://s3.amazonaws.com/appforest_uf/f1635193980808x667843541003630300/Pop%20Up%20World%20Token%20White%20Paper.pdf"
+    },
+    {
+      "id": "boc:vrooli",
+      "website": "https://vrooli.com",
+      "github": "https://github.com/MattHalloran/Vrooli"
+    },
+    {
+      "id": "boc:obsidian-systems",
+      "website": "https://obsidian.systems/",
+      "github": "https://github.com/obsidiansystems"
+    },
+    {
+      "id": "boc:uniscroll",
+      "website": "https://www.uniscroll.io/"
+    },
+    {
+      "id": "boc:smart-contract-audit-token",
+      "website": "https://www.scatdao.com/",
+      "whitepaper": "https://scatdao.b-cdn.net/wp-content/uploads/2021/09/SCAT-DAO-Whitepaper-v4b.pdf"
+    },
+    {
+      "id": "boc:cnftlab",
+      "website": "https://cnftlab.dev"
+    },
+    {
+      "id": "boc:moments",
+      "website": "https://www.adamoments.io/",
+      "whitepaper": "https://adamoments.cdn.prismic.io/adamoments/ZrDOZkaF0TcGIr1j_ATS_Technical_Whitepaper.pdf"
+    },
+    {
+      "id": "boc:cardano-spot",
+      "website": "https://cardanospot.io/?mtm_campaign=builtoncardano"
+    },
+    {
+      "id": "boc:free-loaderz-dao-llc",
+      "website": "https://freeloaderz.io"
+    },
+    {
+      "id": "boc:testnet-coins-io",
+      "website": "https://testnetcoins.io"
+    },
+    {
+      "id": "boc:cardano-press",
+      "website": "https://cardanopress.io/",
+      "github": "https://github.com/cardanopress",
+      "documentation": "https://cardanopress.io/docs/"
+    },
+    {
+      "id": "boc:clear-contracts",
+      "website": "https://clearcontracts.io/"
+    },
+    {
+      "id": "boc:voteaire",
+      "website": "https://voteaire.io/"
+    },
+    {
+      "id": "boc:adao",
+      "website": "https://www.theadao.io/",
+      "github": "https://github.com/ADAOcommunity"
+    },
+    {
+      "id": "boc:steak-protocol",
+      "website": "https://steakprotocol.com",
+      "github": "https://github.com/STEAKProtocol"
+    },
+    {
+      "id": "boc:chess-of-art",
+      "whitepaper": "https://medium.com/@ChessOfArt/chess-of-art-litepaper-c479529226d"
+    },
+    {
+      "id": "boc:cardano-jobs",
+      "website": "https://www.cardanojobs.io/"
+    },
+    {
+      "id": "boc:merm-ada-minting",
+      "website": "https://mermada.com/"
+    },
+    {
+      "id": "boc:retro-nf-ts",
+      "website": "https://minting.retronfts.art/"
+    },
+    {
+      "id": "boc:supra",
+      "website": "https://suprapayments.io/"
+    },
+    {
+      "id": "boc:summon-platform",
+      "website": "https://summonplatform.io/",
+      "github": "https://github.com/ADAOcommunity"
+    },
+    {
+      "id": "boc:blockchain-learning-center",
+      "website": "https://blockchainlearning.center/"
+    },
+    {
+      "id": "boc:meta-lamp",
+      "website": "https://www.metalamp.io/"
+    },
+    {
+      "id": "boc:blockrock-z",
+      "website": "https://blockrockz.io/"
+    },
+    {
+      "id": "boc:g-ouroboros",
+      "github": "https://github.com/blinklabs-io/gouroboros"
+    },
+    {
+      "id": "boc:cardano-bi",
+      "website": "https://cardanobi.io",
+      "github": "https://github.com/adacapital/cardanobi"
+    },
+    {
+      "id": "boc:use-cardano",
+      "website": "https://use-cardano.alangaming.com",
+      "github": "https://www.github.com/use-cardano/use-cardano"
+    },
+    {
+      "id": "boc:tangocrypto",
+      "website": "https://www.tangocrypto.com/",
+      "github": "https://github.com/tango-crypto",
+      "documentation": "https://docs.tangocrypto.com/"
+    },
+    {
+      "id": "boc:imperator-lang",
+      "github": "https://github.com/ImperatorLang/imperator"
+    },
+    {
+      "id": "boc:cardano-python-module",
+      "website": "https://pypi.org/project/cardano/",
+      "github": "https://github.com/emesik/cardano-python"
+    },
+    {
+      "id": "boc:py-cardano",
+      "website": "https://pycardano.readthedocs.io/en/latest/",
+      "github": "https://github.com/cffls/pycardano"
+    },
+    {
+      "id": "boc:oura",
+      "github": "https://github.com/txpipe/oura",
+      "documentation": "https://txpipe.github.io/oura/"
+    },
+    {
+      "id": "boc:cryplect",
+      "website": "https://www.cryplect.com/"
+    },
+    {
+      "id": "boc:crossmint",
+      "website": "https://crossmint.com"
+    },
+    {
+      "id": "boc:txpipe",
+      "github": "https://github.com/txpipe"
+    },
+    {
+      "id": "boc:cardano-nieuws-updates-dutch-by-bitterbalpool-bitb",
+      "website": "https://www.bitterbalpool.nl"
+    },
+    {
+      "id": "boc:academia-cardano",
+      "website": "https://cardano-hispano.com/cursos/cardano/"
+    },
+    {
+      "id": "boc:simple-cardano",
+      "website": "https://simplecardano.com/"
+    },
+    {
+      "id": "boc:comunidad-cardano",
+      "website": "https://comunidadcardano.com"
+    },
+    {
+      "id": "boc:adiuvat",
+      "website": "https://www.adiuvat.com.co/",
+      "github": "https://github.com/BabylonCap/VAULT"
+    },
+    {
+      "id": "boc:osmium-dao",
+      "website": "https://osmiumdao.io",
+      "whitepaper": "https://osmiumdao.io/white-paper"
+    },
+    {
+      "id": "boc:cardanopuzzle",
+      "website": "https://cardanopuzzle.com/"
+    },
+    {
+      "id": "boc:cardans-club",
+      "website": "https://cardans.club",
+      "whitepaper": "https://paper.cardans.club"
+    },
+    {
+      "id": "boc:verafy",
+      "website": "https://verafy.io"
+    },
+    {
+      "id": "boc:ada-cyber-humans",
+      "website": "https://adacyberhumans.com/"
+    },
+    {
+      "id": "boc:ada-chicks",
+      "website": "https://www.adachicks.com/"
+    },
+    {
+      "id": "boc:rocketpad",
+      "whitepaper": "https://rocketpad.community/wp-content/uploads/1641/61/ROCKETPAD-WHITEPAPER-REDESIGNED.pdf"
+    },
+    {
+      "id": "boc:ruggy-token",
+      "website": "https://ruggy.org/"
+    },
+    {
+      "id": "boc:tarot-cardano-nf-ts",
+      "website": "https://tarotcardano.com/"
+    },
+    {
+      "id": "boc:sassy-shark",
+      "website": "https://sassyshark.io/"
+    },
+    {
+      "id": "boc:cicada-tactics",
+      "website": "https://cicadatactics.com",
+      "github": "https://github.com/CicadaNFT",
+      "whitepaper": "https://cicadatactics.com/faq"
+    },
+    {
+      "id": "boc:price-art",
+      "website": "https://price-art.io/"
+    },
+    {
+      "id": "boc:cnft-social",
+      "website": "https://cnft.social"
+    },
+    {
+      "id": "boc:cardano-comics",
+      "website": "https://www.cardanocomics.io/"
+    },
+    {
+      "id": "boc:cardano-file-certification",
+      "website": "https://85.214.129.164/",
+      "whitepaper": "http://85.214.129.164/whitepaper"
+    },
+    {
+      "id": "boc:fetachain",
+      "website": "https://fetachain.io/"
+    },
+    {
+      "id": "boc:simel",
+      "website": "https://simel.io"
+    },
+    {
+      "id": "boc:ada-mail",
+      "website": "https://www.adamail.me/"
+    },
+    {
+      "id": "boc:profila",
+      "website": "https://profila.com/",
+      "documentation": "https://profila.gitbook.io/profila",
+      "whitepaper": "https://ico.profila.com/"
+    },
+    {
+      "id": "boc:pocre",
+      "github": "https://github.com/eLearningDAO/POCRE"
+    },
+    {
+      "id": "boc:decon",
+      "website": "https://decon.app",
+      "github": "https://github.com/alucao/decon"
+    },
+    {
+      "id": "boc:d-branch-news",
+      "website": "https://dbranch.news/",
+      "github": "https://github.com/b-rad-c?tab=repositories&q=dbranch&type=&language=&sort=name"
+    },
+    {
+      "id": "boc:the-alexandria-project",
+      "website": "https://thelibrary.fun"
+    },
+    {
+      "id": "boc:mark",
+      "website": "https://sites.google.com/view/gaingfoundation/",
+      "whitepaper": "https://sites.google.com/view/gaingfoundation/white-paper?authuser=0"
+    },
+    {
+      "id": "boc:youblob",
+      "website": "https://www.youblob.com",
+      "whitepaper": "https://www.youblob.com/whitepaper"
+    },
+    {
+      "id": "boc:peak-chain",
+      "website": "https://www.peakchain-pool.com/"
+    },
+    {
+      "id": "boc:larissa-health",
+      "website": "https://larissa.health"
+    },
+    {
+      "id": "boc:gem-wallet",
+      "website": "https://gemwallet.com/",
+      "github": "https://github.com/gemwalletcom/"
+    },
+    {
+      "id": "boc:coin-wallet",
+      "website": "https://coin.space/",
+      "github": "https://github.com/CoinSpace/"
+    },
+    {
+      "id": "boc:c-64-wallet",
+      "website": "https://c64.app",
+      "github": "https://github.com/jimcase/C64-Wallet"
+    },
+    {
+      "id": "boc:nu-fi",
+      "website": "https://nu.fi/"
+    },
+    {
+      "id": "boc:begin",
+      "website": "https://begin.is/"
+    },
+    {
+      "id": "boc:eternl-wallet",
+      "website": "https://eternl-wallet.com/"
+    },
+    {
+      "id": "boc:bing-chilling-token",
+      "website": "https://bingchilling.app/"
+    },
+    {
+      "id": "boc:pigy-oracle",
+      "website": "https://oracle.pigytoken.com/"
+    },
+    {
+      "id": "boc:on-a-drac",
+      "website": "https://www.draccoin.com/"
+    },
+    {
+      "id": "boc:hoskdog",
+      "website": "https://hoskdog.io",
+      "github": "https://github.com/Adahandles/HOSKDOG/",
+      "whitepaper": "https://adahandles.github.io/HOSKDOG/whitepaper.html"
+    },
+    {
+      "id": "boc:super-fly",
+      "website": "https://pool.pm/asset1es22l73cmcs75w0ynu8rhfwuzcrkmnvrqdy6q8?wsort=dec"
+    },
+    {
+      "id": "boc:charlz-token",
+      "website": "https://www.charlz.io"
+    },
+    {
+      "id": "boc:meme-btc",
+      "website": "https://memebtc.io/",
+      "github": "https://github.com/MemeBTC21"
+    },
+    {
+      "id": "boc:bully-verse-woof-world",
+      "website": "https://bully-verse.space/",
+      "whitepaper": "https://1drv.ms/b/s!AoBAiQhTVjW7gR43tTKWkXm9mczr"
+    },
+    {
+      "id": "boc:fennk",
+      "website": "https://www.fennk.com/"
+    },
+    {
+      "id": "boc:european-freedom-coin",
+      "website": "https://www.tiktok.com/@superfreshmega"
+    },
+    {
+      "id": "boc:cardabbean",
+      "website": "https://cardabbean.io/",
+      "whitepaper": "https://cardabbean.io/sand-paper"
+    },
+    {
+      "id": "boc:carda-station",
+      "website": "https://www.cardastation.com/"
+    },
+    {
+      "id": "boc:eikonikos",
+      "website": "https://eikonikos.io/"
+    },
+    {
+      "id": "boc:cardalonia",
+      "website": "https://cardalonia.io/",
+      "github": "https://github.com/cardalonia",
+      "documentation": "https://docs.cardalonia.io/"
+    },
+    {
+      "id": "boc:pocket-towne",
+      "website": "https://pockettowne.io/",
+      "whitepaper": "https://pockettowne.io/pocketpaper.html"
+    },
+    {
+      "id": "boc:unbounded-earth",
+      "website": "https://unbounded.earth"
+    },
+    {
+      "id": "boc:meta-rentals",
+      "website": "https://metarentals.rent/"
+    },
+    {
+      "id": "boc:cardano-villa",
+      "website": "https://cardanovilla.io/"
+    },
+    {
+      "id": "boc:cardano-node-docker-image",
+      "github": "https://github.com/jterrier84/Cardano-node-docker",
+      "documentation": "https://armada-alliance.com/guides/run-a-cardano-node-with-docker"
+    },
+    {
+      "id": "boc:blockiy",
+      "website": "https://www.blockiy.com/",
+      "github": "https://github.com/blockiy"
+    }
+  ]
+}
