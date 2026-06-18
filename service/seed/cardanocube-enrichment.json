@@ -5,34 +5,14 @@
   "authority_class": "D",
   "as_of": "2026-06-17",
   "note": "Per-project external links (website/github/documentation/whitepaper) harvested from cardanocube.com project pages preserved via the Wayback Machine. Each link is verbatim from the captured page; the raw id_ snapshot URL and the SHA-256 of the exact fetched bytes are recorded as evidence. Social links (twitter/discord/telegram/etc.) and cardanocube own footer links are excluded. No fabrication: projects with no published link in their snapshot are omitted (see skipped log).",
-  "count": 102,
+  "count": 120,
   "bare_slug_universe": 142,
   "skipped": [
-    {
-      "slug": "discoin",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20260603134209id_/https://cardanocube.com/projects/discoin"
-    },
     {
       "slug": "virusx",
       "reason": "no classifiable links",
       "wayback_url": "https://web.archive.org/web/20240722133646id_/https://cardanocube.com/projects/virusx",
       "sha256": "7e0ea52040e6630518f62e9f1c01a175ee41f936e3aee718c1916b08553647c2"
-    },
-    {
-      "slug": "nunet",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20260603134325id_/https://www.cardanocube.com/projects/nunet"
-    },
-    {
-      "slug": "cardanogpt",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250120024939id_/https://www.cardanocube.com/projects/cardanogpt"
-    },
-    {
-      "slug": "wanchain",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250120025528id_/https://www.cardanocube.com/projects/wanchain"
     },
     {
       "slug": "agora-cardano",
@@ -43,11 +23,6 @@
       "reason": "no classifiable links",
       "wayback_url": "https://web.archive.org/web/20250212192733id_/https://www.cardanocube.com/projects/daedalus-turbo",
       "sha256": "1ef920af2c06d0bc66b37a4ac2c9c6e187f06c05ce697f743618cf51eaab90c1"
-    },
-    {
-      "slug": "eonpower",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250119223040id_/https://www.cardanocube.com/projects/eonpower"
     },
     {
       "slug": "smart-contract-audit-token",
@@ -62,25 +37,10 @@
       "reason": "no wayback snapshot"
     },
     {
-      "slug": "nmkr",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20260303061004id_/https://www.cardanocube.com/projects/nmkr"
-    },
-    {
-      "slug": "jam-on-bread",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250120022947id_/https://www.cardanocube.com/projects/jam-on-bread"
-    },
-    {
       "slug": "jpg-store",
       "reason": "no classifiable links",
       "wayback_url": "https://web.archive.org/web/20240415025214id_/https://www.cardanocube.com/projects/jpg-store",
       "sha256": "f40068234b0356b6c2c6262406057dce1f06cee72e345142c25b86073dd3f31f"
-    },
-    {
-      "slug": "adafund-me",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250617114143id_/https://www.cardanocube.com/projects/adafund-me"
     },
     {
       "slug": "adanft",
@@ -105,23 +65,8 @@
       "sha256": "13a3ed1b13c80da7220038afce640a0dd0868c096b612c2ef818a7478f5f7f1d"
     },
     {
-      "slug": "newm",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250320124111id_/https://www.cardanocube.com/projects/newm"
-    },
-    {
       "slug": "materios",
       "reason": "no wayback snapshot"
-    },
-    {
-      "slug": "adastat",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250209071652id_/https://www.cardanocube.com/projects/adastat"
-    },
-    {
-      "slug": "cardanobits",
-      "reason": "http 503",
-      "wayback_url": "https://web.archive.org/web/20250318000913id_/https://www.cardanocube.com/projects/cardanobits"
     },
     {
       "slug": "chainsofwar",
@@ -186,6 +131,396 @@
     {
       "slug": "cryptodino",
       "reason": "no wayback snapshot"
+    },
+    {
+      "id": "boc:a-shib",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:abcde",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:ada-fractals",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:ada-street-bets",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:adam",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:ansible-cardano-node",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:army-of-spies",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:big-pey",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:blake-cnft",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:boop-pop",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:breast-of-cardano",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:brkz",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:brown-nft",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:building-on-cardano",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:bullish-dumpling",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:carda-stat",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-advisor-bot",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-catalyst-community-site",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-catalyst-tv",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-cube",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-dragonz",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-ecosystem-news",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-howto",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-light-tools",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-over-coffee",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cardano-phishing-bot",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cexplorer-io",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cnft-predator",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:cosmic-soul",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:dessert-cat-nft",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:discord-management-solutions",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:drip-dropz",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:dripada",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:e-tuk-tuk",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:e-u-tx-o-org",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:epochs-end",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:essential-cardano",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:gamez-on-chain",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:graffiti-consortium",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:guild-operators",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:hoskinsea",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:jor-manager",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:local-meetups",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:martify-labs",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:meow-swap",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:milkomeda",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:milkomeda-c-1-explorer",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:minterr",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:mission-driven-pools",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:moon-rock",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:orbis",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:paid-xpo",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:patryk-karter",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:pi-xel-tc",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:pixel-links",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:plooty",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:pool-data-live",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:repo-ledge",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:rin-2-s-ai",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:sapien",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:security-bot",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:stake-pool-24-7",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:stateof-cardano",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:tap-tools",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:tempo",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:the-adalator",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:the-bull-boon",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:the-dictator",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:the-seal-society-merch",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:the-universal-joint",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:the-village-of-jugglers",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:tosi-drop",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:tourist-a",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:wallet-bud",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:wallet-wednesday",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:wonder-whale",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:xdao",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
+    },
+    {
+      "id": "boc:yay-swap",
+      "reason": "no wayback snapshot",
+      "source_checked": "cardanocube.com/projects/<slug> via Wayback availability API"
     }
   ],
   "projects": [
@@ -1250,6 +1585,215 @@
         "sha_matched_custody": null,
         "capture_date": null
       }
+    },
+    {
+      "id": "discoin",
+      "website": "https://discosolaris.io/discoin",
+      "documentation": "https://docs.discoin.family",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134209id_/https://cardanocube.com/projects/discoin",
+        "sha256": "cb72d31f176e890e289efb94a55fd59077c4d07d1ce2a0f1198f517abcad8714",
+        "sha_matched_custody": false,
+        "capture_date": "2026-06-03T13:42:09Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "nunet",
+      "website": "https://nunet.io",
+      "whitepaper": "https://nunet-io.github.io/public/NuNet_Whitepaper_2.0.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260603134325id_/https://www.cardanocube.com/projects/nunet",
+        "sha256": "284c40573d35f986c7a576d0931bbf528d993847b82082d12c5be3d77b0e14e1",
+        "sha_matched_custody": false,
+        "capture_date": "2026-06-03T13:43:25Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "cardanogpt",
+      "website": "https://cardanogpt.ai/",
+      "documentation": "https://docs.cardanogpt.ai/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120024939id_/https://www.cardanocube.com/projects/cardanogpt",
+        "sha256": "842e98f865b14cd0f483f008481208a30591222fe9d44b6ad37fc833a1cfaf15",
+        "sha_matched_custody": false,
+        "capture_date": "2025-01-20T02:49:39Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "wanchain",
+      "website": "https://www.wanchain.org/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120025528id_/https://www.cardanocube.com/projects/wanchain",
+        "sha256": "0f21aafca3f5263b583a1abdbf879ede14be5bd91fa80db2a470406918f1a251",
+        "sha_matched_custody": false,
+        "capture_date": "2025-01-20T02:55:28Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "eonpower",
+      "website": "https://eonpower.energy/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250119223040id_/https://www.cardanocube.com/projects/eonpower",
+        "sha256": "c259efda6cb06a5ce5e23f3c0dcb945078d50142ed0aeff69f720d66b61caf51",
+        "sha_matched_custody": false,
+        "capture_date": "2025-01-19T22:30:40Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "nmkr",
+      "website": "https://www.nmkr.io",
+      "whitepaper": "https://www.nmkr.io/whitepaper",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260303061004id_/https://www.cardanocube.com/projects/nmkr",
+        "sha256": "93431b37a43eb75e1802927787e0a9acea393a23ae346b883b31c90c78a38580",
+        "sha_matched_custody": false,
+        "capture_date": "2026-03-03T06:10:04Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "jam-on-bread",
+      "website": "https://jamonbread.io",
+      "documentation": "https://jamonbread-io.gitbook.io",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120022947id_/https://www.cardanocube.com/projects/jam-on-bread",
+        "sha256": "2565331f16115a363739c6fd78bda541fc9056baccc617729ed376138307dd50",
+        "sha_matched_custody": false,
+        "capture_date": "2025-01-20T02:29:47Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "adafund-me",
+      "website": "http://adafund.me",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250617114143id_/https://www.cardanocube.com/projects/adafund-me",
+        "sha256": "a5072e1cafaeb46160d2c7a7056fc6957604d51bef05f0ee761e5d3e6e286863",
+        "sha_matched_custody": false,
+        "capture_date": "2025-06-17T11:41:43Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "newm",
+      "website": "https://newm.io/",
+      "whitepaper": "https://newm.io/wp-content/uploads/2022/06/projectNEWM_Whitepaper_V1.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250320124111id_/https://www.cardanocube.com/projects/newm",
+        "sha256": "5a9bc3072b91ec8bac43676589c377cba9bdc70c87577073717940169bbfa153",
+        "sha_matched_custody": false,
+        "capture_date": "2025-03-20T12:41:11Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "adastat",
+      "website": "https://adastat.net/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250209071652id_/https://www.cardanocube.com/projects/adastat",
+        "sha256": "71cc1b9b7e40f88dfe573162a3a238ae471a15217eb4899e80894658482f8af0",
+        "sha_matched_custody": false,
+        "capture_date": "2025-02-09T07:16:52Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "cardanobits",
+      "website": "https://cardanobits.art/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250318000913id_/https://www.cardanocube.com/projects/cardanobits",
+        "sha256": "dd9152510327d96d88d2739d1bc68e2ff03fd398a1875ef8600ae071df6f0eac",
+        "sha_matched_custody": false,
+        "capture_date": "2025-03-18T00:09:13Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:adaverse",
+      "website": "https://www.adaverse.co",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250120035045id_/https://www.cardanocube.com/projects/adaverse",
+        "sha256": "79cb072aa31d39e43bf1d2e5d3c91220267e35869387d2d7921d7ae2ed392705",
+        "sha_matched_custody": false,
+        "capture_date": "2025-01-20T03:50:45Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:artifct",
+      "website": "https://artifct.app",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240714105344id_/https://www.cardanocube.com/projects/artifct",
+        "sha256": "d90238ef75f66aeede69db0ef620f597e5e5f1fb5eb1fe743e954429d3efff0c",
+        "sha_matched_custody": false,
+        "capture_date": "2024-07-14T10:53:44Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:clarity-protocol",
+      "website": "https://www.clarity.vote/",
+      "documentation": "https://docs.clarity.vote/",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250305224356id_/https://www.cardanocube.com/projects/clarity-protocol",
+        "sha256": "c4b7b4b855e7378cec49d2cd25b118ce6b9d42cf70dd6affe4cf4677d5ff95dd",
+        "sha_matched_custody": false,
+        "capture_date": "2025-03-05T22:43:56Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:coindodo",
+      "website": "https://coindodo.io/cardano",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250317132459id_/https://www.cardanocube.com/projects/coindodo",
+        "sha256": "4247620b6800ff98c4a14b8b98f6095c0efee61e1bc985ceea56d47a59e8589a",
+        "sha_matched_custody": false,
+        "capture_date": "2025-03-17T13:24:59Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:duelist-king",
+      "website": "https://duelistking.com/",
+      "whitepaper": "https://duelistking.com/Duelist_King_WPP.pdf",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20250206134334id_/https://www.cardanocube.com/projects/duelist-king",
+        "sha256": "d06ccd64e77cd1caebda6d19d654a37dea5cdfbb001af4658df422b102fa60f5",
+        "sha_matched_custody": false,
+        "capture_date": "2025-02-06T13:43:34Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:nmkr",
+      "website": "https://www.nmkr.io",
+      "whitepaper": "https://www.nmkr.io/whitepaper",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20260303061004id_/https://www.cardanocube.com/projects/nmkr",
+        "sha256": "93431b37a43eb75e1802927787e0a9acea393a23ae346b883b31c90c78a38580",
+        "sha_matched_custody": false,
+        "capture_date": "2026-03-03T06:10:04Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
+    },
+    {
+      "id": "boc:ravendex",
+      "website": "https://ravendex.io",
+      "whitepaper": "https://docs.ravendex.io/whitepaper",
+      "evidence": {
+        "wayback_url": "https://web.archive.org/web/20240527033419id_/https://www.cardanocube.com/projects/ravendex",
+        "sha256": "24359606b08da08635ae3098450d36e9be51f39030390142893709f40fcc8269",
+        "sha_matched_custody": false,
+        "capture_date": "2024-05-27T03:34:19Z",
+        "harvested_by": "P4 enrichment pass (re-fetch of previously 503/uncaptured cardanocube project pages)"
+      }
     }
-  ]
+  ],
+  "p4_enrichment_note": "P4 pass added 18 project entries: 11 cardanocube bare-slug pages that previously returned HTTP 503 (re-fetched successfully from their recorded Wayback id_ snapshot) and 7 Built-on-Cardano (boc:) projects whose website was not captured in the BOC sweep but which have an archived cardanocube project page. All are sourced from cardanocube.com (authority D) with per-project wayback_url+sha256 evidence. boc: ids are kept in this file (not builtoncardano-enrichment.json) because the link provenance is cardanocube + a specific Wayback snapshot, not the BOC directory. 78 boc: projects had no archived cardanocube page (recorded in skipped)."
 }
