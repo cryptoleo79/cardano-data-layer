@@ -16,10 +16,25 @@ const STARTED = Date.now();
 const router = new Router();
 
 // --- built-in routes (first-class deployment endpoints) ---
-router.add('GET', '/health', async () => ({
-  status: 200,
-  body: { ok: true, service: 'cardano-data-layer', version: '0.1.0', uptime_s: Math.floor((Date.now() - STARTED) / 1000), routes: router.list().length, time: new Date().toISOString() },
-}));
+router.add('GET', '/health', async () => {
+  // Pipeline freshness for heartbeat monitoring: newest market-poller write and
+  // newest OHLCV tick. Lets external monitors detect a silently-dead poller the
+  // same way meta.json surfaces the governance ETL's last run.
+  let freshness = null;
+  try {
+    const tm = db.prepare('SELECT MAX(as_of) AS as_of, COUNT(*) AS rows FROM token_market').get();
+    const oh = db.prepare("SELECT MAX(ts) AS ts FROM ohlcv WHERE interval = 'raw'").get();
+    freshness = {
+      token_market_as_of: tm && tm.as_of ? new Date(tm.as_of * 1000).toISOString() : null,
+      token_market_rows: tm ? tm.rows : 0,
+      ohlcv_latest: oh && oh.ts ? new Date(oh.ts * 1000).toISOString() : null,
+    };
+  } catch { /* tables may not exist yet — report null rather than fail health */ }
+  return {
+    status: 200,
+    body: { ok: true, service: 'cardano-data-layer', version: '0.1.0', uptime_s: Math.floor((Date.now() - STARTED) / 1000), routes: router.list().length, freshness, time: new Date().toISOString() },
+  };
+});
 router.add('GET', '/routes', async () => ({ status: 200, body: { routes: router.list() } }));
 
 // /openapi.json — the OpenAPI 3.1 spec, served verbatim.
