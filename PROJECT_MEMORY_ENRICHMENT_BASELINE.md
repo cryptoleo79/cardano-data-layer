@@ -1,6 +1,6 @@
 # Project Memory — Enrichment Baseline
 
-**As of:** 2026-06-21 (Completion Sprint closed). **Enrichment paused.**
+**As of:** 2026-06-22 (Completion Sprint closed; opportunistic 2-failure retry done). **Enrichment paused.**
 
 This records the post-sprint baseline and the exact projects that remain unenriched,
 classified by *why*. It is a factual record, not a to-do list — the next enrichment
@@ -16,8 +16,8 @@ provenance-backed. **No invented links. No inferred links. No ticker guessing.**
 | Metric | Value |
 |--------|-------|
 | Projects | 847 |
-| **Enriched (≥1 sourced link)** | **786 / 847 (92.8%)** |
-| **Unenriched** | **61** |
+| **Enriched (≥1 sourced link)** | **787 / 847 (92.9%)** |
+| **Unenriched** | **60** |
 
 Per-field coverage (distinct projects, active claims):
 
@@ -34,7 +34,7 @@ pages (Class D, `data-project-link-type` attributes), each claim carrying proven
 
 ---
 
-## The 61 remaining, classified
+## The 60 remaining, classified
 
 ### A. No source exists — 59
 No source provides an official link for these. Not fixable without violating the
@@ -62,18 +62,21 @@ NFT/community pages with no standalone web presence.
 > the-seal-society-merch, the-village-of-jugglers, wallet-bud, wallet-wednesday,
 > wonder-whale
 
-### B. Source unavailable — 0
-No project currently falls here. Both link sources (Built on Cardano, cardanocube) are
-reachable. This bucket is kept so a future outage can be recorded honestly rather than
-misfiled as "no source."
+### B. Source unavailable — 1
+The page is reachable (HTTP 200) but the link source **is not reliably retrievable**, so
+no reproducible custody can be captured. Not enriched — using a one-off capture the
+source won't re-serve would be unreproducible "best effort," which the rules forbid.
 
-### C. Transient fetch failure — 2 (retryable)
-cardanocube projects that failed/returned no links **during the sprint run** but whose
-pages are reachable now (HTTP 200) and **do carry an official `website` link type**.
-A retry in the next sprint would enrich both (→ 788/847). Not retried now: enrichment is
-paused.
+> **daedalus-turbo** — its cardanocube page is a SPA shell: the Wayback `id_` snapshot
+> contains no rendered links, and a plain fetch returns no link attributes. A single
+> `curl -L` capture once showed a `data-project-link-type="website"`, but it is not
+> reproducible, so we cannot anchor a SHA-256 to bytes the source reliably serves.
+> Revisit only if cardanocube renders its links server-side consistently.
 
-> chainsofwar, daedalus-turbo
+### C. Transient fetch failure — 0
+**chainsofwar** (the other sprint-run failure) was retried opportunistically on
+2026-06-22: its page served the links cleanly and it is now enriched (website +
+whitepaper, Wayback `id_` + SHA-256 custody). Bucket now empty.
 
 ---
 
@@ -82,12 +85,12 @@ paused.
 | Class | Count | Fixable? |
 |-------|------:|----------|
 | A · No source exists | 59 | No — would require inventing/inferring/ticker-guessing |
-| B · Source unavailable | 0 | — |
-| C · Transient fetch failure | 2 | Yes — retry in a future, evidence-driven sprint |
+| B · Source unavailable | 1 | Only if cardanocube renders the link reproducibly |
+| C · Transient fetch failure | 0 | — (chainsofwar retried & enriched 2026-06-22) |
 
-**Realistic ceiling from current sources: 788 / 847** (786 today + the 2 transient).
-The remaining 59 are not a backlog; they are projects for which no link can be honestly
-sourced. Closing them would mean breaking the rules — so they stay open.
+**Realistic ceiling from current sources: 787 / 847** (today). The remaining 60 are not a
+backlog: 59 have no honestly-sourceable link, and 1 (daedalus-turbo) has no reproducible
+custody. Closing any of them would mean breaking the rules — so they stay open.
 
 ## Next
 

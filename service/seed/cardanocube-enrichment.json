@@ -5,7 +5,7 @@
  "authority_class": "D",
  "as_of": "2026-06-21",
  "note": "Per-project external links (website/github/documentation/whitepaper) harvested from cardanocube.com project pages preserved via the Wayback Machine. Each link is verbatim from the captured page; the raw id_ snapshot URL and the SHA-256 of the exact fetched bytes are recorded as evidence. Social links (twitter/discord/telegram/etc.) and cardanocube own footer links are excluded. No fabrication: projects with no published link in their snapshot are omitted (see skipped log). 2026-06-21: added cardanocube-origin projects not previously covered, links source-typed via the page's data-project-link-type attributes (website/whitepaper); custody = Wayback id_ snapshot where archiving succeeded, else live capture (kind:url) with SHA-256 of the captured bytes. Nothing fabricated.",
- "count": 147,
+ "count": 148,
  "bare_slug_universe": 142,
  "skipped": [
   {
@@ -2086,6 +2086,17 @@
     "ref": "https://web.archive.org/web/20260621014652id_/https://www.cardanocube.com/projects/walkerscnft",
     "sha256": "6b7066ed5d0ef955ca4aaee9fb08e9b637f5db8e15879b2d9c76349a9b939745",
     "capture_date": "2026-06-20T12:30:00Z"
+   }
+  },
+  {
+   "id": "chainsofwar",
+   "website": "https://chainsofwar.io",
+   "whitepaper": "https://uploads-ssl.webflow.com/62dffd2d93fe42261c4d833a/6351afe2b5daae1581c9f4e3_COW%20Paper%20v1.02%20(1).pdf",
+   "evidence": {
+    "kind": "wayback",
+    "ref": "https://web.archive.org/web/20260621145007id_/https://www.cardanocube.com/projects/chainsofwar",
+    "sha256": "eff2014c378e6219a04f46bebece49576f0edf6e8c373545889db043e702223f",
+    "capture_date": "2026-06-21T13:00:00Z"
    }
   }
  ],
