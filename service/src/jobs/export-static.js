@@ -42,6 +42,10 @@ const fileKey = (id) => id.replace(/[^A-Za-z0-9._-]/g, '_');
 
 mkdirSync(join(outDir, 'projects'), { recursive: true });
 
+const LINK_FIELDS = ['website', 'github', 'documentation', 'whitepaper'];
+// category slug -> compact member rows (derived; powers the explorer + heat map)
+const catMembers = new Map();
+
 // --- per-project detail files + enriched list rows ---
 const listRows = [];
 const { projects } = listProjects({ limit: 1000 });
@@ -53,21 +57,62 @@ for (const row of projects) {
   const claimFields = Object.keys(detail.fields || {});
   const evidenceCount = Object.values(detail.fields || {}).flat()
     .reduce((n, c) => n + (c.provenance?.evidence?.length || 0), 0);
+  const linkFields = LINK_FIELDS.filter((f) => detail.fields?.[f]?.length);
+  const enriched = linkFields.length > 0;
   const file = `${fileKey(row.id)}.json`;
   writeFileSync(join(outDir, 'projects', file),
     JSON.stringify({ project: detail, history: history.events, generated_at: GENERATED_AT }, null, 2));
-  listRows.push({
+  const listRow = {
     id: detail.id, file, kind: detail.kind,
     name: detail.name || detail.fields?.ticker?.[0]?.value || row.id, status: detail.status,
     rank: detail.fields?.rank?.[0]?.value ?? null,
     unclassified: detail.unclassified, source_id: prov.source_id, authority_class: prov.authority_class,
     category_count: detail.categories.length, claim_fields: claimFields.length,
+    link_fields: linkFields, enriched,
     evidence_count: evidenceCount, history_count: history.count,
     superseded_claim_count: detail.superseded_claim_count,
-  });
+  };
+  listRows.push(listRow);
+  // accumulate compact membership for each active category assignment
+  const member = {
+    id: detail.id, file, name: listRow.name, kind: detail.kind, status: detail.status,
+    authority_class: prov.authority_class, enriched, link_fields: linkFields,
+    evidence_count: evidenceCount, history_count: history.count,
+  };
+  for (const c of detail.categories) {
+    if (!catMembers.has(c.slug)) catMembers.set(c.slug, []);
+    catMembers.get(c.slug).push(member);
+  }
 }
 
 const categories = listCategories().categories;
+
+// --- derived category aggregate (membership + enrichment density) ---
+const catAgg = categories.map((c) => {
+  const members = (catMembers.get(c.slug) || []).sort((a, b) => a.name.localeCompare(b.name));
+  const enrichedCount = members.filter((m) => m.enriched).length;
+  const status = c.deprecated ? 'deprecated' : (members.length ? 'populated' : 'pending');
+  return {
+    slug: c.slug, name: c.name, status,
+    project_count: members.length, enriched_count: enrichedCount,
+    enriched_pct: members.length ? Math.round((enrichedCount / members.length) * 100) : 0,
+    evidence_total: members.reduce((n, m) => n + (m.evidence_count || 0), 0),
+    deprecated: !!c.deprecated, alias_of: c.alias_of, source: c.source, members,
+  };
+});
+writeFileSync(join(outDir, 'categories.json'), JSON.stringify({
+  meta: {
+    generated_at: GENERATED_AT,
+    counts: {
+      categories: catAgg.length,
+      populated: catAgg.filter((c) => c.status === 'populated').length,
+      pending: catAgg.filter((c) => c.status === 'pending').length,
+      deprecated: catAgg.filter((c) => c.status === 'deprecated').length,
+    },
+    authority_legend: { A: 'On-chain', B: 'Official', C: 'At-risk platform', D: 'Community', E: 'Researcher' },
+  },
+  categories: catAgg,
+}, null, 2));
 
 const index = {
   meta: {
@@ -94,3 +139,4 @@ writeFileSync(join(outDir, 'index.json'), JSON.stringify(index, null, 2));
 
 console.log(`exported to ${outDir}`);
 console.log(`  projects=${listRows.length} categories=${categories.length} events=${eventCount()} chain_ok=${chain.ok}`);
+console.log(`  enriched=${listRows.filter((r) => r.enriched).length} categories.json members=${catAgg.reduce((n, c) => n + c.project_count, 0)}`);
