@@ -231,10 +231,17 @@ export function seedCardanocubeEnrichment() {
   const counts = { website: 0, github: 0, documentation: 0, whitepaper: 0 };
   for (const p of ej.projects || []) {
     if (!p.id) continue;
-    // Per-project evidence: the exact snapshot we read these links from.
+    // Per-project evidence: the exact snapshot/capture we read these links from.
+    // kind defaults to 'wayback' for backward compatibility with earlier entries;
+    // links captured live (when a Wayback snapshot was unavailable) are labelled
+    // 'url' with an accurate description — we never mislabel a live fetch as Wayback.
     const ev = p.evidence || {};
-    const evidence = [{ kind: 'wayback', ref: ev.wayback_url || ej.source_url, sha256: ev.sha256 || null,
-      description: `cardanocube project page for "${p.id}" (chain-of-custody from the Wayback Machine; SHA-256 of the captured bytes)` }];
+    const kind = ev.kind || 'wayback';
+    const ref = ev.ref || ev.wayback_url || ej.source_url;
+    const description = kind === 'wayback'
+      ? `cardanocube project page for "${p.id}" (chain-of-custody from the Wayback Machine; SHA-256 of the captured bytes)`
+      : `cardanocube project page for "${p.id}" (live capture ${ev.capture_date || ej.as_of}; SHA-256 of the captured bytes)`;
+    const evidence = [{ kind, ref, sha256: ev.sha256 || null, description }];
     for (const f of FIELDS) {
       const v = p[f];
       if (!v || done.has(`${p.id} ${f}`)) continue;
