@@ -71,6 +71,7 @@ for (const row of projects) {
     link_fields: linkFields, enriched,
     evidence_count: evidenceCount, history_count: history.count,
     superseded_claim_count: detail.superseded_claim_count,
+    created_seq: detail.created_seq, last_seq: detail.last_seq,
   };
   listRows.push(listRow);
   // accumulate compact membership for each active category assignment
