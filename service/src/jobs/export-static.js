@@ -15,7 +15,7 @@
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
-import { initEventStore, eventCount, verifyChain } from '../projectmemory/eventstore.js';
+import { initEventStore, eventCount, verifyChain, allEvents } from '../projectmemory/eventstore.js';
 import { initProjections } from '../projectmemory/schema.js';
 import { rebuildProjections } from '../projectmemory/reducer.js';
 import { seedIfEmpty } from '../projectmemory/seed.js';
@@ -114,6 +114,24 @@ writeFileSync(join(outDir, 'categories.json'), JSON.stringify({
   },
   categories: catAgg,
 }, null, 2));
+
+// --- derived Project Memory timeline milestones (date-grouped event log) ---
+// A projection of the existing event log — facts only, for timeline.html.
+const LINK_F = { website: 1, github: 1, documentation: 1, whitepaper: 1 };
+const mileByDate = new Map();
+for (const e of allEvents()) {
+  const d = (e.ts || '').slice(0, 10);
+  if (!d) continue;
+  if (!mileByDate.has(d)) mileByDate.set(d, { date: d, project_imported: 0, category_added: 0, category_deprecated: 0, category_assigned: 0, links: { website: 0, github: 0, documentation: 0, whitepaper: 0 }, claims: 0, sources: {} });
+  const m = mileByDate.get(d);
+  if (e.type === 'project.imported') m.project_imported++;
+  else if (e.type === 'category.added') m.category_added++;
+  else if (e.type === 'category.deprecated') m.category_deprecated++;
+  else if (e.type === 'category.assigned') { m.category_assigned++; if (e.payload && e.payload.source_id) m.sources[e.payload.source_id] = 1; }
+  else if (e.type === 'claim.asserted') { m.claims++; const f = e.payload && e.payload.field; if (LINK_F[f]) m.links[f]++; if (e.payload && e.payload.source_id) m.sources[e.payload.source_id] = 1; }
+}
+const milestones = [...mileByDate.values()].map((m) => ({ ...m, sources: Object.keys(m.sources) })).sort((a, b) => a.date.localeCompare(b.date));
+writeFileSync(join(outDir, 'memory-timeline.json'), JSON.stringify({ meta: { generated_at: GENERATED_AT, events: eventCount(), dates: milestones.length }, milestones }, null, 2));
 
 const index = {
   meta: {
