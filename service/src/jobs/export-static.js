@@ -59,6 +59,14 @@ for (const row of projects) {
     .reduce((n, c) => n + (c.provenance?.evidence?.length || 0), 0);
   const linkFields = LINK_FIELDS.filter((f) => detail.fields?.[f]?.length);
   const enriched = linkFields.length > 0;
+  // per-project event dates (for ecosystem-pulse): created/last + per-link-field date
+  const evs = history.events || [];
+  const createdTs = evs.length ? (evs[0].ts || '').slice(0, 10) : null;
+  const lastTs = evs.length ? (evs[evs.length - 1].ts || '').slice(0, 10) : null;
+  const linkTs = {};
+  for (const e of evs) {
+    if (e.type === 'claim.asserted' && e.payload && LINK_FIELDS.includes(e.payload.field)) linkTs[e.payload.field] = (e.ts || '').slice(0, 10);
+  }
   const file = `${fileKey(row.id)}.json`;
   writeFileSync(join(outDir, 'projects', file),
     JSON.stringify({ project: detail, history: history.events, generated_at: GENERATED_AT }, null, 2));
@@ -72,6 +80,7 @@ for (const row of projects) {
     evidence_count: evidenceCount, history_count: history.count,
     superseded_claim_count: detail.superseded_claim_count,
     created_seq: detail.created_seq, last_seq: detail.last_seq,
+    created_ts: createdTs, last_ts: lastTs, link_ts: linkTs,
   };
   listRows.push(listRow);
   // accumulate compact membership for each active category assignment
